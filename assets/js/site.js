@@ -2,11 +2,11 @@
 // Convenção: todas as páginas incluem <header id="tt-nav"></header> e <footer id="tt-footer"></footer>
 
 const NAV_LINKS = [
-  { href: 'index.html', label: 'Início' },
-  { href: 'manifesto.html', label: 'Manifesto' },
-  { href: 'metodo.html', label: 'Método' },
-  { href: 'sobre-alex.html', label: 'Alex Amadeu' },
-  { href: 'contato.html', label: 'Contato' },
+  { href: '/', label: 'Início' },
+  { href: '/manifesto', label: 'Manifesto' },
+  { href: '/metodo', label: 'Método' },
+  { href: '/sobre-alex', label: 'Alex Amadeu' },
+  { href: '/contato', label: 'Contato' },
 ];
 
 function renderNav(activePage) {
@@ -17,14 +17,14 @@ function renderNav(activePage) {
     <nav class="nav" aria-label="Navegação principal">
       <div class="container nav-inner">
         <div class="nav-left">
-          <a href="index.html" class="brand" aria-label="TriboTax — início">
+          <a href="/" class="brand" aria-label="TriboTax — início">
             <span>Tribo<span style="font-style:italic">Tax</span></span>
             <span class="dot" aria-hidden="true"></span>
           </a>
           <div class="nav-links">${links}</div>
         </div>
         <div class="nav-right">
-          <a class="btn btn-ghost" href="contato.html#diagnostico">
+          <a class="btn btn-ghost" href="/contato#diagnostico">
             Diagnóstico
             <svg class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
           </a>
@@ -35,7 +35,7 @@ function renderNav(activePage) {
       </div>
       <div class="nav-drawer" aria-hidden="true">
         ${links}
-        <a class="btn btn-primary nav-drawer-cta" href="contato.html#diagnostico">Diagnóstico →</a>
+        <a class="btn btn-primary nav-drawer-cta" href="/contato#diagnostico">Diagnóstico →</a>
       </div>
     </nav>
   `;
@@ -75,8 +75,8 @@ function renderFooter() {
           <div>
             <div class="kicker" style="color:#A7AE9E">Contato</div>
             <div style="margin-top:16px; display:flex; flex-direction:column; gap:10px; font-size:14px">
-              <a href="contato.html">contato@tribotax.com.br</a>
-              <a href="contato.html">WhatsApp institucional</a>
+              <a href="/contato">contato@tribotax.com.br</a>
+              <a href="/contato">WhatsApp institucional</a>
               <a href="#">LinkedIn</a>
               <a href="#">Instagram</a>
             </div>
@@ -106,7 +106,7 @@ function setupReveal() {
 
 // Init
 window.addEventListener('DOMContentLoaded', () => {
-  const active = (location.pathname.split('/').pop() || 'index.html');
+  const active = location.pathname.replace(/\/$/, '') || '/';
   renderNav(active);
   renderFooter();
   setupReveal();
