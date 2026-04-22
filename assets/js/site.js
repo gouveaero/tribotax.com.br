@@ -12,6 +12,7 @@ const NAV_LINKS = [
 function renderNav(activePage) {
   const nav = document.getElementById('tt-nav');
   if (!nav) return;
+  const links = NAV_LINKS.map(l => `<a href="${l.href}" class="${l.href===activePage?'active':''}">${l.label}</a>`).join('');
   nav.innerHTML = `
     <nav class="nav" aria-label="Navegação principal">
       <div class="container nav-inner">
@@ -20,9 +21,7 @@ function renderNav(activePage) {
             <span>Tribo<span style="font-style:italic">Tax</span></span>
             <span class="dot" aria-hidden="true"></span>
           </a>
-          <div class="nav-links">
-            ${NAV_LINKS.map(l => `<a href="${l.href}" class="${l.href===activePage?'active':''}">${l.label}</a>`).join('')}
-          </div>
+          <div class="nav-links">${links}</div>
         </div>
         <div class="nav-right">
           <a class="btn btn-ghost" href="contato.html#diagnostico">
@@ -30,9 +29,25 @@ function renderNav(activePage) {
             <svg class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
           </a>
         </div>
+        <button class="nav-hamburger" aria-label="Abrir menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="nav-drawer" aria-hidden="true">
+        ${links}
+        <a class="btn btn-primary nav-drawer-cta" href="contato.html#diagnostico">Diagnóstico →</a>
       </div>
     </nav>
   `;
+  const navEl = nav.querySelector('.nav');
+  const hamburger = nav.querySelector('.nav-hamburger');
+  const drawer = nav.querySelector('.nav-drawer');
+  hamburger.addEventListener('click', () => {
+    const isOpen = navEl.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', String(isOpen));
+    hamburger.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
+    drawer.setAttribute('aria-hidden', String(!isOpen));
+  });
 }
 
 function renderFooter() {
@@ -42,7 +57,7 @@ function renderFooter() {
     <footer class="footer on-deep">
       <div class="container">
         <div class="grid grid-4" style="align-items:start">
-          <div style="grid-column: span 2">
+          <div class="footer-brand">
             <div class="brand" style="color:#E7DEC9; font-size:28px">
               <span>Tribo<span style="font-style:italic">Tax</span></span>
               <span class="dot" aria-hidden="true"></span>

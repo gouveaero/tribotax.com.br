@@ -24,7 +24,10 @@
       gap: var(--sp-9);
       align-items: end;
     }
-    @media (max-width: 960px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
+    @media (max-width: 960px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+      .knot-mark { width: min(200px, 50%); margin: 0 auto; }
+    }
 
     .hero h1 { margin: 24px 0 0; }
     .hero .pecunia {
@@ -105,6 +108,14 @@
     }
     .philosophy-body { max-width: 54ch; color: var(--fg-on-deep-muted); font-size: 17px; line-height: 1.65; }
     .philosophy-body p + p { margin-top: 1em; }
+    .philosophy-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: var(--sp-9);
+      margin-top: 40px;
+      align-items: start;
+    }
+    @media (max-width: 860px) { .philosophy-grid { grid-template-columns: 1fr; gap: var(--sp-7); } }
 
     /* Princípios (3 colunas) */
     .principles .col {
@@ -404,7 +415,7 @@
   <section class="philosophy">
     <div class="container">
       <div class="eyebrow">Filosofia fundadora · Roma, 70 d.C.</div>
-      <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--sp-9); margin-top: 40px; align-items: start" class="reveal">
+      <div class="philosophy-grid reveal">
         <blockquote class="philosophy-quote">
           O dinheiro<br/>
           <span class="drop">não tem cheiro.</span>

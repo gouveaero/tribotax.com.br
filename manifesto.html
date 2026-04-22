@@ -15,9 +15,13 @@
   }
   .masthead .meta {
     display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 8px;
     font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.22em;
     text-transform: uppercase; color: var(--fg-muted);
     margin-bottom: 64px;
+  }
+  @media (max-width: 600px) {
+    .masthead .meta { flex-direction: column; align-items: flex-start; gap: 6px; }
   }
   .masthead h1 {
     font-family: var(--f-display); font-weight: 500;
