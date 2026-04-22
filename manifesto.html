@@ -165,8 +165,12 @@
   .signature-block {
     background: var(--forest-900);
     color: var(--fg-on-deep);
-    padding: clamp(80px, 10vw, 140px) 0;
+    padding: clamp(56px, 10vw, 140px) 0;
     margin-top: var(--sp-10);
+  }
+  @media (max-width: 600px) {
+    .signature-block { margin-top: var(--sp-8); }
+    .article { padding-bottom: var(--sp-8); }
   }
   .signature-block h2 {
     font-family: var(--f-display); font-size: clamp(36px, 4.4vw, 64px);
