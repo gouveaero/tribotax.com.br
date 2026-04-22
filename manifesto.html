@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Manifesto · TriboTax</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="assets/css/tokens.css" />
+<style>
+  .masthead {
+    padding: clamp(56px, 7vw, 96px) 0 clamp(40px, 5vw, 64px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .masthead .meta {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--fg-muted);
+    margin-bottom: 64px;
+  }
+  .masthead h1 {
+    font-family: var(--f-display); font-weight: 500;
+    font-size: clamp(56px, 8vw, 136px); line-height: 0.98;
+    letter-spacing: -0.02em; margin: 0;
+  }
+  .masthead h1 em { font-style: italic; color: var(--copper-500); }
+  .masthead .deck {
+    margin-top: 48px; max-width: 60ch;
+    font-family: var(--f-display); font-style: italic;
+    font-size: clamp(22px, 1.9vw, 28px); line-height: 1.4;
+    color: var(--ink-700);
+  }
+
+  .article { padding: clamp(64px, 7vw, 96px) 0 var(--sp-10); }
+  .article-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--sp-9);
+    align-items: start;
+  }
+  @media (max-width: 900px) { .article-grid { grid-template-columns: 1fr; gap: 32px; } }
+
+  .margin-col { position: sticky; top: 100px; align-self: start; }
+  .margin-col .mono { color: var(--fg-muted); line-height: 1.8; }
+  .margin-col .section-label { display: block; margin-bottom: 4px; color: var(--copper-500); }
+
+  .body-col { max-width: 680px; font-size: 18px; line-height: 1.7; color: var(--ink-700); }
+  .body-col > section { margin-bottom: var(--sp-9); scroll-margin-top: 100px; }
+  .body-col h2 {
+    font-family: var(--f-display); font-weight: 500;
+    font-size: clamp(32px, 3.2vw, 48px); line-height: 1.1;
+    letter-spacing: -0.01em; margin: 0 0 24px; color: var(--forest-900);
+  }
+  .body-col h2 em { font-style: italic; color: var(--copper-500); }
+  .body-col p { margin: 0 0 22px; }
+  .body-col p:first-of-type::first-letter {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-size: 4.6em;
+    line-height: 0.9;
+    float: left;
+    padding: 8px 12px 0 0;
+    color: var(--copper-500);
+  }
+  .body-col section:not(:first-of-type) p:first-of-type::first-letter {
+    font-size: 1em; float: none; padding: 0; color: inherit; font-style: inherit;
+  }
+
+  .pull {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-size: clamp(28px, 2.6vw, 40px);
+    line-height: 1.2;
+    color: var(--forest-900);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 32px 0;
+    margin: 40px 0;
+    max-width: 20ch;
+  }
+  .pull .accent { color: var(--copper-500); }
+
+  .principle-card {
+    border-top: 1px solid var(--rule);
+    padding-top: 24px;
+    margin-top: 32px;
+  }
+  .principle-card .pmeta {
+    display: flex; justify-content: space-between;
+    font-family: var(--f-mono); font-size: 11px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--fg-muted); margin-bottom: 16px;
+  }
+  .principle-card h3 {
+    font-family: var(--f-display); font-style: italic;
+    font-size: 32px; font-weight: 500; line-height: 1.15;
+    color: var(--forest-900); margin: 0 0 16px;
+  }
+  .principle-card p { color: var(--ink-700); margin: 0; }
+
+  .signature-block {
+    background: var(--forest-900);
+    color: var(--fg-on-deep);
+    padding: clamp(80px, 10vw, 140px) 0;
+    margin-top: var(--sp-10);
+  }
+  .signature-block h2 {
+    font-family: var(--f-display); font-size: clamp(36px, 4.4vw, 64px);
+    line-height: 1.08; font-weight: 500; margin: 0 0 32px;
+    color: var(--fg-on-deep);
+  }
+  .signature-block .sig {
+    margin-top: 64px;
+    display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 48px;
+  }
+  @media (max-width: 720px) { .signature-block .sig { grid-template-columns: 1fr; } }
+  .signature-block .sig-name {
+    font-family: var(--f-display); font-style: italic;
+    font-size: 48px; color: var(--copper-400); line-height: 1;
+  }
+  .signature-block .sig-role {
+    font-family: var(--f-mono); font-size: 11px;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--fg-on-deep-muted); margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+<header id="tt-nav"></header>
+
+<section class="masthead">
+  <div class="container">
+    <div class="meta">
+      <span>Manifesto · MMXXVI</span>
+      <span>TriboTax · Editorial original</span>
+      <span>15 min de leitura</span>
+    </div>
+    <h1 class="reveal">
+      Da conformidade<br/>
+      <em>à comunidade.</em>
+    </h1>
+    <p class="deck reveal">
+      Um manifesto sobre por que a consultoria tributária tradicional parou de funcionar — e sobre o modelo que ocupa o espaço que ela deixou.
+    </p>
+  </div>
+</section>
+
+<article class="article">
+  <div class="container">
+    <div class="article-grid">
+
+      <aside class="margin-col">
+        <div class="mono">
+          <span class="section-label">Índice</span>
+          <div style="display:flex; flex-direction:column; gap:10px; margin-top:16px">
+            <a href="#i">I. Escritório frio</a>
+            <a href="#ii">II. Inimigo comum</a>
+            <a href="#iii">III. Mentor, não vendedor</a>
+            <a href="#iv">IV. Cinco pilares</a>
+            <a href="#v">V. Legado</a>
+            <a href="#vi">VI. Assinatura</a>
+          </div>
+        </div>
+      </aside>
+
+      <div class="body-col">
+
+        <section id="i">
+          <div class="kicker" style="color: var(--copper-500); margin-bottom: 24px">Capítulo I</div>
+          <h2>O ambiente fiscal moderno exige mais do que <em>precisão técnica.</em></h2>
+          <p>Durante décadas, a consultoria tributária brasileira se vendeu como um produto de precisão: relatórios densos, pareceres assinados, faturas emitidas. A frieza institucional era vista como sinal de rigor. O cliente pagava por horas e recebia documentos. O relacionamento começava em uma proposta e terminava em um protocolo.</p>
+          <p>Funcionou enquanto a complexidade era menor, a legislação mais estável, e o ciclo de risco do empresário cabia no calendário anual de obrigações acessórias. Esse mundo não existe mais.</p>
+          <p>Hoje, o empresário brasileiro opera dentro de um ambiente fiscal que muda a cada trimestre, onde um tema julgado em Brasília pode modificar dez milhões em fluxo de caixa, e onde a solidão diante da burocracia virou um custo psicológico mensurável. A tecnicidade árida do modelo tradicional deixou de ser suficiente — e, em muitos casos, virou parte do problema.</p>
+          <div class="pull">Não precisamos de mais relatórios. <span class="accent">Precisamos de menos solidão fiscal.</span></div>
+        </section>
+
+        <section id="ii">
+          <div class="kicker" style="color: var(--copper-500); margin-bottom: 24px">Capítulo II</div>
+          <h2>O inimigo não é o concorrente. <em>É o sistema.</em></h2>
+          <p>A Teoria da Identidade Social, formulada por Henri Tajfel e John Turner nos anos setenta, postula que indivíduos buscam categorização em grupos para obter propósito e segurança — especialmente em ambientes percebidos como ameaçadores.</p>
+          <p>O setor tributário brasileiro é, por definição, um ambiente ameaçador. Não pela má-fé de ninguém em particular, mas pela sua natureza estrutural: um sistema impessoal, volátil, altamente técnico e punitivo na margem. Os empresários que mais conhecemos descrevem a relação com o fisco usando palavras que um psicólogo reconheceria imediatamente: medo, isolamento, fadiga.</p>
+          <p>É nesse contexto que a lógica da tribo faz sentido. A coesão interna de uma comunidade se fortalece não por concorrentes em comum — mas por um sistema em comum. A TriboTax existe para ser a barreira protetora contra esse sistema: uma frente unida de inteligência, linguagem e cuidado que eleva exponencialmente o que chamamos internamente de <em>saldo bancário emocional</em> do cliente.</p>
+        </section>
+
+        <section id="iii">
+          <div class="kicker" style="color: var(--copper-500); margin-bottom: 24px">Capítulo III</div>
+          <h2>Somos mentores. <em>Não vendedores.</em></h2>
+          <p>A narrativa de um bom serviço tributário não é a do fornecedor heróico que chega para salvar o dia. É a do mentor sábio que caminha ao lado do herói — e o herói, nesta história, é sempre o empresário que carrega a operação nas costas.</p>
+          <p>Essa distinção não é semântica. É operacional. O mentor não prescreve; diagnostica. Não promete; arquiteta. Não fatura horas; constrói pertencimento. Quando um cliente entra para a nossa tribo, ele não está comprando um projeto — está assumindo um lugar em um círculo de inteligência coletiva onde o valor aumenta com cada novo membro.</p>
+          <p>Nossa função é fornecer as ferramentas vitais para que o empresário tome a decisão fiscal certa no momento em que ela precisa ser tomada. Isso inclui leitura de jurisprudência, modelagem de cenários, disponibilidade humana em tempo real — e a capacidade de traduzir o labirinto tributário em uma conversa que o decisor pode efetivamente ter com o próprio time.</p>
+        </section>
+
+        <section id="iv">
+          <div class="kicker" style="color: var(--copper-500); margin-bottom: 24px">Capítulo IV</div>
+          <h2>Os cinco pilares da <em>união inquebrável.</em></h2>
+          <p>Não existe tribo sem arquitetura. O que separa uma comunidade que se dissolve de uma que dura são pilares bem desenhados — e mantidos com disciplina. Em dois anos de construção do modelo, chegamos aos cinco que consideramos inegociáveis.</p>
+
+          <div class="principle-card">
+            <div class="pmeta"><span>Pilar I</span><span>Propósito</span></div>
+            <h3>O porquê inegociável da união</h3>
+            <p>Antes de qualquer tese, antes de qualquer operação, está a convicção de que resiliência fiscal e proteção de legado são causas — não entregáveis. Quem entra para a TriboTax entra porque acredita nessa causa. Quem não acredita não deveria entrar.</p>
+          </div>
+          <div class="principle-card">
+            <div class="pmeta"><span>Pilar II</span><span>Pessoas</span></div>
+            <h3>Filtro antes de filosofia</h3>
+            <p>Filtros rigorosos sobre quem entra, quem permanece e quem se afasta. A exclusividade não é vaidade: é garantia de qualidade, segurança jurídica e densidade do diálogo entre pares.</p>
+          </div>
+          <div class="principle-card">
+            <div class="pmeta"><span>Pilar III</span><span>Política</span></div>
+            <h3>A governança que protege o silêncio</h3>
+            <p>Diretrizes claras — explícitas e privadas — que garantem um ambiente profissional, ético e de alta confiança. A conversa dentro da tribo é feita em voz baixa, com protocolo e com cuidado.</p>
+          </div>
+          <div class="principle-card">
+            <div class="pmeta"><span>Pilar IV</span><span>Participação</span></div>
+            <h3>Engenharia contra o consumo passivo</h3>
+            <p>Não construímos uma audiência. Construímos um círculo. Fóruns internos, encontros por segmento, intercâmbio de casos anonimizados. Quem pertence contribui — e, contribuindo, aprende.</p>
+          </div>
+          <div class="principle-card">
+            <div class="pmeta"><span>Pilar V</span><span>Lugar</span></div>
+            <h3>O habitat da tribo</h3>
+            <p>Espaços digitais privados, encontros presenciais, cartas institucionais. A TriboTax tem topologia: o cliente sabe onde está quando nos encontra, e onde volta quando precisa de nós.</p>
+          </div>
+        </section>
+
+        <section id="v">
+          <div class="kicker" style="color: var(--copper-500); margin-bottom: 24px">Capítulo V</div>
+          <h2>A proteção do legado <em>transcende a economia de impostos.</em></h2>
+          <p>Chamar a TriboTax apenas de consultoria tributária subestima a natureza do trabalho. O que um empresário de primeira geração nos pede, no fundo, raramente é uma recuperação de crédito — é a segurança de que o patrimônio construído ao longo de trinta anos não vai ser erodido por uma leitura descuidada de um regulamento, nem fragmentado por uma sucessão improvisada.</p>
+          <p>Por isso trabalhamos sob quatro virtudes clássicas da tradição estoica aplicadas à vida corporativa: <em>prudência</em> para guiar decisões sustentáveis, <em>coragem</em> para impulsionar a inovação ética no planejamento, <em>temperança</em> para manter o equilíbrio frente à volatilidade econômica, e <em>justiça</em> para consolidar a confiança intergeracional.</p>
+          <p>A tribo é a ponte entre o legado dos fundadores e o futuro da sucessão. É essa função — não a economia tributária imediata — que justifica a profundidade do nosso envolvimento com cada cliente.</p>
+          <div class="pull">Patrimônio não é uma planilha. <span class="accent">É uma narrativa.</span></div>
+        </section>
+
+        <section id="vi">
+          <div class="kicker" style="color: var(--copper-500); margin-bottom: 24px">Capítulo VI · Fechamento</div>
+          <h2>Este é o lugar que a TriboTax <em>decidiu ocupar.</em></h2>
+          <p>Entre o advogado tributário tradicional — tecnicamente sólido, humanamente distante — e a startup de automação fiscal — rápida, barata, sem alma jurídica —, existe um território que ninguém está ocupando com seriedade. É o território da consultoria de comunidade: humana, técnica, permanente.</p>
+          <p>É esse o território da TriboTax. E é nele que convidamos os líderes que leram até aqui a construir, conosco, o próximo capítulo da resiliência fiscal no Brasil.</p>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</article>
+
+<section class="signature-block">
+  <div class="container">
+    <div class="eyebrow">Assinatura</div>
+    <h2 style="margin-top: 32px">
+      Se você chegou até aqui,<br/>
+      o convite <em style="color: var(--copper-400); font-style: italic">já foi feito.</em>
+    </h2>
+    <p class="lede" style="max-width: 58ch">
+      A tribo cresce por pertencimento, não por anúncio. Se este texto fez sentido para a fase em que sua operação está, fale conosco. Vamos entender juntos se há lugar para você no próximo círculo.
+    </p>
+    <div style="margin-top: 48px; display: flex; gap: 16px; flex-wrap: wrap">
+      <a class="btn btn-primary" href="contato.html#diagnostico">
+        Solicitar diagnóstico
+        <svg class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+      </a>
+      <a class="btn btn-ghost" href="sobre-alex.html">Conhecer Alex Amadeu</a>
+    </div>
+    <div class="sig">
+      <div>
+        <div class="sig-name">Alex Amadeu</div>
+        <div class="sig-role">Fundador · TriboTax · MMXXVI</div>
+      </div>
+      <div style="width: 80px; color: var(--copper-400)">
+        <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="width:80px">
+          <circle cx="100" cy="100" r="92" opacity="0.3"/>
+          <path d="M100 28 C 62 62, 62 108, 100 142 C 138 108, 138 62, 100 28 Z"/>
+          <path d="M100 28 C 62 62, 62 108, 100 142 C 138 108, 138 62, 100 28 Z" transform="rotate(120 100 100)"/>
+          <path d="M100 28 C 62 62, 62 108, 100 142 C 138 108, 138 62, 100 28 Z" transform="rotate(240 100 100)"/>
+          <circle cx="100" cy="100" r="4" fill="currentColor" stroke="none"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="tt-footer"></footer>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

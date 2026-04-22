@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 160" fill="none">
+  
+  <g stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none" vector-effect="non-scaling-stroke" transform="translate(10,10)">
+    <circle cx="70" cy="70" r="62"></circle>
+    <path d="M70 20 C 46 42, 46 78, 70 100 C 94 78, 94 42, 70 20 Z"></path>
+    <path d="M70 20 C 46 42, 46 78, 70 100 C 94 78, 94 42, 70 20 Z" transform="rotate(120 70 70)"></path>
+    <path d="M70 20 C 46 42, 46 78, 70 100 C 94 78, 94 42, 70 20 Z" transform="rotate(240 70 70)"></path>
+    <circle cx="70" cy="70" r="3" fill="currentColor" stroke="none"></circle>
+  </g>
+  <g fill="currentColor">
+    <text x="170" y="102" font-family="&#39;Cormorant Garamond&#39;, Garamond, serif" font-weight="500" font-size="78" letter-spacing="0.5">
+      Tribo<tspan font-style="italic" font-weight="400">Tax</tspan>
+    </text>
+  </g>
+</svg>

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contato · TriboTax</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="assets/css/tokens.css" />
+<style>
+  .head { padding: clamp(56px, 7vw, 96px) 0 clamp(48px, 6vw, 72px); }
+  .head h1 { font-family: var(--f-display); font-size: clamp(56px, 7vw, 120px); line-height: 0.98; margin: 20px 0 0; font-weight: 500; letter-spacing: -0.02em; }
+  .head h1 em { font-style: italic; color: var(--copper-500); }
+
+  .form-wrap { padding: 0 0 var(--sp-10); }
+  .form-grid {
+    display: grid; grid-template-columns: 1fr 380px; gap: var(--sp-9);
+    align-items: start;
+  }
+  @media (max-width: 960px) { .form-grid { grid-template-columns: 1fr; } }
+
+  .form-card {
+    background: var(--clay-100);
+    padding: clamp(32px, 4vw, 56px);
+    border: 1px solid var(--rule);
+  }
+  .field { margin-bottom: 20px; }
+  .field label {
+    display: block;
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--fg-muted); margin-bottom: 8px;
+  }
+  .field input, .field textarea, .field select {
+    width: 100%; padding: 14px 16px;
+    border: 1px solid var(--rule); background: var(--clay-50);
+    font-family: var(--f-body); font-size: 15px; color: var(--ink-900);
+    border-radius: 2px;
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus {
+    outline: none; border-color: var(--forest-800); background: #fff;
+  }
+  .field textarea { min-height: 120px; resize: vertical; }
+  .field .hint { margin-top: 6px; font-size: 12px; color: var(--fg-faint); }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 560px) { .field-row { grid-template-columns: 1fr; } }
+
+  .radios { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  @media (max-width: 560px) { .radios { grid-template-columns: 1fr; } }
+  .radios label {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; border: 1px solid var(--rule);
+    background: var(--clay-50); cursor: pointer;
+    font-family: var(--f-body); font-size: 13px; letter-spacing: 0;
+    text-transform: none; color: var(--ink-700); margin: 0;
+    transition: all .2s ease;
+  }
+  .radios label:has(input:checked) {
+    border-color: var(--forest-800); background: var(--forest-900); color: var(--clay-50);
+  }
+  .radios input { accent-color: var(--copper-500); }
+
+  .submit-row { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; gap: 16px; flex-wrap: wrap; }
+  .submit-row .small { color: var(--fg-muted); max-width: 36ch; }
+
+  .side-panel {
+    padding: 40px 0;
+  }
+  .side-panel .block { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--rule); }
+  .side-panel .block:last-child { border-bottom: 0; }
+  .side-panel .k { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 12px; }
+  .side-panel h3 { font-family: var(--f-display); font-size: 26px; font-weight: 500; margin: 0 0 8px; color: var(--forest-900); line-height: 1.2; }
+  .side-panel h3 em { font-style: italic; color: var(--copper-500); }
+  .side-panel .big { font-family: var(--f-display); font-size: 22px; margin: 0 0 6px; }
+  .side-panel a.line { display: inline-flex; align-items: center; gap: 10px; color: var(--forest-900); border-bottom: 1px solid var(--copper-500); padding-bottom: 2px; font-size: 15px; }
+
+  .success {
+    display: none;
+    background: var(--forest-900); color: var(--fg-on-deep);
+    padding: 56px 48px; text-align: center;
+  }
+  .success.on { display: block; }
+  .success h3 { font-family: var(--f-display); font-size: 40px; margin: 0 0 16px; font-weight: 500; color: var(--fg-on-deep); }
+  .success h3 em { color: var(--copper-400); font-style: italic; }
+  .success p { color: var(--fg-on-deep-muted); max-width: 42ch; margin: 0 auto; }
+</style>
+</head>
+<body>
+<header id="tt-nav"></header>
+
+<section class="head" id="diagnostico">
+  <div class="container reveal">
+    <span class="eyebrow">Solicitar diagnóstico</span>
+    <h1>O primeiro <em>passo.</em></h1>
+    <p class="lede" style="margin-top: 32px; max-width: 62ch">
+      Preencha as informações abaixo para receber um diagnóstico preliminar gratuito sobre as oportunidades de recuperação e os riscos latentes da sua arquitetura tributária atual. Retornamos em até 48h úteis com uma leitura inicial — sem compromisso e sem qualquer promessa de resultado.
+    </p>
+  </div>
+</section>
+
+<section class="form-wrap">
+  <div class="container">
+    <div class="form-grid">
+      <form class="form-card reveal" id="diagForm" onsubmit="event.preventDefault(); document.getElementById('diagForm').style.display='none'; document.getElementById('success').classList.add('on');">
+        <div class="field">
+          <label for="nome">Nome completo</label>
+          <input id="nome" name="nome" type="text" required placeholder="Como devemos te chamar" />
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="email">E-mail corporativo</label>
+            <input id="email" name="email" type="email" required placeholder="voce@empresa.com.br" />
+          </div>
+          <div class="field">
+            <label for="whats">WhatsApp</label>
+            <input id="whats" name="whats" type="tel" placeholder="(00) 00000-0000" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="empresa">Empresa</label>
+            <input id="empresa" name="empresa" type="text" required />
+          </div>
+          <div class="field">
+            <label for="cargo">Cargo</label>
+            <input id="cargo" name="cargo" type="text" placeholder="CFO, sócio, controller…" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Regime tributário</label>
+          <div class="radios">
+            <label><input type="radio" name="regime" value="real" /> Lucro Real</label>
+            <label><input type="radio" name="regime" value="presumido" /> Lucro Presumido</label>
+            <label><input type="radio" name="regime" value="simples" /> Simples Nacional</label>
+            <label><input type="radio" name="regime" value="naosei" /> Não sei dizer</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Setor principal</label>
+          <div class="radios" style="grid-template-columns: repeat(3, 1fr)">
+            <label><input type="radio" name="setor" /> Indústria</label>
+            <label><input type="radio" name="setor" /> Distribuição</label>
+            <label><input type="radio" name="setor" /> Serviços</label>
+            <label><input type="radio" name="setor" /> Agronegócio</label>
+            <label><input type="radio" name="setor" /> Varejo</label>
+            <label><input type="radio" name="setor" /> Outro</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="contexto">Contexto da demanda</label>
+          <textarea id="contexto" name="contexto" placeholder="Em poucas linhas: o que levou você a buscar a TriboTax?"></textarea>
+          <div class="hint">Sem detalhe confidencial — tratamos o aprofundamento em conversa reservada.</div>
+        </div>
+
+        <div class="submit-row">
+          <span class="small">Ao enviar, você concorda em receber uma leitura preliminar por e-mail ou WhatsApp. Não compartilhamos dados.</span>
+          <button type="submit" class="btn btn-primary">
+            Enviar diagnóstico
+            <svg class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+          </button>
+        </div>
+      </form>
+
+      <div class="success" id="success">
+        <div style="display:flex; justify-content:center; margin-bottom: 24px">
+          <div class="seal" aria-hidden="true">tt</div>
+        </div>
+        <h3>Recebemos. <em>A tribo te responde.</em></h3>
+        <p>Em até 48 horas úteis, Alex Amadeu ou um mentor da equipe entra em contato com a sua leitura preliminar. Enquanto isso, o manifesto fica aqui.</p>
+        <div style="margin-top: 32px"><a class="btn btn-ghost" href="manifesto.html">Ler o manifesto</a></div>
+      </div>
+
+      <aside class="side-panel reveal">
+        <div class="block">
+          <div class="k">Canal direto</div>
+          <h3>Falar pelo <em>WhatsApp.</em></h3>
+          <p class="muted" style="font-size: 14px; line-height: 1.55">Para quem prefere a conversa imediata ou já conhece o escopo.</p>
+          <div style="margin-top: 14px">
+            <a class="line" href="#">+55 (11) 00000-0000
+              <svg class="arrow" viewBox="0 0 16 10" width="16" height="10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="block">
+          <div class="k">Escritório</div>
+          <p class="big" style="margin-top: 12px">São Paulo, SP</p>
+          <p class="muted" style="font-size: 14px; line-height: 1.55">Atendimento presencial ou remoto em todo o país.</p>
+        </div>
+        <div class="block">
+          <div class="k">E-mail</div>
+          <div style="margin-top: 12px">
+            <a class="line" href="mailto:contato@tribotax.com.br">contato@tribotax.com.br</a>
+          </div>
+        </div>
+        <div class="block">
+          <div class="k">Resposta</div>
+          <p class="big" style="margin-top: 12px">Até 48h úteis.</p>
+          <p class="muted" style="font-size: 14px; line-height: 1.55">Se o caso exigir urgência — autuação em prazo, por exemplo — marque o assunto como <em>URGENTE</em>.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<footer id="tt-footer"></footer>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

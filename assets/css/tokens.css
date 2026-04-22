@@ -1,0 +1,293 @@
+/* TriboTax — Design Tokens
+   Concept: O Nó + Círculo. Argila dominante. Verde profundo e cobre pontuam.
+   Voz editorial, material, humana. Sem slop. */
+
+:root {
+  /* ——— Base (argila/off-white) ——— */
+  --clay-50:  #F6F1E8;  /* fundo principal — quente, calcário */
+  --clay-100: #EFE7D8;  /* fundo alternado */
+  --clay-200: #E3D7C2;  /* divisores suaves */
+  --clay-300: #CBBBA0;  /* textura */
+  --clay-400: #A89778;  /* marginália */
+
+  /* ——— Verde profundo (resiliência, agro, juridicidade) ——— */
+  --forest-900: #14251D;  /* quase preto verde */
+  --forest-800: #1B3226;  /* fundo de seção âncora */
+  --forest-700: #234032;
+  --forest-600: #325647;
+  --forest-500: #4A7360;
+  --forest-200: #C8D4CC;
+
+  /* ——— Ocre vermelho / terracota-bordô (acento menos óbvio que cobre) ——— */
+  --copper-700: #5E1F1A;
+  --copper-600: #7A2B22;
+  --copper-500: #8F3A2E;  /* acento principal — terracota profunda */
+  --copper-400: #A8594B;
+  --copper-300: #C07D6E;
+  --copper-200: #D9A99C;
+
+  /* ——— Neutros tipográficos ——— */
+  --ink-900: #121210;  /* texto principal em claro */
+  --ink-700: #2A2A26;
+  --ink-500: #55544E;
+  --ink-300: #8C8A81;
+
+  /* ——— Semânticos ——— */
+  --bg: var(--clay-50);
+  --bg-alt: var(--clay-100);
+  --bg-deep: var(--forest-800);
+  --bg-deeper: var(--forest-900);
+  --fg: var(--ink-900);
+  --fg-muted: var(--ink-500);
+  --fg-faint: var(--ink-300);
+  --fg-on-deep: #E7DEC9;
+  --fg-on-deep-muted: #A7AE9E;
+  --accent: var(--copper-500);
+  --accent-dim: var(--copper-700);
+  --rule: rgba(18,18,16,0.14);
+  --rule-deep: rgba(231,222,201,0.16);
+
+  /* ——— Tipografia ——— */
+  --f-display: "Cormorant Garamond", "GT Sectra", Garamond, "Times New Roman", serif;
+  --f-body:    "Inter Tight", Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --f-mono:    "JetBrains Mono", "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+  /* ——— Escala ——— */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px;
+  --sp-9: 96px; --sp-10: 144px; --sp-11: 200px;
+
+  --radius-s: 2px;
+  --radius-m: 4px;
+
+  --maxw: 1280px;
+  --maxw-read: 720px;
+}
+
+/* ——— Reset leve ——— */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--f-body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "cv11";
+}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; background: none; border: 0; cursor: pointer; color: inherit; }
+
+/* ——— Grão de papel global, sutilíssimo ——— */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none;
+  opacity: .35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.08  0 0 0 0 0.08  0 0 0 0 0.07  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  z-index: 1;
+}
+body > * { position: relative; z-index: 2; }
+
+/* ——— Tipografia editorial ——— */
+.h-display {
+  font-family: var(--f-display);
+  font-weight: 500;
+  font-style: normal;
+  letter-spacing: -0.015em;
+  line-height: 1.02;
+  color: var(--fg);
+}
+.h-italic { font-style: italic; font-weight: 400; }
+.h-1 { font-size: clamp(56px, 7.2vw, 120px); }
+.h-2 { font-size: clamp(40px, 4.6vw, 72px); line-height: 1.04; }
+.h-3 { font-size: clamp(28px, 2.6vw, 44px); line-height: 1.1; }
+.h-4 { font-size: clamp(22px, 1.8vw, 28px); line-height: 1.2; }
+
+.eyebrow {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  display: inline-flex; align-items: center; gap: 10px;
+}
+.eyebrow::before {
+  content: ""; width: 18px; height: 1px; background: currentColor; display: inline-block;
+}
+.on-deep .eyebrow { color: var(--copper-300); }
+.on-deep { color: var(--fg-on-deep); }
+.on-deep .fg-muted { color: var(--fg-on-deep-muted); }
+
+.lede {
+  font-size: clamp(17px, 1.15vw, 19px);
+  line-height: 1.55;
+  color: var(--ink-700);
+  max-width: 56ch;
+}
+.on-deep .lede { color: var(--fg-on-deep-muted); }
+
+.mono { font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.04em; }
+.small { font-size: 13px; color: var(--fg-muted); }
+
+/* ——— Containers & grid ——— */
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 56px);
+}
+.row { display: flex; gap: var(--sp-6); }
+.grid { display: grid; gap: var(--sp-6); }
+.grid-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+.grid-4 { grid-template-columns: repeat(4, minmax(0,1fr)); }
+@media (max-width: 860px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+
+/* ——— Regras horizontais ——— */
+.rule { border-top: 1px solid var(--rule); }
+.on-deep .rule { border-color: var(--rule-deep); }
+
+/* ——— Botões ——— */
+.btn {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 14px 22px;
+  font-family: var(--f-body);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-s);
+  transition: background .25s ease, color .25s ease, border-color .25s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.btn-primary {
+  background: var(--forest-900); color: var(--clay-50);
+}
+.btn-primary:hover { background: var(--forest-700); }
+.btn-ghost {
+  background: transparent; color: var(--fg);
+  border-color: var(--rule);
+}
+.btn-ghost:hover { border-color: var(--ink-700); }
+.on-deep .btn-primary { background: var(--copper-500); color: #0D1711; }
+.on-deep .btn-primary:hover { background: var(--copper-400); }
+.on-deep .btn-ghost { color: var(--fg-on-deep); border-color: var(--rule-deep); }
+.on-deep .btn-ghost:hover { border-color: var(--copper-400); }
+
+.btn .arrow { width: 16px; height: 10px; }
+.btn .arrow path { stroke: currentColor; fill: none; stroke-width: 1.4; }
+
+/* ——— Nav ——— */
+.nav {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(246, 241, 232, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 72px;
+}
+.nav-left { display: flex; align-items: center; gap: 40px; }
+.brand {
+  font-family: var(--f-display);
+  font-weight: 500;
+  font-size: 22px;
+  letter-spacing: 0.02em;
+  display: inline-flex; align-items: baseline; gap: 10px;
+}
+.brand .dot { width: 6px; height: 6px; background: var(--copper-500); border-radius: 50%; display: inline-block; transform: translateY(-3px); }
+.nav-links { display: flex; gap: 28px; font-size: 14px; color: var(--ink-700); }
+.nav-links a { position: relative; padding: 4px 0; }
+.nav-links a::after {
+  content: ""; position: absolute; left: 0; bottom: 0;
+  width: 0; height: 1px; background: var(--copper-500);
+  transition: width .3s ease;
+}
+.nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+
+.nav-right { display: flex; align-items: center; gap: 16px; }
+
+/* ——— Footer ——— */
+.footer {
+  background: var(--forest-900);
+  color: var(--fg-on-deep);
+  padding: var(--sp-10) 0 var(--sp-7);
+  margin-top: var(--sp-10);
+}
+.footer a { color: var(--fg-on-deep); }
+.footer .small { color: var(--fg-on-deep-muted); }
+
+/* ——— Marginália técnica (estilo nota-de-rodapé editorial) ——— */
+.margin-note {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+/* ——— Numeração romana/editorial ——— */
+.numeral {
+  font-family: var(--f-display);
+  font-style: italic;
+  color: var(--copper-500);
+  font-size: 22px;
+  line-height: 1;
+}
+
+/* ——— Seções ——— */
+section { padding: clamp(80px, 10vw, 140px) 0; position: relative; }
+section.tight { padding: clamp(48px, 6vw, 88px) 0; }
+
+/* ——— Selo em cobre (circulo com sombra radial) ——— */
+.seal {
+  width: 96px; height: 96px; border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, #EFC9A8, var(--copper-500) 55%, var(--copper-700) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(0,0,0,0.15),
+    inset 0 -20px 40px rgba(0,0,0,0.25),
+    inset 0 10px 20px rgba(255,230,200,0.4),
+    0 12px 30px rgba(138,75,42,0.2);
+  display: grid; place-items: center;
+  font-family: var(--f-display);
+  font-style: italic;
+  color: #2A1710;
+  font-size: 28px;
+}
+
+/* ——— Uppercase tracking block ——— */
+.kicker {
+  font-family: var(--f-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+/* ——— Sutil hover em cards ——— */
+.card-move { transition: transform .4s cubic-bezier(.2,.7,.2,1); }
+.card-move:hover { transform: translateY(-3px); }
+
+/* ——— Entry reveal ——— */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1); }
+.reveal.in { opacity: 1; transform: none; }
+
+/* ——— Utilitários ——— */
+.flow > * + * { margin-top: 1em; }
+.center { text-align: center; }
+.muted { color: var(--fg-muted); }
+.accent { color: var(--copper-500); }
+.forest { color: var(--forest-800); }
+.italic { font-style: italic; }
+.spacer-sm { height: var(--sp-5); }
+.spacer-md { height: var(--sp-7); }
+.spacer-lg { height: var(--sp-9); }

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Alex Amadeu · TriboTax</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="assets/css/tokens.css" />
+<style>
+  .intro {
+    padding: clamp(56px, 7vw, 96px) 0 0;
+  }
+  .intro-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-9);
+    align-items: end;
+  }
+  @media (max-width: 900px) { .intro-grid { grid-template-columns: 1fr; } }
+  .portrait {
+    aspect-ratio: 4/5;
+    background: var(--forest-900);
+    border: 1px solid var(--rule);
+    position: relative;
+    overflow: hidden;
+  }
+  .portrait img {
+    width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%;
+    filter: grayscale(0.25) contrast(1.04);
+    mix-blend-mode: luminosity;
+    opacity: 0.95;
+  }
+  .portrait::before {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 55%, rgba(20,37,29,0.55) 100%);
+    pointer-events: none; z-index: 2;
+  }
+  .portrait::after {
+    content: "retrato · Alex Amadeu";
+    position: absolute; bottom: 18px; left: 18px;
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.2em;
+    color: var(--clay-50); text-transform: uppercase;
+    z-index: 3;
+  }
+  .intro h1 {
+    font-family: var(--f-display); font-size: clamp(56px, 7vw, 112px);
+    line-height: 0.98; margin: 20px 0 0; font-weight: 500; letter-spacing: -0.02em;
+  }
+  .intro h1 em { font-style: italic; color: var(--copper-500); }
+  .credentials {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-5); margin-top: 56px; padding: 32px 0;
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  }
+  @media (max-width: 720px) { .credentials { grid-template-columns: 1fr; } }
+  .credentials .c .k { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-muted); }
+  .credentials .c .v { font-family: var(--f-display); font-size: 22px; margin-top: 6px; color: var(--forest-900); }
+
+  .letter {
+    padding: clamp(80px, 10vw, 140px) 0;
+  }
+  .letter-inner {
+    max-width: 680px; margin: 0 auto;
+    font-size: 19px; line-height: 1.75; color: var(--ink-700);
+  }
+  .letter-inner h2 {
+    font-family: var(--f-display); font-weight: 500;
+    font-size: clamp(32px, 3.4vw, 52px); line-height: 1.08;
+    margin: 56px 0 24px; color: var(--forest-900); letter-spacing: -0.01em;
+  }
+  .letter-inner h2:first-child { margin-top: 0; }
+  .letter-inner h2 em { font-style: italic; color: var(--copper-500); }
+  .letter-inner p { margin: 0 0 22px; }
+  .letter-inner p:first-of-type::first-letter {
+    font-family: var(--f-display); font-style: italic;
+    font-size: 4.4em; line-height: 0.9; float: left;
+    padding: 8px 14px 0 0; color: var(--copper-500);
+  }
+  .letter-inner .sig {
+    margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--rule);
+  }
+  .letter-inner .sig .name {
+    font-family: var(--f-display); font-style: italic; font-size: 40px;
+    color: var(--copper-500); line-height: 1;
+  }
+  .letter-inner .sig .role {
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--fg-muted); margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+<header id="tt-nav"></header>
+
+<section class="intro">
+  <div class="container">
+    <div class="intro-grid reveal">
+      <div class="portrait"><img src="assets/img/alex-amadeu.jpg" alt="Retrato de Alex Amadeu" /></div>
+      <div>
+        <span class="eyebrow">Mentor · fundador</span>
+        <h1>Alex<br/>Amadeu,<br/><em>advogado.</em></h1>
+        <p class="lede" style="margin-top: 32px">
+          Tributarista com atuação em recuperação de créditos, defesa em processos administrativos e arquitetura fiscal de grupos empresariais e famílias empresárias. Fundou a TriboTax para trocar a frieza da consultoria tradicional por um modelo de comunidade técnica.
+        </p>
+      </div>
+    </div>
+    <div class="credentials reveal">
+      <div class="c"><div class="k">Formação</div><div class="v">Direito tributário · pós-graduação</div></div>
+      <div class="c"><div class="k">Atuação</div><div class="v">Contencioso e consultivo</div></div>
+      <div class="c"><div class="k">Registro</div><div class="v">OAB/SP</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="letter">
+  <div class="container">
+    <div class="letter-inner reveal">
+      <span class="kicker" style="color: var(--copper-500)">Carta aberta</span>
+      <h2 style="margin-top: 24px">Eu não fundei um escritório. <em>Fundei uma tribo.</em></h2>
+      <p>Passei os primeiros anos da minha carreira dentro do modelo tradicional da consultoria tributária. Era um modelo eficiente em tese — relatórios técnicos, pareceres caríssimos, uma linguagem que o cliente respeitava sem nunca entender de verdade. Era também um modelo profundamente solitário. O empresário recebia o documento e ficava sozinho com ele. A tecnicidade virava muro.</p>
+      <p>Foi percebendo essa solidão que comecei a entender que o problema não era a falta de bons advogados tributários no Brasil — existem muitos, e eu tenho profundo respeito por uma geração de colegas que construíram a disciplina. O problema era o formato. A relação transacional. A lógica de que cada novo caso é um novo projeto, cada novo cliente é uma nova fatura, e a memória operacional se dissolve no fim de cada contrato.</p>
+      <h2>O que faltava <em>não era técnica.</em></h2>
+      <p>Era permanência. Era uma comunidade onde o conhecimento de um cliente se soma — anonimamente, com respeito — ao conhecimento do próximo. Era uma linguagem que desfaz o labirinto ao invés de impressionar com ele. Era um mentor — não um fornecedor — que entende que o patrimônio do outro não é uma planilha, é uma narrativa.</p>
+      <p>A TriboTax nasceu dessa inquietação. Ela tem tudo que uma consultoria séria precisa ter — técnica, rigor, conformidade absoluta com a OAB, método — e tem algo a mais, que eu chamo, sem embaraço, de <em>alma</em>. Uma tribo só funciona quando quem a lidera acredita nela como um lugar, não como um produto.</p>
+      <h2>A que <em>me comprometo.</em></h2>
+      <p>A estar presente. A traduzir sem simplificar. A nunca prometer vitória onde há apenas probabilidade. A recusar clientes que não cabem no círculo, porque dizer sim a qualquer um é trair quem já pertence. A proteger o patrimônio que você construiu como se fosse o legado da minha própria família — porque, dentro da tribo, a distinção entre o seu legado e o nosso começa a deixar de fazer sentido.</p>
+      <p>Se você chegou até aqui, provavelmente é porque algo no ambiente fiscal está pedindo uma segunda leitura. Essa leitura, eu faço com você. E não tem pressa: boa tributação se constrói em quilômetros, não em metros.</p>
+      <div class="sig">
+        <div class="name">Alex Amadeu</div>
+        <div class="role">Fundador · TriboTax · Advogado tributarista</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="tt-footer"></footer>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

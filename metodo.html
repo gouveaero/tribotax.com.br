@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Método · TriboTax</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="assets/css/tokens.css" />
+<style>
+  .head { padding: clamp(56px, 7vw, 96px) 0 clamp(40px, 5vw, 72px); }
+  .head h1 { font-family: var(--f-display); font-size: clamp(56px, 7vw, 120px); line-height: 0.98; margin: 20px 0 0; font-weight: 500; letter-spacing: -0.02em; }
+  .head h1 em { font-style: italic; color: var(--copper-500); }
+  .head .lede { margin-top: 40px; max-width: 60ch; }
+
+  .journey { padding: 0 0 var(--sp-10); }
+  .step {
+    display: grid;
+    grid-template-columns: 220px 1fr 1fr;
+    gap: var(--sp-7);
+    padding: 56px 0;
+    border-top: 1px solid var(--rule);
+    align-items: start;
+  }
+  .step:last-child { border-bottom: 1px solid var(--rule); }
+  @media (max-width: 900px) { .step { grid-template-columns: 1fr; gap: 24px; } }
+  .step .num {
+    font-family: var(--f-display); font-style: italic;
+    font-size: clamp(64px, 6vw, 108px); line-height: 0.9;
+    color: var(--copper-500); letter-spacing: -0.02em;
+  }
+  .step h3 {
+    font-family: var(--f-display); font-size: clamp(32px, 3vw, 44px);
+    line-height: 1.08; margin: 0 0 16px; font-weight: 500;
+    color: var(--forest-900); letter-spacing: -0.01em;
+  }
+  .step h3 em { font-style: italic; color: var(--copper-500); }
+  .step .body { color: var(--ink-700); font-size: 17px; line-height: 1.6; }
+  .step .body p { margin: 0 0 14px; }
+  .step .artifacts {
+    border-left: 1px solid var(--rule); padding-left: 28px;
+  }
+  @media (max-width: 900px) { .step .artifacts { border-left: 0; padding-left: 0; border-top: 1px solid var(--rule); padding-top: 24px; } }
+  .step .artifacts .k {
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--fg-muted); margin-bottom: 16px;
+  }
+  .step .artifacts ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
+  .step .artifacts ul li { padding-left: 18px; position: relative; color: var(--ink-700); }
+  .step .artifacts ul li::before { content: ""; position: absolute; left: 0; top: 10px; width: 8px; height: 1px; background: var(--copper-500); }
+
+  .circle-diagram { padding: clamp(80px, 10vw, 140px) 0; background: var(--forest-900); color: var(--fg-on-deep); }
+  .circle-diagram h2 { font-family: var(--f-display); font-size: clamp(36px, 4.4vw, 64px); line-height: 1.08; font-weight: 500; margin: 0; color: var(--fg-on-deep); }
+  .circle-diagram h2 em { font-style: italic; color: var(--copper-400); }
+  .rings-wrap { display: flex; justify-content: center; margin-top: 64px; }
+  .rings { width: min(560px, 90%); color: var(--copper-300); }
+
+  .cta-row {
+    padding: clamp(80px, 10vw, 140px) 0;
+    text-align: center;
+  }
+  .cta-row h2 { font-family: var(--f-display); font-size: clamp(40px, 5vw, 80px); line-height: 1.04; margin: 0 0 32px; font-weight: 500; letter-spacing: -0.015em; max-width: 22ch; margin-inline: auto; }
+  .cta-row h2 em { font-style: italic; color: var(--copper-500); }
+</style>
+</head>
+<body>
+<header id="tt-nav"></header>
+
+<section class="head">
+  <div class="container reveal">
+    <span class="eyebrow">Método · MMXXVI</span>
+    <h1>Um caminho,<br/><em>não um projeto.</em></h1>
+    <p class="lede">
+      Toda operação que entra na TriboTax percorre o mesmo anel. Não porque somos rígidos — porque a resiliência fiscal é um processo, e processos precisam de ordem. Abaixo, os cinco passos que separam a primeira conversa da zeladoria permanente.
+    </p>
+  </div>
+</section>
+
+<section class="journey">
+  <div class="container">
+    <div class="step reveal">
+      <div class="num">I.</div>
+      <div>
+        <div class="kicker" style="color: var(--copper-500)">Primeiro contato</div>
+        <h3 style="margin-top: 12px">Diagnóstico <em>preliminar.</em></h3>
+        <div class="body">
+          <p>Uma conversa estruturada de 45 minutos, pelo WhatsApp ou videochamada, com foco em entender o perfil da operação, os regimes tributários envolvidos e os pontos onde o caixa pode estar preso sem que ninguém tenha ainda nomeado.</p>
+          <p>Sem compromisso. Sem prescrição antecipada. É o momento em que avaliamos, juntos, se faz sentido aprofundar.</p>
+        </div>
+      </div>
+      <div class="artifacts">
+        <div class="k">Entregáveis</div>
+        <ul>
+          <li>Mapa inicial de oportunidades</li>
+          <li>Leitura de risco aparente</li>
+          <li>Recomendação: seguir ou encerrar</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step reveal">
+      <div class="num">II.</div>
+      <div>
+        <div class="kicker" style="color: var(--copper-500)">Imersão técnica</div>
+        <h3 style="margin-top: 12px">Auditoria <em>fiscal preditiva.</em></h3>
+        <div class="body">
+          <p>Análise cirúrgica dos últimos cinco anos de operação: apurações, obrigações acessórias, contratos sensíveis, práticas contábeis e exposição a autuações latentes. É aqui que se separa o que é crédito recuperável, o que é risco a tratar, e o que é simplesmente ruído.</p>
+          <p>Trabalhamos em sala fechada com o time contábil do cliente — não em paralelo, mas acoplados.</p>
+        </div>
+      </div>
+      <div class="artifacts">
+        <div class="k">Entregáveis</div>
+        <ul>
+          <li>Laudo técnico consolidado</li>
+          <li>Quantificação de oportunidades</li>
+          <li>Matriz de risco priorizada</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step reveal">
+      <div class="num">III.</div>
+      <div>
+        <div class="kicker" style="color: var(--copper-500)">Execução</div>
+        <h3 style="margin-top: 12px">Habilitação <em>e defesa.</em></h3>
+        <div class="body">
+          <p>Protocolos administrativos, ações judiciais, defesas em fiscalização, pedidos de compensação e todo o ciclo processual necessário. O cliente não é notificado por e-mail; é informado por seu mentor, com contexto, e sempre antes da próxima movimentação.</p>
+          <p>Aqui também se faz, quando cabível, a estruturação societária — holdings, reorganizações, segregações.</p>
+        </div>
+      </div>
+      <div class="artifacts">
+        <div class="k">Entregáveis</div>
+        <ul>
+          <li>Peças técnicas e processuais</li>
+          <li>Estruturação societária</li>
+          <li>Acompanhamento ativo até a conclusão</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step reveal">
+      <div class="num">IV.</div>
+      <div>
+        <div class="kicker" style="color: var(--copper-500)">Transição</div>
+        <h3 style="margin-top: 12px">Arquitetura <em>de longo prazo.</em></h3>
+        <div class="body">
+          <p>Com a estabilização em curso, começamos a desenhar o ecossistema tributário que a empresa precisa para os próximos cinco anos — considerando a Reforma Tributária, o perfil de crescimento, os movimentos societários previstos e a cadeia na qual a operação se insere.</p>
+        </div>
+      </div>
+      <div class="artifacts">
+        <div class="k">Entregáveis</div>
+        <ul>
+          <li>Plano diretor tributário</li>
+          <li>Protocolo de transição IBS/CBS</li>
+          <li>Governança fiscal interna</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step reveal">
+      <div class="num">V.</div>
+      <div>
+        <div class="kicker" style="color: var(--copper-500)">Permanência</div>
+        <h3 style="margin-top: 12px">Zeladoria <em>contínua.</em></h3>
+        <div class="body">
+          <p>O ciclo não termina na entrega do plano — começa nele. A tribo permanece presente: pareceres sob demanda, radar legislativo, apoio a decisões de investimento, revisão semestral e presença contínua ao lado do time interno do cliente.</p>
+          <p>É o que chamamos, sem disfarce, de pertencimento: a operação deixa de estar sozinha diante do fisco.</p>
+        </div>
+      </div>
+      <div class="artifacts">
+        <div class="k">Entregáveis</div>
+        <ul>
+          <li>Contrato anual de zeladoria</li>
+          <li>Reuniões mensais e revisões trimestrais</li>
+          <li>Canal direto com o mentor</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="circle-diagram">
+  <div class="container reveal">
+    <div class="eyebrow">O anel da resiliência</div>
+    <h2 style="margin-top: 32px; max-width: 20ch">
+      Responder, estabilizar, <em>transformar.</em>
+    </h2>
+    <div class="rings-wrap">
+      <div class="rings">
+        <svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="200" cy="200" r="190" opacity="0.25"/>
+          <circle cx="200" cy="200" r="145" opacity="0.4"/>
+          <circle cx="200" cy="200" r="100" opacity="0.6"/>
+          <circle cx="200" cy="200" r="55"/>
+          <circle cx="200" cy="200" r="5" fill="currentColor" stroke="none"/>
+          <g font-family="'Inter Tight', sans-serif" font-size="10" letter-spacing="2" fill="currentColor" stroke="none" text-anchor="middle">
+            <text x="200" y="25">TRANSFORMAR · ESFERA DE IMPACTO</text>
+            <text x="200" y="70">ESTABILIZAR · ANEL DE TRANSIÇÃO</text>
+            <text x="200" y="115">RESPONDER · NÚCLEO DE CRISE</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-row">
+  <div class="container reveal">
+    <div style="display:flex; justify-content:center"><div class="seal" aria-hidden="true">tt</div></div>
+    <h2 style="margin-top: 32px">Comece pelo <em>diagnóstico.</em></h2>
+    <p class="lede" style="margin: 0 auto 32px; text-align:center">A primeira conversa define se há lugar para a sua operação no círculo. Sem compromisso.</p>
+    <a class="btn btn-primary" href="contato.html#diagnostico">
+      Solicitar diagnóstico
+      <svg class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+    </a>
+  </div>
+</section>
+
+<footer id="tt-footer"></footer>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

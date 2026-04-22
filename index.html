@@ -1,0 +1,836 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TriboTax — Inteligência Coletiva. Resiliência Fiscal.</title>
+  <meta name="description" content="Consultoria tributária para líderes que não navegam sozinhos. Proteção de legado, recuperação de créditos, arquitetura fiscal preditiva." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <style>
+    /* ——— Page-specific ——— */
+
+    /* Hero */
+    .hero {
+      padding: clamp(48px, 7vw, 96px) 0 clamp(80px, 10vw, 140px);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: var(--sp-9);
+      align-items: end;
+    }
+    @media (max-width: 960px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+    .hero h1 { margin: 24px 0 0; }
+    .hero .pecunia {
+      color: var(--copper-500);
+      font-style: italic;
+      font-weight: 400;
+    }
+    .hero-right { position: relative; }
+    .knot-mark {
+      width: min(440px, 100%);
+      color: var(--forest-800);
+      margin-left: auto;
+      filter: drop-shadow(0 20px 40px rgba(20,37,29,0.12));
+    }
+    .knot-mark::before { content: ""; }
+    .hero-footer {
+      margin-top: var(--sp-9);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--sp-5);
+      border-top: 1px solid var(--rule);
+      padding-top: var(--sp-5);
+    }
+    @media (max-width: 720px) { .hero-footer { grid-template-columns: repeat(2, 1fr); } }
+    .stat { display: flex; flex-direction: column; gap: 6px; }
+    .stat .num { font-family: var(--f-display); font-size: clamp(32px, 3vw, 44px); line-height: 1; color: var(--forest-800); letter-spacing: -0.02em; }
+    .stat .lbl { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-muted); }
+
+    /* Tagline ornamental */
+    .ornament-row {
+      display: flex; align-items: center; gap: 24px;
+      font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.24em;
+      text-transform: uppercase; color: var(--fg-muted);
+    }
+    .ornament-row::before, .ornament-row::after {
+      content: ""; flex: 1; height: 1px; background: var(--rule);
+    }
+
+    /* Pecunia Non Olet — filosofia fundadora (seção dark) */
+    .philosophy {
+      background: var(--forest-900);
+      color: var(--fg-on-deep);
+      padding: clamp(120px, 14vw, 200px) 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .philosophy::before {
+      content: "";
+      position: absolute;
+      right: -200px; top: 50%;
+      width: 900px; height: 900px;
+      transform: translateY(-50%);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(190,109,63,0.28), rgba(20,37,29,0) 55%);
+      pointer-events: none;
+    }
+    .philosophy-quote {
+      font-family: var(--f-display);
+      font-weight: 400;
+      font-style: italic;
+      font-size: clamp(40px, 5.4vw, 86px);
+      line-height: 1.08;
+      letter-spacing: -0.01em;
+      color: var(--fg-on-deep);
+      max-width: 18ch;
+    }
+    .philosophy-quote .drop {
+      color: var(--copper-400);
+      font-style: italic;
+    }
+    .philosophy-attr {
+      margin-top: 32px;
+      font-family: var(--f-mono);
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--copper-300);
+    }
+    .philosophy-body { max-width: 54ch; color: var(--fg-on-deep-muted); font-size: 17px; line-height: 1.65; }
+    .philosophy-body p + p { margin-top: 1em; }
+
+    /* Princípios (3 colunas) */
+    .principles .col {
+      padding-top: 32px;
+      border-top: 1px solid var(--rule);
+    }
+    .principles .col .numeral { display: block; margin-bottom: 16px; }
+    .principles h3 { margin: 0 0 12px; }
+    .principles p { color: var(--fg-muted); max-width: 34ch; }
+
+    /* Direitos (antigo "Teses" — sem citar números) */
+    .rights {
+      background: var(--clay-100);
+      padding: clamp(96px, 11vw, 160px) 0;
+    }
+    .right-row {
+      display: grid;
+      grid-template-columns: 80px 280px 1fr auto;
+      gap: var(--sp-6);
+      padding: 32px 0;
+      border-top: 1px solid var(--rule);
+      align-items: start;
+    }
+    .right-row:last-child { border-bottom: 1px solid var(--rule); }
+    @media (max-width: 960px) {
+      .right-row { grid-template-columns: 1fr; gap: 12px; }
+    }
+    .right-row .order {
+      font-family: var(--f-display);
+      font-style: italic;
+      font-size: 42px;
+      color: var(--copper-500);
+      line-height: 1;
+    }
+    .right-row .title { font-family: var(--f-display); font-size: 28px; line-height: 1.15; }
+    .right-row .desc { color: var(--ink-700); max-width: 60ch; font-size: 16px; }
+    .right-row .sector { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-muted); white-space: nowrap; }
+    @media (max-width: 960px) { .right-row .sector { white-space: normal; } }
+
+    /* Método — stewardship 3 fases */
+    .method-deep {
+      background: var(--forest-800);
+      color: var(--fg-on-deep);
+      padding: clamp(120px, 14vw, 200px) 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .method-deep::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(231,222,201,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(231,222,201,0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse at 50% 50%, #000 30%, transparent 75%);
+    }
+    .method-phases {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: rgba(231,222,201,0.14);
+      margin-top: var(--sp-8);
+      position: relative;
+      z-index: 2;
+    }
+    @media (max-width: 860px) { .method-phases { grid-template-columns: 1fr; } }
+    .phase {
+      background: var(--forest-800);
+      padding: 48px 32px;
+      position: relative;
+    }
+    .phase-head {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 32px;
+    }
+    .phase .pnum {
+      font-family: var(--f-display); font-style: italic;
+      font-size: 72px; line-height: 1; color: var(--copper-400);
+      letter-spacing: -0.02em;
+    }
+    .phase .pkicker {
+      font-family: var(--f-mono); font-size: 11px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--copper-300);
+    }
+    .phase h3 { font-family: var(--f-display); font-size: 40px; line-height: 1.08; margin: 0 0 16px; color: var(--fg-on-deep); font-weight: 400; }
+    .phase p { color: var(--fg-on-deep-muted); font-size: 15px; line-height: 1.6; max-width: 32ch; }
+    .phase ul { margin: 24px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #BCC2B4; }
+    .phase ul li { padding-left: 18px; position: relative; }
+    .phase ul li::before { content: ""; position: absolute; left: 0; top: 9px; width: 8px; height: 1px; background: var(--copper-400); }
+
+    /* Setores */
+    .sectors-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-top: 1px solid var(--rule);
+      border-left: 1px solid var(--rule);
+    }
+    @media (max-width: 960px) { .sectors-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .sectors-grid { grid-template-columns: 1fr; } }
+    .sector-card {
+      border-right: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      padding: 40px 28px;
+      background: var(--clay-50);
+      transition: background .3s ease;
+      min-height: 240px;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .sector-card:hover { background: var(--clay-100); }
+    .sector-card .snum {
+      font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.2em;
+      color: var(--fg-faint);
+    }
+    .sector-card h4 { font-family: var(--f-display); font-size: 28px; line-height: 1.1; margin: 0 0 12px; font-weight: 500; }
+    .sector-card p { font-size: 14px; color: var(--fg-muted); margin: 0; max-width: 28ch; }
+
+    /* Manifesto callout */
+    .manifesto-callout {
+      background: var(--copper-500);
+      color: #1A0E08;
+      padding: clamp(80px, 9vw, 120px) 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .manifesto-callout::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15  0 0 0 0 0.08  0 0 0 0 0.05  0 0 0 0.22 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+      opacity: 0.5; mix-blend-mode: multiply;
+      pointer-events: none;
+    }
+    .manifesto-callout .inner { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    @media (max-width: 860px) { .manifesto-callout .inner { grid-template-columns: 1fr; } }
+    .manifesto-callout h2 { font-family: var(--f-display); font-size: clamp(40px, 5vw, 76px); line-height: 1.04; margin: 0 0 16px; font-weight: 500; letter-spacing: -0.015em; }
+    .manifesto-callout h2 em { color: #3A1A0B; font-style: italic; }
+    .manifesto-callout p { max-width: 48ch; font-size: 17px; line-height: 1.6; color: #2A1208; }
+    .manifesto-callout .btn-primary { background: #1A0E08; color: var(--copper-300); }
+    .manifesto-callout .btn-primary:hover { background: #2C1811; color: var(--clay-50); }
+
+    /* Alex card */
+    .alex-row {
+      display: grid; grid-template-columns: 1.05fr 1fr; gap: var(--sp-9);
+      align-items: center;
+    }
+    @media (max-width: 860px) { .alex-row { grid-template-columns: 1fr; } }
+    .alex-photo {
+      aspect-ratio: 4/5;
+      background: var(--forest-900);
+      border: 1px solid var(--rule);
+      position: relative;
+      overflow: hidden;
+    }
+    .alex-photo img {
+      width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%;
+      filter: grayscale(0.3) contrast(1.05);
+      mix-blend-mode: luminosity;
+      opacity: 0.95;
+    }
+    .alex-photo::before {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 55%, rgba(20,37,29,0.6) 100%);
+      pointer-events: none; z-index: 2;
+    }
+    .alex-photo::after {
+      content: "retrato · Alex Amadeu";
+      position: absolute; bottom: 18px; left: 18px;
+      font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.2em;
+      color: var(--clay-50); text-transform: uppercase;
+      z-index: 3;
+    }
+    .alex-row blockquote {
+      font-family: var(--f-display); font-size: clamp(28px, 2.6vw, 40px);
+      line-height: 1.2; font-style: italic; font-weight: 400;
+      color: var(--forest-900); margin: 0; max-width: 22ch;
+      letter-spacing: -0.01em;
+    }
+    .alex-row blockquote::before { content: "“"; color: var(--copper-500); font-size: 1.2em; margin-right: -0.1em; }
+    .alex-row blockquote::after  { content: "”"; color: var(--copper-500); font-size: 1.2em; }
+    .alex-sig { margin-top: 32px; font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-muted); }
+
+    /* CTA final */
+    .final-cta {
+      text-align: center;
+      padding: clamp(120px, 14vw, 200px) 0;
+    }
+    .final-cta h2 {
+      font-family: var(--f-display);
+      font-size: clamp(44px, 6vw, 96px);
+      line-height: 1.02;
+      max-width: 20ch; margin: 24px auto 32px;
+      font-weight: 500; letter-spacing: -0.015em;
+    }
+    .final-cta h2 em { color: var(--copper-500); font-style: italic; }
+    .final-cta .buttons { display: inline-flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+
+    /* Tweaks panel */
+    .tweaks-panel {
+      position: fixed; right: 20px; bottom: 20px; z-index: 100;
+      background: var(--clay-50); border: 1px solid var(--ink-900);
+      padding: 20px 24px; width: 300px;
+      font-family: var(--f-mono); font-size: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+      display: none;
+    }
+    .tweaks-panel.open { display: block; }
+    .tweaks-panel h4 { margin: 0 0 16px; font-family: var(--f-display); font-size: 18px; letter-spacing: 0; text-transform: none; font-weight: 500; font-style: italic; }
+    .tweak-row { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+    .tweak-row label { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-muted); }
+    .tweak-row .opts { display: flex; gap: 6px; }
+    .tweak-row .opts button {
+      flex: 1; padding: 8px 6px; border: 1px solid var(--rule); background: transparent;
+      font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.08em; cursor: pointer;
+    }
+    .tweak-row .opts button.active { background: var(--forest-900); color: var(--clay-50); border-color: var(--forest-900); }
+  </style>
+</head>
+<body>
+  <header id="tt-nav"></header>
+
+  <!-- ———————— HERO ———————— -->
+  <section class="hero">
+    <div class="container">
+      <div class="ornament-row reveal">
+        <span>Advocacia tributária · MMXXVI</span>
+        <span>Inteligência Coletiva · Resiliência Fiscal</span>
+      </div>
+
+      <div class="hero-grid" style="margin-top: 56px">
+        <div class="reveal">
+          <span class="kicker">O que somos</span>
+          <h1 class="h-display h-1">
+            Ninguém<br/>
+            atravessa o fisco<br/>
+            <em class="h-italic pecunia">sozinho.</em>
+          </h1>
+          <p class="lede" style="margin-top: 32px; max-width: 52ch">
+            A TriboTax é a consultoria tributária que trocou a frieza do escritório pela lógica da tribo. Somos um círculo de inteligência coletiva para líderes que carregam patrimônio, operação e legado — e entenderam que o sistema fiscal brasileiro não é feito para ser enfrentado em silêncio.
+          </p>
+          <div style="display: flex; gap: 14px; margin-top: 40px; flex-wrap: wrap">
+            <a class="btn btn-primary" href="contato.html#diagnostico">
+              Solicitar diagnóstico
+              <svg class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+            </a>
+            <a class="btn btn-ghost" href="manifesto.html">Ler o manifesto</a>
+          </div>
+        </div>
+
+        <div class="hero-right reveal">
+          <div class="knot-mark" aria-hidden="true">
+            <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="100" cy="100" r="94" opacity="0.22"/>
+              <circle cx="100" cy="100" r="80" opacity="0.4"/>
+              <!-- Trifólio entrelaçado, linhas duplas para sugerir corda -->
+              <g>
+                <path d="M100 28 C 62 62, 62 108, 100 142 C 138 108, 138 62, 100 28 Z"/>
+                <path d="M100 28 C 62 62, 62 108, 100 142 C 138 108, 138 62, 100 28 Z" transform="rotate(120 100 100)"/>
+                <path d="M100 28 C 62 62, 62 108, 100 142 C 138 108, 138 62, 100 28 Z" transform="rotate(240 100 100)"/>
+                <!-- linhas internas para espessura ótica -->
+                <path d="M100 38 C 70 68, 70 102, 100 132 C 130 102, 130 68, 100 38 Z" opacity="0.4"/>
+                <path d="M100 38 C 70 68, 70 102, 100 132 C 130 102, 130 68, 100 38 Z" transform="rotate(120 100 100)" opacity="0.4"/>
+                <path d="M100 38 C 70 68, 70 102, 100 132 C 130 102, 130 68, 100 38 Z" transform="rotate(240 100 100)" opacity="0.4"/>
+              </g>
+              <circle cx="100" cy="100" r="5" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          <div style="text-align: right; margin-top: 24px">
+            <div class="mono" style="color: var(--fg-muted)">O NÓ · símbolo da união inquebrável</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-footer reveal">
+        <div class="stat">
+          <span class="num">I.</span>
+          <span class="lbl">Diagnóstico</span>
+        </div>
+        <div class="stat">
+          <span class="num">II.</span>
+          <span class="lbl">Estratégia</span>
+        </div>
+        <div class="stat">
+          <span class="num">III.</span>
+          <span class="lbl">Recuperação</span>
+        </div>
+        <div class="stat">
+          <span class="num">IV.</span>
+          <span class="lbl">Zeladoria contínua</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ———————— FILOSOFIA · PECUNIA NON OLET ———————— -->
+  <section class="philosophy">
+    <div class="container">
+      <div class="eyebrow">Filosofia fundadora · Roma, 70 d.C.</div>
+      <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--sp-9); margin-top: 40px; align-items: start" class="reveal">
+        <blockquote class="philosophy-quote">
+          O dinheiro<br/>
+          <span class="drop">não tem cheiro.</span>
+        </blockquote>
+
+        <div class="philosophy-body" style="padding-top: 8px">
+          <p>
+            Foi o que o imperador Vespasiano respondeu ao filho, quando este questionou a dignidade de um imposto sobre coletores de urina. A máxima atravessou dois mil anos e virou a filosofia operacional do fisco brasileiro: não importa a origem, importa o fato gerador.
+          </p>
+          <p>
+            O que os manuais não ensinam é que esse mesmo princípio — a <em>neutralidade</em> absoluta do sistema fiscal — é a sua maior arma de defesa. Se o Estado não distingue contribuintes na hora de cobrar, não pode distingui-los na hora de conceder direitos.
+          </p>
+          <p style="color: var(--copper-300); font-family: var(--f-display); font-style: italic; font-size: 22px; line-height: 1.4; margin-top: 28px">
+            O fisco usa Vespasiano para cobrar de você.<br/>
+            A TriboTax usa Vespasiano para defender você.
+          </p>
+        </div>
+      </div>
+      <div class="philosophy-attr" style="margin-top: 80px">— Pecunia Non Olet · Vespasiano, Imperador Romano · 70 d.C.</div>
+    </div>
+  </section>
+
+  <!-- ———————— TRÊS PRINCÍPIOS ———————— -->
+  <section class="principles">
+    <div class="container">
+      <div class="reveal" style="max-width: 720px">
+        <span class="eyebrow">Nossos três princípios</span>
+        <h2 class="h-display h-2" style="margin-top: 32px">
+          Não somos um<br/>
+          fornecedor. Somos<br/>
+          <em class="h-italic accent">uma tribo.</em>
+        </h2>
+      </div>
+
+      <div class="grid grid-3" style="margin-top: var(--sp-9)">
+        <div class="col reveal">
+          <span class="numeral">i.</span>
+          <h3 class="h-display h-4">Inteligência coletiva</h3>
+          <p>O conhecimento tributário de ponta não cabe em uma sala. Reunimos advogados, contadores e analistas em torno da mesma operação — e multiplicamos a leitura de riscos e oportunidades por quatro.</p>
+        </div>
+        <div class="col reveal">
+          <span class="numeral">ii.</span>
+          <h3 class="h-display h-4">Resiliência fiscal</h3>
+          <p>Responder a crises, estabilizar a operação, transformar a arquitetura tributária. Não é um projeto pontual: é zeladoria contínua sobre a saúde fiscal da empresa.</p>
+        </div>
+        <div class="col reveal">
+          <span class="numeral">iii.</span>
+          <h3 class="h-display h-4">Proteção de legado</h3>
+          <p>Patrimônio construído em décadas não pode depender de uma leitura apressada do regulamento. Arquitetamos holdings, sucessões e planejamentos à prova do tempo — e do próximo governo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ———————— O QUE FAZEMOS · TRADUÇÃO EM DIREITOS ———————— -->
+  <section class="rights">
+    <div class="container">
+      <div class="grid grid-2 reveal" style="align-items: end; margin-bottom: var(--sp-8)">
+        <div>
+          <span class="eyebrow">O que fazemos</span>
+          <h2 class="h-display h-2" style="margin-top: 32px">
+            Direitos que<br/>
+            o sistema não<br/>
+            <em class="h-italic accent">te ensinou.</em>
+          </h2>
+        </div>
+        <p class="lede">
+          Boa parte do caixa da sua empresa pode estar presa em créditos tributários que nunca foram mapeados, em bases de cálculo infladas por práticas que os tribunais já declararam indevidas, ou em decisões administrativas que simplesmente não foram contestadas. Nossa função é devolver essa conversa ao seu controle.
+        </p>
+      </div>
+
+      <div class="reveal">
+        <div class="right-row">
+          <span class="order">I.</span>
+          <div class="title">Recuperação de créditos tributários</div>
+          <p class="desc">Mapeamento cirúrgico de PIS, COFINS, ICMS, IPI e insumos produtivos. Identificamos o que foi pago a mais nos últimos cinco anos e estruturamos a habilitação administrativa ou judicial — com laudo técnico que protege o pedido.</p>
+          <span class="sector">Indústria · Distribuição<br/>Serviços · Agro</span>
+        </div>
+        <div class="right-row">
+          <span class="order">II.</span>
+          <div class="title">Defesa em autuações e dívida ativa</div>
+          <p class="desc">Resposta tática a fiscalizações, impugnações e recursos administrativos. Construção de teses que conversam com o CARF, o TIT e os tribunais — e que, quando necessário, abrem espaço para reforma sistêmica da operação.</p>
+          <span class="sector">Empresas do Lucro Real<br/>e grupos econômicos</span>
+        </div>
+        <div class="right-row">
+          <span class="order">III.</span>
+          <div class="title">Arquitetura fiscal e planejamento</div>
+          <p class="desc">Reforma Tributária, transição IBS/CBS, elisão fiscal lícita, reorganizações societárias. A conta não cai no seu contador: cai no seu balanço. Ajustamos a engenharia antes — não depois.</p>
+          <span class="sector">Operações complexas<br/>e cross-border</span>
+        </div>
+        <div class="right-row">
+          <span class="order">IV.</span>
+          <div class="title">Holdings familiares e proteção patrimonial</div>
+          <p class="desc">Estruturamos holdings patrimoniais e sucessórias para empresários que querem transmitir controle sem transmitir conflito. Governança, blindagem tributária e continuidade intergeracional desenhadas como uma coisa só.</p>
+          <span class="sector">Famílias empresárias<br/>e sucessão</span>
+        </div>
+        <div class="right-row">
+          <span class="order">V.</span>
+          <div class="title">Consultoria recorrente · Zeladoria fiscal</div>
+          <p class="desc">Um parceiro permanente dentro da sua operação. Monitoramento legislativo, radar de jurisprudência, pareceres sob demanda e presença contínua ao lado do seu time contábil. A tribo não te visita — ela fica.</p>
+          <span class="sector">Clientes corporativos<br/>de contrato anual</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ———————— MÉTODO — RESPONDER · ESTABILIZAR · TRANSFORMAR ———————— -->
+  <section class="method-deep on-deep" id="metodo">
+    <div class="container">
+      <div class="reveal" style="max-width: 720px">
+        <span class="eyebrow">Método · Zeladoria em três atos</span>
+        <h2 class="h-display h-2" style="margin-top: 32px; color: var(--fg-on-deep)">
+          Responder.<br/>
+          Estabilizar.<br/>
+          <em class="h-italic" style="color: var(--copper-400)">Transformar.</em>
+        </h2>
+        <p class="lede" style="max-width: 58ch; margin-top: 32px">
+          Toda operação que chega à TriboTax passa pelo mesmo anel — da intervenção tática imediata à reestruturação estratégica do ecossistema fiscal. Não oferecemos projetos. Oferecemos um caminho.
+        </p>
+      </div>
+
+      <div class="method-phases reveal">
+        <div class="phase">
+          <div class="phase-head">
+            <span class="pnum">01</span>
+            <span class="pkicker">Núcleo de crise</span>
+          </div>
+          <h3>Responder</h3>
+          <p>Intervenção tática imediata em autuações, fiscalizações em curso e decisões urgentes. A tribo cria um escudo de contenção para abrir espaço para a reforma sistêmica.</p>
+          <ul>
+            <li>Defesas e impugnações em prazo</li>
+            <li>Leitura de risco imediato</li>
+            <li>Comunicação com autoridades</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="phase-head">
+            <span class="pnum">02</span>
+            <span class="pkicker">Anel de transição</span>
+          </div>
+          <h3>Estabilizar</h3>
+          <p>Construção das fundações de dados e recuperação financeira. Levantamento histórico, habilitação de créditos, segregação contábil e preparação do caixa para o próximo ciclo.</p>
+          <ul>
+            <li>Mapeamento de créditos retroativos</li>
+            <li>Habilitação administrativa ou judicial</li>
+            <li>Laudos técnicos blindados</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="phase-head">
+            <span class="pnum">03</span>
+            <span class="pkicker">Esfera de impacto</span>
+          </div>
+          <h3>Transformar</h3>
+          <p>Reestruturação proativa do ecossistema tributário do cliente. Arquitetura de holdings, transição para o IBS/CBS, governança e a adaptação que preserva crescimento a longo prazo.</p>
+          <ul>
+            <li>Reforma Tributária 2026-2033</li>
+            <li>Estruturas societárias e sucessórias</li>
+            <li>Consultoria recorrente contínua</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ———————— SETORES ———————— -->
+  <section>
+    <div class="container">
+      <div class="grid grid-2 reveal" style="align-items: end; margin-bottom: var(--sp-7)">
+        <div>
+          <span class="eyebrow">Quem já pertence à tribo</span>
+          <h2 class="h-display h-2" style="margin-top: 32px">
+            Setores e operações<br/>
+            <em class="h-italic accent">que acolhemos.</em>
+          </h2>
+        </div>
+        <p class="lede">
+          A lógica tributária brasileira atinge cadeias inteiras — e cada uma tem um ponto cego específico. A TriboTax desenha o mapa de risco por perfil de operação, não por tabela pronta de honorários.
+        </p>
+      </div>
+
+      <div class="sectors-grid reveal">
+        <div class="sector-card">
+          <div class="snum">I</div>
+          <div>
+            <h4>Indústria</h4>
+            <p>Lucro real, cadeias produtivas com insumos intensivos, créditos de PIS/COFINS e IPI a recompor.</p>
+          </div>
+        </div>
+        <div class="sector-card">
+          <div class="snum">II</div>
+          <div>
+            <h4>Distribuição &amp; atacado</h4>
+            <p>Bitributação silenciosa em cadeias com substituição tributária. Caixa preso em imposto sobre imposto.</p>
+          </div>
+        </div>
+        <div class="sector-card">
+          <div class="snum">III</div>
+          <div>
+            <h4>Serviços &amp; tecnologia</h4>
+            <p>ISS, retenções na fonte, regime de apuração e revisão de teses específicas de software e infraestrutura.</p>
+          </div>
+        </div>
+        <div class="sector-card">
+          <div class="snum">IV</div>
+          <div>
+            <h4>Agronegócio</h4>
+            <p>Produtor rural pessoa física na não-cumulatividade, diferimento, e a transição do IBS/CBS sobre a cadeia.</p>
+          </div>
+        </div>
+        <div class="sector-card">
+          <div class="snum">V</div>
+          <div>
+            <h4>Holdings familiares</h4>
+            <p>Estruturas patrimoniais, sucessão em vida, blindagem e continuidade de empresas familiares.</p>
+          </div>
+        </div>
+        <div class="sector-card">
+          <div class="snum">VI</div>
+          <div>
+            <h4>Construção &amp; imobiliário</h4>
+            <p>Regimes especiais (RET), incorporações, cessão de direitos e ITBI — áreas de litígio estrutural.</p>
+          </div>
+        </div>
+        <div class="sector-card">
+          <div class="snum">VII</div>
+          <div>
+            <h4>Varejo</h4>
+            <p>Bases de cálculo, monofásicos, marketplaces e a complexidade estadual brasileira em escala.</p>
+          </div>
+        </div>
+        <div class="sector-card">
+          <div class="snum">VIII</div>
+          <div>
+            <h4>Grupos econômicos</h4>
+            <p>Operações entre coligadas, preços de transferência, e a arquitetura fiscal que sustenta grupos complexos.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ———————— ALEX AMADEU — RETRATO ———————— -->
+  <section class="tight">
+    <div class="container">
+      <div class="alex-row reveal">
+        <div class="alex-photo"><img src="assets/img/alex-amadeu.jpg" alt="Retrato de Alex Amadeu" /></div>
+        <div>
+          <span class="eyebrow">Mentor · fundador</span>
+          <div style="height: 24px"></div>
+          <blockquote>
+            Eu não fundei um escritório para atender clientes. Fundei uma tribo para proteger legados.
+          </blockquote>
+          <div class="alex-sig">Dr. Alex Amadeu · Advogado tributarista</div>
+          <div style="margin-top: 40px">
+            <a class="btn btn-ghost" href="sobre-alex.html">
+              Ler a carta aberta
+              <svg class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ———————— MANIFESTO CALLOUT ———————— -->
+  <section class="manifesto-callout">
+    <div class="container">
+      <div class="inner reveal">
+        <div>
+          <span class="kicker" style="color: #3A1A0B">Manifesto</span>
+          <h2 style="margin-top: 20px">
+            Da conformidade<br/>
+            <em>à comunidade.</em>
+          </h2>
+        </div>
+        <div>
+          <p>
+            A consultoria tributária tradicional é transacional, fria e institucional. A TriboTax é o oposto disso: humana, narrativa, comunitária. Onde os outros entregam relatórios, entregamos pertencimento. Onde os outros reagem, nós antecipamos.
+          </p>
+          <div style="margin-top: 32px">
+            <a class="btn btn-primary" href="manifesto.html">
+              Ler o manifesto completo
+              <svg class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ———————— CTA FINAL ———————— -->
+  <section class="final-cta">
+    <div class="container">
+      <div class="reveal">
+        <div style="display: flex; justify-content: center"><div class="seal" aria-hidden="true">tt</div></div>
+        <h2>
+          Quanto sua operação<br/>
+          está deixando <em>na mesa?</em>
+        </h2>
+        <p class="lede" style="margin: 0 auto 40px; text-align: center; max-width: 50ch">
+          Um diagnóstico preliminar gratuito revela o potencial real de recuperação e os riscos latentes da sua arquitetura tributária atual. Sem compromisso. Sem promessa mágica. Apenas a leitura que o fisco não te manda.
+        </p>
+        <div class="buttons">
+          <a class="btn btn-primary" href="contato.html#diagnostico">
+            Solicitar diagnóstico
+            <svg class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+          </a>
+          <a class="btn btn-ghost" href="contato.html">Falar pelo WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tweaks -->
+  <div class="tweaks-panel" id="tweaksPanel">
+    <h4>Tweaks</h4>
+    <div class="tweak-row">
+      <label>Paleta</label>
+      <div class="opts" data-tweak="palette">
+        <button data-val="clay" class="active">Argila</button>
+        <button data-val="forest">Verde</button>
+        <button data-val="dark">Antracite</button>
+      </div>
+    </div>
+    <div class="tweak-row">
+      <label>Tipografia display</label>
+      <div class="opts" data-tweak="type">
+        <button data-val="cormorant" class="active">Cormorant</button>
+        <button data-val="fraunces">Fraunces</button>
+      </div>
+    </div>
+    <div class="tweak-row">
+      <label>Densidade</label>
+      <div class="opts" data-tweak="density">
+        <button data-val="editorial" class="active">Editorial</button>
+        <button data-val="compact">Compacto</button>
+      </div>
+    </div>
+  </div>
+
+  <footer id="tt-footer"></footer>
+
+  <script src="assets/js/site.js"></script>
+  <script>
+    // ——— Tweaks (edit mode) ———
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "palette": "clay",
+      "type": "cormorant",
+      "density": "compact"
+    }/*EDITMODE-END*/;
+    let tweaks = { ...TWEAK_DEFAULTS };
+
+    function applyTweaks() {
+      const root = document.documentElement;
+      const validPalettes = ['clay', 'forest', 'dark'];
+      if (!validPalettes.includes(tweaks.palette)) tweaks.palette = 'clay';
+      // Palette — only override tokens for non-default palettes; let tokens.css own the baseline
+      if (tweaks.palette === 'forest') {
+        root.style.setProperty('--bg', '#1B3226');
+        root.style.setProperty('--bg-alt', '#234032');
+        root.style.setProperty('--fg', '#E7DEC9');
+        document.body.classList.add('on-deep');
+      } else if (tweaks.palette === 'dark') {
+        root.style.setProperty('--bg', '#151413');
+        root.style.setProperty('--bg-alt', '#1C1B19');
+        root.style.setProperty('--fg', '#E7DEC9');
+        document.body.classList.add('on-deep');
+      } else {
+        // clay (default) — clear inline overrides so tokens.css owns it
+        root.style.removeProperty('--bg');
+        root.style.removeProperty('--bg-alt');
+        root.style.removeProperty('--fg');
+        document.body.classList.remove('on-deep');
+      }
+      // Type
+      if (tweaks.type === 'fraunces') {
+        root.style.setProperty('--f-display', '"Fraunces", "Cormorant Garamond", Garamond, serif');
+      } else {
+        root.style.setProperty('--f-display', '"Cormorant Garamond", Garamond, "Times New Roman", serif');
+      }
+      // Density
+      if (tweaks.density === 'compact') {
+        root.style.setProperty('--sp-9', '56px');
+        root.style.setProperty('--sp-10', '88px');
+      } else {
+        root.style.setProperty('--sp-9', '96px');
+        root.style.setProperty('--sp-10', '144px');
+      }
+      // UI sync
+      document.querySelectorAll('[data-tweak]').forEach(row => {
+        const key = row.dataset.tweak;
+        row.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.val === tweaks[key]));
+      });
+    }
+
+    // Load Fraunces lazily if picked
+    function ensureFraunces() {
+      if (document.getElementById('fraunces-link')) return;
+      const l = document.createElement('link');
+      l.id = 'fraunces-link'; l.rel = 'stylesheet';
+      l.href = 'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&display=swap';
+      document.head.appendChild(l);
+    }
+
+    document.querySelectorAll('.tweaks-panel [data-tweak]').forEach(row => {
+      row.addEventListener('click', (e) => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        const key = row.dataset.tweak;
+        tweaks[key] = btn.dataset.val;
+        if (key === 'type' && btn.dataset.val === 'fraunces') ensureFraunces();
+        applyTweaks();
+        window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [key]: btn.dataset.val } }, '*');
+      });
+    });
+
+    // Edit mode protocol — listener first, then announce
+    window.addEventListener('message', (e) => {
+      const d = e.data || {};
+      if (d.type === '__activate_edit_mode') document.getElementById('tweaksPanel').classList.add('open');
+      if (d.type === '__deactivate_edit_mode') document.getElementById('tweaksPanel').classList.remove('open');
+    });
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+
+    applyTweaks();
+  </script>
+</body>
+</html>
