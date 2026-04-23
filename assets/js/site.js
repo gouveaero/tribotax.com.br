@@ -100,7 +100,7 @@ function setupReveal() {
         io.unobserve(e.target);
       }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 }
 
