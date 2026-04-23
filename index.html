@@ -78,11 +78,12 @@
     .philosophy::before {
       content: "";
       position: absolute;
-      right: -200px; top: 50%;
-      width: 900px; height: 900px;
-      transform: translateY(-50%);
-      background:
-        radial-gradient(circle at 30% 30%, rgba(190,109,63,0.28), rgba(20,37,29,0) 55%);
+      inset: 0;
+      background: radial-gradient(
+        ellipse 40% 80% at 110% 35%,
+        rgba(190,109,63,0.28),
+        rgba(20,37,29,0) 100%
+      );
       pointer-events: none;
     }
     .philosophy-quote {
