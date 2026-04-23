@@ -1,583 +1,966 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>TriboTax — Manual da Marca</title>
-<meta name="description" content="Manual da Marca v1.0 · 2026">
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,700;1,400;1,500&family=JetBrains+Mono:ital,wght@0,400;0,700&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tokens.css" />
+<script src="../assets/js/deck-stage.js"></script>
 <style>
-:root {
-  --clay-50: #F6F1E8; --clay-100: #EFE7D8; --clay-200: #E3D7C2; --clay-300: #CBBBA0;
-  --forest-900: #14251D; --forest-700: #234032; --forest-500: #4A7360;
-  --copper-300: #C07D6E; --copper-500: #8F3A2E; --copper-600: #7A2B22;
-  --ink-900: #121210; --ink-700: #2E2C2A; --ink-500: #6B6860;
-  --rule: rgba(18,18,16,0.12);
-  --f-display: 'Cormorant Garamond', serif;
-  --f-sans: 'Inter Tight', sans-serif;
-  --f-mono: 'JetBrains Mono', monospace;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { font-family: var(--f-sans); background: var(--clay-50); color: var(--ink-900); }
+  /* Reset tokens.css side-effects that break deck-stage's fixed positioning.
+     tokens.css declares `body > * { position: relative; z-index: 2 }` and a
+     ::before grain overlay — both fight the shadow-DOM layout. */
+  body::before { display: none !important; }
+  body > deck-stage { position: fixed !important; inset: 0 !important; z-index: auto !important; }
+  section.slide {
+    width: 1920px; height: 1080px;
+    position: relative;
+    background: var(--clay-50);
+    color: var(--ink-900);
+    overflow: hidden;
+    display: block;
+    padding: 96px 120px;
+  }
+  section.slide.deep { background: var(--forest-900); color: var(--fg-on-deep); }
+  section.slide.deep .eyebrow { color: var(--copper-300); }
+  section.slide.deep .rule { border-color: var(--rule-deep); }
+  section.slide.clay-dark { background: var(--clay-100); }
 
-/* ── GATE ─────────────────────────────────────────────── */
-#gate {
-  position: fixed; inset: 0; z-index: 9999; background: var(--forest-900);
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
-}
-#gate svg { width: 72px; height: 72px; color: var(--copper-300); }
-#gate .label { font-family: var(--f-mono); font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(196,165,130,0.55); }
-#gate .title { font-family: var(--f-display); font-size: 2.2rem; font-weight: 500; color: var(--clay-50); letter-spacing: -0.015em; }
-#gate .title em { font-style: italic; color: var(--copper-300); }
-#gate form { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
-#gate input {
-  background: transparent; border: 1px solid rgba(231,222,201,0.18); color: var(--clay-50);
-  padding: 0.7rem 1.4rem; font-family: var(--f-mono); font-size: 0.8rem; letter-spacing: 0.12em;
-  text-align: center; outline: none; width: 220px; transition: border-color 0.2s;
-}
-#gate input:focus { border-color: rgba(192,125,110,0.6); }
-#gate button {
-  background: var(--copper-500); color: var(--clay-50); border: none;
-  padding: 0.65rem 2.5rem; font-family: var(--f-sans); font-size: 0.78rem; font-weight: 500;
-  letter-spacing: 0.08em; cursor: pointer; transition: background 0.2s;
-}
-#gate button:hover { background: var(--copper-600); }
-#gate .error { font-family: var(--f-mono); font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--copper-600); min-height: 1em; }
-#gate .hint { font-family: var(--f-mono); font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(196,165,130,0.3); }
+  /* slide chrome */
+  .chrome {
+    position: absolute; inset: 48px 60px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    pointer-events: none; z-index: 3;
+  }
+  .chrome .head, .chrome .foot {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--fg-muted);
+  }
+  .slide.deep .chrome .head, .slide.deep .chrome .foot { color: var(--copper-300); opacity: 0.9; }
+  .pageno { font-family: var(--f-display); font-style: italic; font-size: 18px; color: var(--copper-500); letter-spacing: 0; text-transform: none; }
 
-/* ── MANUAL ───────────────────────────────────────────── */
-#manual { visibility: hidden; }
+  /* typography helpers */
+  .eyebrow { font-family: var(--f-mono); font-size: 13px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-500); display: inline-flex; align-items: center; gap: 14px; }
+  .eyebrow::before { content: ""; width: 28px; height: 1px; background: currentColor; }
+  h1.display {
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: 168px;
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  h1.display em { font-style: italic; font-weight: 400; color: var(--copper-500); }
+  .slide.deep h1.display em { color: var(--copper-300); }
+  h2.title {
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: 96px;
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+  h2.title em { font-style: italic; font-weight: 400; color: var(--copper-500); }
+  .slide.deep h2.title em { color: var(--copper-300); }
+  h3.sub {
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: 44px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  p.lede {
+    font-family: var(--f-body);
+    font-size: 24px;
+    line-height: 1.5;
+    max-width: 58ch;
+    color: var(--ink-700);
+    margin: 0;
+  }
+  .slide.deep p.lede { color: var(--fg-on-deep-muted); }
+  p.body { font-family: var(--f-body); font-size: 19px; line-height: 1.6; color: var(--ink-700); margin: 0; max-width: 62ch; }
+  .slide.deep p.body { color: var(--fg-on-deep-muted); }
+  .mono { font-family: var(--f-mono); font-size: 13px; letter-spacing: 0.08em; }
+  .kicker { font-family: var(--f-body); font-weight: 500; font-size: 14px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--fg-muted); }
 
-/* COVER */
-.cover {
-  min-height: 100vh; background: var(--forest-900); color: var(--clay-50);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; padding: 4rem 3rem; position: relative;
-}
-.cover svg { width: 160px; height: 160px; color: var(--copper-300); margin-bottom: 3rem; }
-.cover .eyebrow { font-family: var(--f-mono); font-size: 0.65rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--copper-300); display: flex; align-items: center; gap: 12px; justify-content: center; margin-bottom: 1.5rem; }
-.cover .eyebrow span { display: inline-block; width: 24px; height: 1px; background: currentColor; }
-.cover h1 { font-family: var(--f-display); font-size: clamp(4rem, 10vw, 7rem); font-weight: 400; line-height: 1; letter-spacing: -0.02em; color: var(--clay-50); }
-.cover h1 em { color: var(--copper-300); font-style: italic; }
-.cover .sub { font-family: var(--f-sans); font-size: 1rem; line-height: 1.65; color: rgba(231,222,201,0.65); max-width: 46ch; margin: 1.5rem auto 0; }
-.cover .meta { position: absolute; bottom: 2rem; left: 3rem; right: 3rem; display: flex; justify-content: space-between; font-family: var(--f-mono); font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(196,165,130,0.4); }
+  /* layout helpers */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; height: 100%; }
+  .two-col-sm-lg { display: grid; grid-template-columns: 320px 1fr; gap: 80px; height: 100%; }
+  .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; }
+  .four-col { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+  .stack-lg > * + * { margin-top: 48px; }
+  .stack-md > * + * { margin-top: 24px; }
+  .stack-sm > * + * { margin-top: 12px; }
 
-/* SECTIONS */
-section { max-width: 1100px; margin: 0 auto; padding: 6rem 3rem; border-bottom: 1px solid var(--rule); }
-section:last-child { border-bottom: none; }
+  /* ————————————— capa ————————————— */
+  .cover {
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+  .cover .logo-big {
+    width: 440px; height: 440px;
+    color: var(--copper-300);
+    justify-self: center; align-self: center;
+  }
+  .cover .logo-big svg { width: 100%; height: 100%; }
 
-/* chapter intros */
-.chapter-intro { display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; align-items: start; }
-.chapter-num { font-family: var(--f-display); font-size: 7rem; font-weight: 400; line-height: 1; color: rgba(143,58,46,0.15); margin-bottom: -1rem; }
-.chapter-title { font-family: var(--f-display); font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 500; line-height: 1.05; letter-spacing: -0.015em; margin-bottom: 1.5rem; }
-.chapter-title em { font-style: italic; color: var(--copper-500); }
-.lede { font-family: var(--f-sans); font-size: 1.05rem; line-height: 1.7; color: var(--ink-700); margin-bottom: 1.2rem; }
-.lede em { font-style: italic; color: var(--copper-500); }
-.lede:last-child { margin-bottom: 0; }
-.eyebrow { font-family: var(--f-mono); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-500); margin-bottom: 0.8rem; }
+  /* ————————————— logo card ————————————— */
+  .logo-card {
+    background: var(--clay-50);
+    border: 1px solid var(--rule);
+    aspect-ratio: 1/1;
+    display: grid; place-items: center;
+    position: relative;
+    padding: 40px;
+  }
+  .logo-card.deep { background: var(--forest-900); color: var(--fg-on-deep); border-color: var(--rule-deep); }
+  .logo-card.copper { background: var(--copper-500); color: var(--clay-50); border-color: transparent; }
+  .logo-card svg { width: 72%; height: 72%; }
+  .logo-card .tag {
+    position: absolute; bottom: 18px; left: 20px; right: 20px;
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--fg-muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .logo-card.deep .tag, .logo-card.copper .tag { color: rgba(255,255,255,0.6); }
 
-/* index */
-.index-list { list-style: none; margin-top: 2rem; }
-.index-item { display: flex; align-items: baseline; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); font-family: var(--f-display); font-size: 1.4rem; }
-.index-item:first-child { border-top: 1px solid var(--rule); }
-.in { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.12em; color: var(--ink-500); min-width: 2.5rem; }
-.ip { margin-left: auto; font-family: var(--f-mono); font-size: 0.65rem; letter-spacing: 0.1em; color: var(--ink-500); }
+  /* color chip */
+  .swatch {
+    display: flex; flex-direction: column; gap: 14px;
+    font-family: var(--f-mono); font-size: 12px;
+    letter-spacing: 0.08em; color: var(--ink-500);
+  }
+  .swatch .block { aspect-ratio: 3/4; border: 1px solid var(--rule); }
+  .swatch .name { font-family: var(--f-display); font-size: 22px; font-style: italic; letter-spacing: 0; text-transform: none; color: var(--ink-900); }
+  .slide.deep .swatch .name { color: var(--fg-on-deep); }
+  .slide.deep .swatch { color: var(--fg-on-deep-muted); }
+  .swatch .hex { text-transform: uppercase; }
 
-/* manifesto */
-.manifest-section { background: var(--forest-900); color: var(--clay-50); }
-.manifest-section .chapter-title { color: var(--clay-50); }
-.manifest-grid { margin-top: 3rem; display: grid; grid-template-columns: 2rem 1fr; gap: 0 1.5rem; }
-.mn { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.14em; color: rgba(196,165,130,0.45); padding-top: 0.5rem; }
-.ml { font-family: var(--f-display); font-size: 1.6rem; line-height: 1.4; color: var(--clay-50); padding: 0.8rem 0; border-bottom: 1px solid rgba(231,222,201,0.1); }
-.ml:last-child { border-bottom: none; }
-.ml em { font-style: italic; color: var(--copper-300); }
+  /* type specimen */
+  .specimen { border-top: 1px solid var(--rule); padding-top: 28px; }
+  .slide.deep .specimen { border-color: var(--rule-deep); }
+  .specimen .label { font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 20px; }
+  .specimen .big { font-family: var(--f-display); font-weight: 500; font-size: 140px; line-height: 0.95; letter-spacing: -0.02em; }
+  .specimen .big em { font-style: italic; font-weight: 400; color: var(--copper-500); }
+  .specimen .sample-body { font-family: var(--f-body); font-size: 22px; line-height: 1.5; color: var(--ink-700); max-width: 60ch; }
+  .slide.deep .specimen .sample-body { color: var(--fg-on-deep-muted); }
+  .specimen .sample-mono { font-family: var(--f-mono); font-size: 15px; letter-spacing: 0.1em; color: var(--ink-700); }
+  .slide.deep .specimen .sample-mono { color: var(--fg-on-deep-muted); }
 
-/* mark section */
-.mark-showcase { display: flex; align-items: center; gap: 3rem; margin-top: 2.5rem; }
-.mark-showcase svg { width: 120px; height: 120px; color: var(--forest-900); flex-shrink: 0; }
-.mark-specs { font-family: var(--f-mono); font-size: 0.68rem; letter-spacing: 0.14em; color: var(--ink-500); line-height: 1.8; text-transform: uppercase; }
-.logo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
-.logo-card { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; border: 1px solid var(--rule); background: var(--clay-50); padding: 2rem; }
-.logo-card.on-deep { background: var(--forest-900); border-color: transparent; }
-.logo-card.on-copper { background: var(--copper-500); border-color: transparent; }
-.logo-card svg { width: 60%; height: 60%; }
-.tag { font-family: var(--f-mono); font-size: 0.55rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-500); text-align: center; }
-.on-deep .tag { color: rgba(196,165,130,0.5); }
-.on-copper .tag { color: rgba(246,241,232,0.65); }
-.dodont-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-.dd-card { border: 1px solid var(--rule); padding: 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
-.dd-mark-yes { font-family: var(--f-mono); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--forest-500); }
-.dd-mark-no { font-family: var(--f-mono); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--copper-500); }
-.dd-demo svg { width: 60px; height: 60px; }
-.dd-caption { font-family: var(--f-mono); font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-500); text-align: center; }
+  /* chapter */
+  .chapter-num { font-family: var(--f-display); font-style: italic; font-size: 220px; color: var(--copper-500); line-height: 0.9; }
+  .slide.deep .chapter-num { color: var(--copper-300); }
 
-/* color */
-.color-section { background: var(--clay-100); }
-.swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
-.swatch { }
-.swatch .block { height: 100px; border: 1px solid var(--rule); margin-bottom: 0.75rem; }
-.swatch-name { font-family: var(--f-display); font-size: 1.1rem; margin-bottom: 0.25rem; }
-.swatch-hex { font-family: var(--f-mono); font-size: 0.65rem; letter-spacing: 0.1em; color: var(--ink-500); }
-.swatch-role { font-family: var(--f-mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--copper-500); font-weight: 500; margin-top: 0.25rem; }
-.palette-rule { font-family: var(--f-display); font-size: 1.8rem; font-style: italic; color: var(--copper-500); margin-top: 2.5rem; }
+  /* grid overlay for spacing slide */
+  .grid-demo {
+    position: relative;
+    height: 100%;
+    border: 1px solid var(--rule);
+    background:
+      repeating-linear-gradient(to right, transparent 0 calc(100%/12 - 1px), rgba(143, 58, 46, 0.12) calc(100%/12 - 1px) calc(100%/12));
+  }
+  .grid-demo .gutter { position: absolute; top: 50%; transform: translateY(-50%); left: 50%; font-family: var(--f-mono); font-size: 12px; color: var(--fg-muted); letter-spacing: 0.2em; text-transform: uppercase; }
 
-/* typography */
-.specimen-row { display: grid; grid-template-columns: 130px 80px 1fr; align-items: baseline; gap: 1.5rem; padding: 1.2rem 0; border-bottom: 1px solid var(--rule); }
-.specimen-row:first-child { border-top: 1px solid var(--rule); }
-.sp-role { font-family: var(--f-mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-500); }
-.sp-use { font-family: var(--f-mono); font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--copper-300); }
+  /* do / don't */
+  .dodont { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .dd-card { border: 1px solid var(--rule); padding: 32px; aspect-ratio: 4/3; display: flex; flex-direction: column; justify-content: space-between; background: var(--clay-50); }
+  .dd-card .mark { font-family: var(--f-display); font-style: italic; font-size: 28px; }
+  .dd-card.yes .mark { color: var(--forest-700); }
+  .dd-card.no .mark { color: var(--copper-600); }
+  .dd-card .demo { flex: 1; display: grid; place-items: center; margin: 20px 0; }
+  .dd-card .demo svg { width: 140px; height: 140px; color: var(--forest-900); }
+  .dd-card.no .demo svg { color: var(--copper-500); opacity: 0.7; transform: rotate(18deg) scale(0.9); }
+  .dd-card .caption { font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-muted); }
 
-/* voice */
-.voice-section { background: var(--forest-900); color: var(--clay-50); }
-.voice-section .chapter-title { color: var(--clay-50); }
-.voice-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2.5rem; }
-.voice-col h4 { font-family: var(--f-mono); font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1.5rem; }
-.voice-yes { font-family: var(--f-display); font-size: 1.2rem; line-height: 1.55; color: var(--clay-50); padding: 1rem 0; border-bottom: 1px solid rgba(231,222,201,0.1); }
-.voice-yes:last-child { border-bottom: none; }
-.voice-yes em { font-style: italic; color: var(--copper-300); }
-.voice-no { font-family: var(--f-display); font-size: 1.2rem; line-height: 1.55; color: rgba(231,222,201,0.45); padding: 1rem 0; border-bottom: 1px solid rgba(231,222,201,0.06); text-decoration: line-through; text-decoration-color: var(--copper-600); }
-.voice-no:last-child { border-bottom: none; }
-.vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2.5rem; }
-.vocab-label { font-family: var(--f-mono); font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1rem; }
-.vocab-label.yes { color: var(--forest-500); }
-.vocab-label.no { color: var(--copper-500); }
-.vocab-list { list-style: none; }
-.vocab-list li { font-family: var(--f-display); font-size: 1.5rem; line-height: 1.6; padding: 0.3rem 0; }
-.vocab-list li em { font-style: italic; color: var(--copper-500); }
-.vocab-list.strikethrough li { text-decoration: line-through; text-decoration-color: var(--copper-500); color: var(--ink-500); }
+  /* voice box */
+  .voice-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+  .voice-col { border-top: 1px solid var(--rule); padding-top: 28px; }
+  .slide.deep .voice-col { border-color: var(--rule-deep); }
+  .voice-col h4 { font-family: var(--f-mono); font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; margin: 0 0 24px; color: var(--fg-muted); }
+  .voice-col .yes { color: var(--forest-700); font-family: var(--f-display); font-size: 34px; line-height: 1.15; font-weight: 500; font-style: italic; }
+  .slide.deep .voice-col .yes { color: var(--copper-300); }
+  .voice-col .no { color: var(--ink-500); font-family: var(--f-display); font-size: 34px; line-height: 1.15; text-decoration: line-through; text-decoration-color: var(--copper-500); text-decoration-thickness: 1.5px; }
+  .slide.deep .voice-col .no { color: var(--fg-on-deep-muted); }
 
-/* grid */
-.grid-demo { border: 1px solid var(--rule); background: var(--clay-50); padding: 2.5rem; margin-top: 2rem; position: relative; overflow: hidden; }
-.grid-columns { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(12, 1fr); gap: 10px; padding: 2.5rem; pointer-events: none; }
-.grid-col { background: rgba(143,58,46,0.06); }
-.grid-content { position: relative; display: grid; grid-template-columns: repeat(12, 1fr); gap: 10px; }
-.grid-specs { margin-top: 2rem; display: flex; flex-direction: column; gap: 6px; }
-.grid-specs .mono-sm { font-family: var(--f-mono); font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-500); }
+  /* manifest list */
+  .manifest { display: grid; grid-template-columns: auto 1fr; column-gap: 60px; row-gap: 40px; align-items: baseline; }
+  .manifest .n { font-family: var(--f-display); font-style: italic; font-size: 44px; color: var(--copper-500); }
+  .manifest .line { font-family: var(--f-display); font-size: 40px; line-height: 1.15; font-weight: 500; letter-spacing: -0.01em; }
+  .manifest .line em { font-style: italic; font-weight: 400; }
 
-/* applications */
-.app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
-.app-card { border: 1px solid var(--rule); padding: 2rem; display: flex; flex-direction: column; justify-content: space-between; min-height: 280px; background: var(--clay-50); }
-.app-card.on-deep { background: var(--forest-900); border-color: transparent; color: var(--clay-50); }
-.app-card svg { width: 32px; height: 32px; }
+  /* closing */
+  .closing {
+    display: grid; place-items: center; height: 100%;
+    text-align: center;
+  }
+  .closing .mark-big { color: var(--copper-300); width: 200px; height: 200px; margin: 0 auto 48px; }
+  .closing .mark-big svg { width: 100%; height: 100%; }
 
-/* quote */
-.quote-block { background: var(--forest-900); color: var(--clay-50); padding: 6rem 3rem; text-align: center; }
-.quote-block .q { font-family: var(--f-display); font-style: italic; font-size: clamp(1.5rem, 4vw, 2.5rem); line-height: 1.3; max-width: 28ch; margin: 2rem auto; color: var(--clay-50); }
-.quote-block .attr { font-family: var(--f-mono); font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(196,165,130,0.45); }
-.quote-block svg { width: 56px; height: 56px; color: var(--copper-300); margin: 0 auto 2rem; display: block; }
+  /* ————————————— SVG symbol ————————————— */
+  .mark-svg { color: currentColor; }
 
-/* closing */
-.closing { min-height: 60vh; background: var(--forest-900); color: var(--clay-50); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 4rem 3rem; }
-.closing svg { width: 120px; height: 120px; color: var(--copper-300); margin-bottom: 2.5rem; }
-.closing .wordmark { font-family: var(--f-display); font-style: italic; font-size: clamp(4rem, 10vw, 8rem); line-height: 1; color: var(--clay-50); }
-.closing .wordmark span { color: var(--copper-300); }
-.closing .fin { font-family: var(--f-mono); font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(196,165,130,0.45); margin-top: 2.5rem; }
-
-/* NAV */
-.top-nav { position: sticky; top: 0; z-index: 100; background: rgba(246,241,232,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); padding: 0.75rem 3rem; display: flex; align-items: center; justify-content: space-between; }
-.top-nav .brand { font-family: var(--f-display); font-size: 1.1rem; font-weight: 500; color: var(--ink-900); }
-.top-nav .brand em { font-style: italic; color: var(--copper-500); }
-.top-nav .nav-links { display: flex; gap: 2rem; list-style: none; }
-.top-nav .nav-links a { font-family: var(--f-mono); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-500); text-decoration: none; transition: color 0.15s; }
-.top-nav .nav-links a:hover { color: var(--copper-500); }
-
-@media (max-width: 768px) {
-  .chapter-intro { grid-template-columns: 1fr; gap: 1.5rem; }
-  .voice-pair, .vocab-grid { grid-template-columns: 1fr; }
-  section { padding: 4rem 1.5rem; }
-  .top-nav .nav-links { display: none; }
-  .cover { padding: 3rem 1.5rem; }
-  .cover .meta { display: none; }
-  .specimen-row { grid-template-columns: 1fr; gap: 0.5rem; }
-}
+  /* ————————————— GATE ————————————— */
+  #gate {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--forest-900);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 40px;
+  }
+  #gate-input {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--clay-50);
+    padding: 16px 32px;
+    font-family: var(--f-mono); font-size: 14px; letter-spacing: 0.12em;
+    width: 320px; text-align: center; outline: none;
+  }
+  #gate-input:focus { border-color: var(--copper-500); }
+  #gate-btn {
+    background: transparent; border: 1px solid var(--copper-500);
+    color: var(--copper-300); padding: 12px 48px;
+    font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase;
+    cursor: pointer;
+  }
+  #gate-btn:hover { background: rgba(143,58,46,0.15); }
 </style>
-<script>
-(function() {
-  if (sessionStorage.getItem('tt-auth') === '1') return;
-  document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('gate').style.display = 'flex';
-    document.getElementById('manual').style.visibility = 'hidden';
-  });
-})();
-</script>
 </head>
 <body>
 
-<div id="gate" style="display:none">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="100" cy="100" r="88"/>
-    <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/>
-    <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/>
-    <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/>
-    <circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/>
+<!-- PASSWORD GATE -->
+<div id="gate">
+  <svg viewBox="0 0 200 200" style="width:80px;height:80px;color:var(--copper-300);" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="100" cy="100" r="88"/>
+      <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/>
+      <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/>
+      <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/>
+      <circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/>
+    </g>
   </svg>
-  <div class="label">Acesso restrito</div>
-  <p class="title">Tribo<em>Tax</em></p>
-  <form id="gate-form">
-    <input type="password" id="gate-input" placeholder="senha de acesso" autocomplete="current-password">
-    <div class="error" id="gate-error"></div>
-    <button type="submit">Acessar</button>
+  <div style="font-family:var(--f-display);font-size:48px;color:var(--clay-50);font-style:italic;font-weight:400;letter-spacing:-0.01em;text-align:center;">
+    Manual da <span style="color:var(--copper-300);">Marca</span>
+  </div>
+  <form id="gate-form" style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+    <input id="gate-input" type="password" placeholder="senha de acesso" autocomplete="current-password" />
+    <div id="gate-error" style="font-family:var(--f-mono);font-size:12px;color:var(--copper-300);letter-spacing:0.1em;min-height:18px;"></div>
+    <button id="gate-btn" type="submit">Acessar</button>
   </form>
-  <div class="hint">Documento interno · circulação restrita</div>
 </div>
+<script>
+(function() {
+  function unlock() { document.getElementById('gate').style.display = 'none'; }
+  if (sessionStorage.getItem('tt-auth') === '1') { unlock(); return; }
+  document.getElementById('gate-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (document.getElementById('gate-input').value === 'tribotax2026') {
+      sessionStorage.setItem('tt-auth', '1');
+      unlock();
+    } else {
+      document.getElementById('gate-error').textContent = 'senha incorreta';
+      document.getElementById('gate-input').value = '';
+      document.getElementById('gate-input').focus();
+    }
+  });
+})();
+</script>
 
-<div id="manual">
+<!-- symbol so we can reuse the mark across slides without 12 copies -->
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <defs>
+    <symbol id="tt-mark" viewBox="0 0 200 200">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="100" cy="100" r="88"/>
+        <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/>
+        <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/>
+        <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/>
+        <circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/>
+      </g>
+    </symbol>
+    <symbol id="tt-lockup" viewBox="0 0 560 160">
+      <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="translate(10,10)">
+        <circle cx="70" cy="70" r="62"/>
+        <path d="M70 20 C 46 42, 46 78, 70 100 C 94 78, 94 42, 70 20 Z"/>
+        <path d="M70 20 C 46 42, 46 78, 70 100 C 94 78, 94 42, 70 20 Z" transform="rotate(120 70 70)"/>
+        <path d="M70 20 C 46 42, 46 78, 70 100 C 94 78, 94 42, 70 20 Z" transform="rotate(240 70 70)"/>
+        <circle cx="70" cy="70" r="4" fill="currentColor" stroke="none"/>
+      </g>
+      <g fill="currentColor">
+        <text x="170" y="102" font-family="'Cormorant Garamond', Garamond, serif" font-weight="500" font-size="78" letter-spacing="0.5">Tribo<tspan font-style="italic" font-weight="400">Tax</tspan></text>
+      </g>
+    </symbol>
+  </defs>
+</svg>
 
-<nav class="top-nav">
-  <span class="brand">Tribo<em>Tax</em></span>
-  <ul class="nav-links">
-    <li><a href="#conceito">I · Conceito</a></li>
-    <li><a href="#simbolo">II · Símbolo</a></li>
-    <li><a href="#cor">III · Cor</a></li>
-    <li><a href="#tipografia">IV · Tipografia</a></li>
-    <li><a href="#voz">V · Voz</a></li>
-    <li><a href="#uso">VI · Uso</a></li>
-  </ul>
-</nav>
+<deck-stage>
 
-<!-- COVER -->
-<div class="cover">
-  <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="100" cy="100" r="88"/>
-    <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/>
-    <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/>
-    <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/>
-    <circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/>
-  </svg>
-  <div class="eyebrow"><span></span> Manual da marca <span></span></div>
-  <h1>Tribo<em>Tax</em></h1>
-  <p class="sub">Tributação rural com profundidade humana.<br>Um manual para manter a voz, a forma e o silêncio certos.</p>
-  <div class="meta">
-    <span>Documento interno · circulação restrita</span>
-    <span>v1.0 · 2026</span>
-  </div>
-</div>
-
-<!-- INDEX -->
-<section id="indice" style="background:var(--clay-50)">
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;">
-    <div>
-      <div class="eyebrow">Manual</div>
-      <h2 class="chapter-title">Seis <em>capítulos</em>,<br>um só nó.</h2>
-      <p class="lede" style="margin-top:1.5rem;">Este manual existe para preservar a forma quando a voz se multiplica. Quando houver dúvida, volte aqui.</p>
+  <!-- ————————————— 01 CAPA ————————————— -->
+  <section class="slide deep" data-screen-label="01 Capa">
+    <div class="chrome">
+      <div class="head">
+        <span>TriboTax · Manual da Marca</span>
+        <span>v1.0 · 2026</span>
+      </div>
+      <div class="foot">
+        <span>Documento interno · circulação restrita</span>
+        <span class="pageno">I</span>
+      </div>
     </div>
-    <ol class="index-list">
-      <li class="index-item"><span class="in">I</span><span>O conceito</span><span class="ip">→</span></li>
-      <li class="index-item"><span class="in">II</span><span>O símbolo</span><span class="ip">→</span></li>
-      <li class="index-item"><span class="in">III</span><span>A cor</span><span class="ip">→</span></li>
-      <li class="index-item"><span class="in">IV</span><span>A tipografia</span><span class="ip">→</span></li>
-      <li class="index-item"><span class="in">V</span><span>A voz</span><span class="ip">→</span></li>
-      <li class="index-item" style="border-bottom:1px solid var(--rule)"><span class="in">VI</span><span>O uso</span><span class="ip">→</span></li>
-    </ol>
-  </div>
-</section>
 
-<!-- CAP I -->
-<section id="conceito" style="background:var(--clay-100)">
-  <div class="chapter-intro">
-    <div><div class="chapter-num">I</div></div>
-    <div>
-      <div class="eyebrow">O conceito</div>
-      <h2 class="chapter-title">O <em>nó</em> e<br>o círculo.</h2>
-      <p class="lede">Uma tribo se reconhece pelo perímetro — quem está dentro, quem está fora. E se sustenta pelo nó — o que amarra memória, posse e trabalho.</p>
-      <p class="lede">TriboTax nasceu nesse ponto de tensão. O círculo é a família rural, o perímetro da propriedade, o grupo econômico. O nó é o pacto: planejamento, sucessão, o vínculo que resiste quando a safra não ajuda.</p>
-      <p class="lede" style="font-style:italic;color:var(--copper-500)">Se um desenho não é nó nem círculo, não é TriboTax.</p>
+    <div class="cover">
+      <div></div>
+      <div style="display:grid;place-items:center;text-align:center;gap:56px;">
+        <div class="logo-big"><svg><use href="#tt-mark"/></svg></div>
+        <div>
+          <div class="eyebrow" style="justify-content:center;color:var(--copper-300);">Manual da marca</div>
+          <h1 class="display" style="margin-top:32px;font-size:220px;">Tribo<em>Tax</em></h1>
+          <p class="lede" style="margin:32px auto 0;max-width:52ch;color:var(--fg-on-deep-muted);font-size:26px;">
+            Tributação rural com profundidade humana. Um manual para manter a voz, a forma e o silêncio certos.
+          </p>
+        </div>
+      </div>
+      <div></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- MANIFESTO -->
-<section class="manifest-section" style="max-width:100%;padding:6rem 0;">
-  <div style="max-width:1100px;margin:0 auto;padding:0 3rem;">
-    <div class="eyebrow" style="color:rgba(196,165,130,0.45)">Cinco princípios</div>
-    <h2 class="chapter-title" style="color:var(--clay-50);">O que <em>a marca</em> defende.</h2>
-    <div class="manifest-grid" style="margin-top:2.5rem;">
-      <span class="mn">i</span><span class="ml">A terra é <em>longa</em>. A contabilidade também deve ser.</span>
-      <span class="mn">ii</span><span class="ml">Imposto é linguagem. <em>Ensinar</em> é metade do serviço.</span>
-      <span class="mn">iii</span><span class="ml">A sucessão começa antes <em>do luto</em>.</span>
-      <span class="mn">iv</span><span class="ml">Planilha não é laudo. <em>Laudo não é conselho.</em></span>
-      <span class="mn">v</span><span class="ml">Não economizamos palavras. <em>Economizamos imposto.</em></span>
+  <!-- ————————————— 02 ÍNDICE ————————————— -->
+  <section class="slide" data-screen-label="02 Índice">
+    <div class="chrome">
+      <div class="head"><span>Índice</span><span>II</span></div>
+      <div class="foot"><span>TriboTax · Manual da Marca</span><span class="pageno">II</span></div>
     </div>
-  </div>
-</section>
 
-<!-- QUOTE -->
-<div class="quote-block">
-  <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="100" cy="100" r="88"/>
-    <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/>
-    <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/>
-    <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/>
-    <circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/>
-  </svg>
-  <p class="q">"Não economizamos palavras. Economizamos imposto."</p>
-  <p class="attr">Princípio V · Manifesto TriboTax</p>
-</div>
+    <div style="height:100%;display:grid;grid-template-columns:1fr 1.3fr;gap:120px;align-items:center;">
+      <div>
+        <div class="eyebrow">Manual</div>
+        <h2 class="title" style="margin-top:24px;">Seis <em>capítulos</em>, um só nó.</h2>
+        <p class="lede" style="margin-top:40px;">
+          Este manual existe para preservar a forma quando a voz se multiplica. Quando houver dúvida, volte aqui.
+        </p>
+      </div>
+      <div>
+        <ol style="list-style:none;padding:0;margin:0;">
+          <li style="display:grid;grid-template-columns:80px 1fr auto;gap:40px;align-items:baseline;padding:32px 0;border-top:1px solid var(--rule);">
+            <span class="numeral">I</span>
+            <span style="font-family:var(--f-display);font-size:38px;">O conceito</span>
+            <span class="mono" style="color:var(--fg-muted);">03 — 05</span>
+          </li>
+          <li style="display:grid;grid-template-columns:80px 1fr auto;gap:40px;align-items:baseline;padding:32px 0;border-top:1px solid var(--rule);">
+            <span class="numeral">II</span>
+            <span style="font-family:var(--f-display);font-size:38px;">O símbolo</span>
+            <span class="mono" style="color:var(--fg-muted);">06 — 08</span>
+          </li>
+          <li style="display:grid;grid-template-columns:80px 1fr auto;gap:40px;align-items:baseline;padding:32px 0;border-top:1px solid var(--rule);">
+            <span class="numeral">III</span>
+            <span style="font-family:var(--f-display);font-size:38px;">A cor</span>
+            <span class="mono" style="color:var(--fg-muted);">09 — 11</span>
+          </li>
+          <li style="display:grid;grid-template-columns:80px 1fr auto;gap:40px;align-items:baseline;padding:32px 0;border-top:1px solid var(--rule);">
+            <span class="numeral">IV</span>
+            <span style="font-family:var(--f-display);font-size:38px;">A tipografia</span>
+            <span class="mono" style="color:var(--fg-muted);">12 — 13</span>
+          </li>
+          <li style="display:grid;grid-template-columns:80px 1fr auto;gap:40px;align-items:baseline;padding:32px 0;border-top:1px solid var(--rule);">
+            <span class="numeral">V</span>
+            <span style="font-family:var(--f-display);font-size:38px;">A voz</span>
+            <span class="mono" style="color:var(--fg-muted);">14 — 15</span>
+          </li>
+          <li style="display:grid;grid-template-columns:80px 1fr auto;gap:40px;align-items:baseline;padding:32px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);">
+            <span class="numeral">VI</span>
+            <span style="font-family:var(--f-display);font-size:38px;">O uso</span>
+            <span class="mono" style="color:var(--fg-muted);">16 — 18</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
 
-<!-- CAP II -->
-<section id="simbolo" style="background:var(--clay-50)">
-  <div class="chapter-intro">
-    <div><div class="chapter-num">II</div></div>
-    <div>
-      <div class="eyebrow">O símbolo</div>
-      <h2 class="chapter-title">Três pétalas,<br><em>um centro</em>.</h2>
-      <p class="lede">Um nó de três voltas inscrito em círculo. As três voltas são as tensões que cruzamos todo dia: <em>terra, família, fisco</em>. O ponto central é o conselho — o lugar onde a decisão repousa.</p>
-      <div class="mark-showcase">
-        <svg style="width:120px;height:120px;color:var(--forest-900)" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="100" cy="100" r="88"/>
-          <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/>
-          <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/>
-          <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/>
-          <circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/>
+  <!-- ————————————— 03 CAPÍTULO I — CONCEITO ————————————— -->
+  <section class="slide clay-dark" data-screen-label="03 Cap I — Conceito">
+    <div class="chrome">
+      <div class="head"><span>Capítulo I · O conceito</span><span>III</span></div>
+      <div class="foot"><span>TriboTax · Manual da Marca</span><span class="pageno">III</span></div>
+    </div>
+    <div style="height:100%;display:grid;grid-template-columns:1fr 1fr;gap:120px;align-items:center;">
+      <div>
+        <div class="chapter-num">I</div>
+        <h2 class="title" style="margin-top:24px;">O <em>nó</em> e o círculo.</h2>
+      </div>
+      <div class="stack-lg">
+        <p class="lede" style="font-size:28px;">
+          Uma tribo se reconhece pelo perímetro — quem está dentro, quem está fora. E se sustenta pelo nó — o que amarra memória, posse e trabalho.
+        </p>
+        <p class="body" style="font-size:22px;">
+          TriboTax nasceu nesse ponto de tensão. O círculo é a família rural, o perímetro da propriedade, o grupo econômico. O nó é o pacto: planejamento, sucessão, o vínculo que resiste quando a safra não ajuda.
+        </p>
+        <p class="body" style="font-size:22px;">
+          Cada elemento visual deste manual volta para esses dois gestos. Se um desenho não é nó nem círculo, não é TriboTax.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ————————————— 04 MANIFESTO ————————————— -->
+  <section class="slide deep" data-screen-label="04 Manifesto">
+    <div class="chrome">
+      <div class="head"><span>Capítulo I · Manifesto</span><span>IV</span></div>
+      <div class="foot"><span>TriboTax · Manual da Marca</span><span class="pageno">IV</span></div>
+    </div>
+    <div style="height:100%;display:grid;grid-template-columns:1fr 1.4fr;gap:120px;align-items:center;">
+      <div>
+        <div class="eyebrow">Cinco princípios</div>
+        <h2 class="title" style="margin-top:32px;">O que <em>a marca</em> defende.</h2>
+      </div>
+      <div class="manifest">
+        <span class="n">i</span>
+        <span class="line">A terra é <em>longa</em>. A contabilidade também deve ser.</span>
+        <span class="n">ii</span>
+        <span class="line">Imposto é linguagem. <em>Ensinar</em> é metade do serviço.</span>
+        <span class="n">iii</span>
+        <span class="line">A sucessão começa antes <em>do luto</em>.</span>
+        <span class="n">iv</span>
+        <span class="line">Planilha não é laudo. <em>Laudo não é conselho.</em></span>
+        <span class="n">v</span>
+        <span class="line">Não economizamos palavras. <em>Economizamos imposto.</em></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ————————————— 05 CAPÍTULO II — SÍMBOLO ————————————— -->
+  <section class="slide" data-screen-label="05 Cap II — Símbolo">
+    <div class="chrome">
+      <div class="head"><span>Capítulo II · O símbolo</span><span>V</span></div>
+      <div class="foot"><span>TriboTax · Manual da Marca</span><span class="pageno">V</span></div>
+    </div>
+    <div style="height:100%;display:grid;grid-template-rows:auto 1fr;gap:60px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end;">
+        <div>
+          <div class="chapter-num" style="font-size:160px;">II</div>
+          <h2 class="title" style="margin-top:24px;">Três pétalas, <em>um centro</em>.</h2>
+        </div>
+        <p class="body" style="font-size:22px;max-width:54ch;">
+          Um nó de três voltas inscrito em círculo. As três voltas são as tensões que cruzamos todo dia: terra, família, fisco. O ponto central é o conselho — o lugar onde a decisão repousa.
+        </p>
+      </div>
+
+      <div class="four-col">
+        <div class="logo-card">
+          <svg style="color:var(--forest-900);"><use href="#tt-mark"/></svg>
+          <span class="tag">Positivo · fundo argila</span>
+        </div>
+        <div class="logo-card deep">
+          <svg style="color:var(--copper-300);"><use href="#tt-mark"/></svg>
+          <span class="tag">Negativo · fundo floresta</span>
+        </div>
+        <div class="logo-card copper">
+          <svg style="color:var(--clay-50);"><use href="#tt-mark"/></svg>
+          <span class="tag">Sólido · fundo terracota</span>
+        </div>
+        <div class="logo-card" style="background:var(--clay-50);">
+          <svg style="color:var(--ink-900);width:62%;height:62%;"><use href="#tt-mark"/></svg>
+          <span class="tag">Uma cor · tinta</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ————————————— 06 LOCKUP ————————————— -->
+  <section class="slide clay-dark" data-screen-label="06 Lockup">
+    <div class="chrome">
+      <div class="head"><span>Capítulo II · Assinatura</span><span>VI</span></div>
+      <div class="foot"><span>TriboTax · Manual da Marca</span><span class="pageno">VI</span></div>
+    </div>
+    <div style="height:100%;display:grid;grid-template-rows:auto 1fr auto;gap:60px;">
+      <div>
+        <div class="eyebrow">Assinatura primária</div>
+        <h3 class="sub" style="margin-top:16px;">Marca + wordmark. <em>Sempre nessa ordem.</em></h3>
+      </div>
+
+      <div style="display:grid;place-items:center;">
+        <svg viewBox="0 0 560 160" style="width:900px;height:auto;color:var(--forest-900);">
+          <use href="#tt-lockup"/>
         </svg>
-        <div class="mark-specs">Símbolo primário<br>Escala mínima digital: 28 px<br>Escala mínima impressa: 12 mm<br>Eixo vertical: intocável</div>
       </div>
-    </div>
-  </div>
-</section>
 
-<!-- ASSINATURAS -->
-<section style="background:var(--clay-100)">
-  <div class="eyebrow">Assinatura primária</div>
-  <h3 style="font-family:var(--f-display);font-size:2rem;font-weight:500;margin-bottom:0.5rem;">Marca + wordmark. <em style="font-style:italic;color:var(--copper-500)">Sempre nessa ordem.</em></h3>
-  <div class="logo-grid">
-    <div class="logo-card">
-      <svg style="width:60%;height:60%;color:var(--forest-900)" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="100" cy="100" r="88"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/><circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/></svg>
-      <span class="tag">Positivo · fundo argila</span>
-    </div>
-    <div class="logo-card on-deep">
-      <svg style="width:60%;height:60%;color:#C07D6E" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="100" cy="100" r="88"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/><circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/></svg>
-      <span class="tag">Negativo · fundo floresta</span>
-    </div>
-    <div class="logo-card on-copper">
-      <svg style="width:60%;height:60%;color:var(--clay-50)" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="100" cy="100" r="88"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/><circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/></svg>
-      <span class="tag">Sólido · fundo terracota</span>
-    </div>
-    <div class="logo-card">
-      <svg style="width:50%;height:50%;color:var(--ink-900)" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="100" cy="100" r="88"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/><circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/></svg>
-      <span class="tag">Uma cor · tinta</span>
-    </div>
-  </div>
-  <h3 style="font-family:var(--f-display);font-size:1.8rem;font-weight:500;margin-top:3.5rem;margin-bottom:1.5rem;">O nó <em style="font-style:italic;color:var(--copper-500)">não se distorce.</em></h3>
-  <div class="dodont-grid">
-    <div class="dd-card">
-      <div class="dd-mark-yes">✓ correto</div>
-      <div class="dd-demo"><svg style="width:60px;height:60px;color:var(--forest-900)" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="100" cy="100" r="88"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/><circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/></svg></div>
-      <div class="dd-caption">proporção original</div>
-    </div>
-    <div class="dd-card">
-      <div class="dd-mark-no">✕ não esticar</div>
-      <div class="dd-demo"><svg style="width:60px;height:60px;color:var(--copper-500);transform:scaleX(1.45)" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="100" cy="100" r="88"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/><circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/></svg></div>
-      <div class="dd-caption">nunca deforme os eixos</div>
-    </div>
-    <div class="dd-card">
-      <div class="dd-mark-no">✕ não rotacionar</div>
-      <div class="dd-demo"><svg style="width:60px;height:60px;color:var(--copper-500);transform:rotate(27deg)" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="100" cy="100" r="88"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/><circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/></svg></div>
-      <div class="dd-caption">o eixo vertical é sagrado</div>
-    </div>
-    <div class="dd-card" style="background:linear-gradient(135deg,#ff0080,#7928ca)">
-      <div class="dd-mark-no" style="color:#fff">✕ não gradiente</div>
-      <div class="dd-demo"><svg style="width:60px;height:60px;color:#fff" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="100" cy="100" r="88"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/><circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/></svg></div>
-      <div class="dd-caption" style="color:rgba(255,255,255,0.6)">fundos ativos proibidos</div>
-    </div>
-  </div>
-</section>
-
-<!-- CAP III -->
-<section id="cor" class="color-section">
-  <div class="chapter-intro">
-    <div><div class="chapter-num">III</div></div>
-    <div>
-      <div class="eyebrow">A cor</div>
-      <h2 class="chapter-title">Argila, <em>floresta</em>,<br>terracota.</h2>
-      <p class="lede">Três famílias, uma dominante. A <em>argila</em> é pele: ocupa 70% de qualquer composição. A <em>floresta</em> estrutura — rodapés, blocos de autoridade. A <em>terracota</em> pontua — nunca preenche.</p>
-      <p class="palette-rule">Regra 70 · 20 · 8 · 2.</p>
-    </div>
-  </div>
-  <div class="swatch-grid" style="margin-top:3rem;">
-    <div class="swatch"><div class="block" style="background:#F6F1E8"></div><div class="swatch-name">Argila 50</div><div class="swatch-hex">#F6F1E8</div><div class="swatch-role">Base · 70%</div></div>
-    <div class="swatch"><div class="block" style="background:#14251D"></div><div class="swatch-name">Floresta 900</div><div class="swatch-hex">#14251D</div><div class="swatch-role">Estrutura · 20%</div></div>
-    <div class="swatch"><div class="block" style="background:#8F3A2E"></div><div class="swatch-name">Terracota 500</div><div class="swatch-hex">#8F3A2E</div><div class="swatch-role">Acento · 8%</div></div>
-    <div class="swatch"><div class="block" style="background:#121210"></div><div class="swatch-name">Tinta 900</div><div class="swatch-hex">#121210</div><div class="swatch-role">Texto · 2%</div></div>
-    <div class="swatch"><div class="block" style="background:#C07D6E"></div><div class="swatch-name">Terracota 300</div><div class="swatch-hex">#C07D6E</div><div class="swatch-role">Cobre · apoio</div></div>
-    <div class="swatch"><div class="block" style="background:#4A7360"></div><div class="swatch-name">Floresta 500</div><div class="swatch-hex">#4A7360</div><div class="swatch-role">Verde · apoio</div></div>
-  </div>
-</section>
-
-<!-- CAP IV -->
-<section id="tipografia" style="background:var(--clay-50)">
-  <div class="chapter-intro">
-    <div><div class="chapter-num">IV</div></div>
-    <div>
-      <div class="eyebrow">A tipografia</div>
-      <h2 class="chapter-title">Serifa que <em>respira</em>.</h2>
-      <p class="lede">A marca fala em serifa editorial — pausa, autoridade, tempo longo. O texto corrente fala em sans neutra, para não atrapalhar a serifa. A mono é sinalização técnica, marginália.</p>
-      <p class="lede" style="font-style:italic;color:var(--copper-500)">Três famílias. Uma hierarquia. Nenhuma exceção.</p>
-    </div>
-  </div>
-  <div style="margin-top:3.5rem;">
-    <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,8vw,7rem);line-height:0.95;letter-spacing:-0.02em;margin-bottom:2rem;">A herança <em style="font-style:italic;color:var(--copper-500)">rural</em><br>precisa de <em style="font-style:italic;color:var(--copper-500)">tempo</em>.</p>
-    <div style="margin-top:2.5rem;">
-      <div class="specimen-row"><span class="sp-role">Display · 120</span><span class="sp-use">manifesto</span><span style="font-family:'Cormorant Garamond',serif;font-size:4rem;line-height:1;letter-spacing:-0.02em;">Herança <em style="font-style:italic;color:var(--copper-500)">longa</em></span></div>
-      <div class="specimen-row"><span class="sp-role">Title · 72</span><span class="sp-use">seção</span><span style="font-family:'Cormorant Garamond',serif;font-size:2.8rem;line-height:1.02;letter-spacing:-0.015em;">O nó antes <em style="font-style:italic">do luto</em></span></div>
-      <div class="specimen-row"><span class="sp-role">Subtitle · 44</span><span class="sp-use">bloco</span><span style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;line-height:1.1;">Planejamento sucessório</span></div>
-      <div class="specimen-row"><span class="sp-role">Body · 19</span><span class="sp-use">corpo</span><span style="font-family:'Inter Tight',sans-serif;font-size:1rem;line-height:1.6;color:var(--ink-700)">Texto corrente. Comprimento alvo: 62 ch.</span></div>
-      <div class="specimen-row"><span class="sp-role">Small · 13</span><span class="sp-use">rodapé</span><span style="font-family:'Inter Tight',sans-serif;font-size:0.78rem;line-height:1.5;color:var(--ink-500)">Notas, legendas e metadados operacionais.</span></div>
-      <div class="specimen-row" style="border-bottom:0"><span class="sp-role">Mono · 11</span><span class="sp-use">técnico</span><span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase">CAP · IV · §03 — MARGINÁLIA</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- CAP V -->
-<section id="voz" class="voice-section" style="max-width:100%;padding:6rem 0;">
-  <div style="max-width:1100px;margin:0 auto;padding:0 3rem;">
-    <div class="chapter-intro">
-      <div><div class="chapter-num" style="color:rgba(196,165,130,0.12)">V</div></div>
-      <div>
-        <div class="eyebrow" style="color:rgba(196,165,130,0.45)">A voz</div>
-        <h2 class="chapter-title" style="color:var(--clay-50)">Fala <em>direta</em>,<br>pausa <em>longa</em>.</h2>
-        <p class="lede" style="color:rgba(231,222,201,0.7)">A voz TriboTax é de quem visita a fazenda de botina e volta para o cartório de gravata. Traduz termo técnico sem infantilizar. Usa itálico para a ênfase que a oralidade não cabe. Evita anglicismo, jargão de consultoria, exclamação.</p>
-      </div>
-    </div>
-    <div style="margin-top:3rem;">
-      <div class="eyebrow" style="color:rgba(196,165,130,0.45)">Guia de voz</div>
-      <h3 style="font-family:var(--f-display);font-size:2rem;font-weight:500;margin-bottom:2rem;color:var(--clay-50)">O que dizer. <em style="font-style:italic;color:var(--copper-300)">O que nunca dizer.</em></h3>
-      <div class="voice-pair">
-        <div class="voice-col">
-          <h4 style="color:rgba(196,165,130,0.55)">Dizer assim</h4>
-          <p class="voice-yes">"A <em>herança rural</em> não começa no cartório. Começa no almoço de domingo."</p>
-          <p class="voice-yes">"Revisamos seis anos de apurações. <em>Foi dinheiro que voltou.</em>"</p>
-          <p class="voice-yes">"Se o seu contador nunca andou no pasto, <em>ele está lendo o balanço errado.</em>"</p>
-        </div>
-        <div class="voice-col">
-          <h4 style="color:rgba(196,165,130,0.55)">Nunca assim</h4>
-          <p class="voice-no">"Soluções disruptivas em compliance tributário rural."</p>
-          <p class="voice-no">"Agronegócio 4.0 potencializando seu ROI fiscal!"</p>
-          <p class="voice-no">"Clique aqui e fale com nossos especialistas!!!"</p>
-        </div>
-      </div>
-      <div class="vocab-grid" style="margin-top:3rem;">
+      <div class="three-col" style="border-top:1px solid var(--rule);padding-top:32px;">
         <div>
-          <div class="vocab-label yes">+ Usar</div>
-          <ul class="vocab-list">
-            <li>conduzir · apurar</li>
-            <li>atestar · <em>revisar</em></li>
-            <li>herança · propriedade</li>
-            <li>pasto · safra · benfeitoria</li>
-            <li>cartório · testamento</li>
-            <li><em>sucessão</em></li>
-          </ul>
+          <div class="mono" style="color:var(--fg-muted);">Área de respiro</div>
+          <p class="body" style="font-size:18px;margin-top:12px;">Mínimo equivale à altura do <em>T</em> maiúsculo, em todas as direções. Preferível: o dobro.</p>
         </div>
         <div>
-          <div class="vocab-label no">− Evitar</div>
-          <ul class="vocab-list strikethrough">
-            <li>solução · inovador</li>
-            <li>potencializar</li>
-            <li>disruptivo · jornada</li>
-            <li>ecossistema · agro 4.0</li>
-            <li>compliance · stakeholder</li>
-            <li>ROI fiscal</li>
-          </ul>
+          <div class="mono" style="color:var(--fg-muted);">Tamanho mínimo</div>
+          <p class="body" style="font-size:18px;margin-top:12px;">Digital: <em>28 px</em> de altura do símbolo. Impresso: <em>12 mm</em>.</p>
+        </div>
+        <div>
+          <div class="mono" style="color:var(--fg-muted);">Quando usar só o símbolo</div>
+          <p class="body" style="font-size:18px;margin-top:12px;">Favicon, selo de rodapé, carimbo em PDF, assinatura de e-mail compacta.</p>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- CAP VI -->
-<section id="uso" style="background:var(--clay-100)">
-  <div class="chapter-intro">
-    <div><div class="chapter-num">VI</div></div>
-    <div>
-      <div class="eyebrow">O uso</div>
-      <h2 class="chapter-title">A marca <em>em uso</em>.</h2>
-      <p class="lede">Três superfícies-teste: documento técnico, peça editorial, assinatura de e-mail. Se a marca respira nesses três, está viva.</p>
-      <p class="lede" style="font-style:italic;color:var(--copper-500)">O uso correto não é decoração. É garantia.</p>
+  <!-- ————————————— 07 DO / DON'T ————————————— -->
+  <section class="slide" data-screen-label="07 Uso do símbolo">
+    <div class="chrome">
+      <div class="head"><span>Capítulo II · Restrições</span><span>VII</span></div>
+      <div class="foot"><span>TriboTax · Manual da Marca</span><span class="pageno">VII</span></div>
     </div>
-  </div>
-  <div class="app-grid" style="margin-top:3rem;">
-    <div class="app-card">
+    <div style="height:100%;display:grid;grid-template-rows:auto 1fr;gap:48px;">
       <div>
-        <svg style="color:var(--forest-900)" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="100" cy="100" r="88"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/><circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/></svg>
-        <div style="font-family:var(--f-mono);font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-500);margin-top:1rem;">Relatório 03/2026 · sigiloso</div>
+        <div class="eyebrow">O que não fazer</div>
+        <h3 class="sub" style="margin-top:16px;">O nó <em>não se distorce.</em></h3>
       </div>
-      <div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;line-height:1.05;">Apuração <em style="font-style:italic;color:var(--copper-500)">LCDPR</em><br>Fazenda Santa Rita</div>
-        <div style="border-top:1px solid var(--rule);margin-top:16px;padding-top:12px;font-family:var(--f-mono);font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-500)">TriboTax · Jan — Dez 2025</div>
+      <div class="dodont" style="grid-template-columns:repeat(4,1fr);">
+        <div class="dd-card yes">
+          <div class="mark">✓ correto</div>
+          <div class="demo"><svg><use href="#tt-mark"/></svg></div>
+          <div class="caption">proporção original</div>
+        </div>
+        <div class="dd-card no">
+          <div class="mark">✕ não esticar</div>
+          <div class="demo"><svg style="transform:scaleX(1.4);"><use href="#tt-mark"/></svg></div>
+          <div class="caption">nunca deforme os eixos</div>
+        </div>
+        <div class="dd-card no">
+          <div class="mark">✕ não rotacionar</div>
+          <div class="demo"><svg style="transform:rotate(27deg);"><use href="#tt-mark"/></svg></div>
+          <div class="caption">o eixo vertical é sagrado</div>
+        </div>
+        <div class="dd-card no" style="background:linear-gradient(135deg,#ff0080,#7928ca);">
+          <div class="mark" style="color:#fff;">✕ não gradiente</div>
+          <div class="demo"><svg style="color:#fff;"><use href="#tt-mark"/></svg></div>
+          <div class="caption" style="color:rgba(255,255,255,0.75);">fundos ativos proibidos</div>
+        </div>
       </div>
     </div>
-    <div class="app-card on-deep">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <svg style="color:#C07D6E" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="100" cy="100" r="88"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/><circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/></svg>
-        <div style="font-family:var(--f-mono);font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:#C07D6E">Ensaio · nº 07</div>
+  </section>
+
+  <!-- ————————————— 08 CAPÍTULO III — COR ————————————— -->
+  <section class="slide clay-dark" data-screen-label="08 Cap III — Cor">
+    <div class="chrome">
+      <div class="head"><span>Capítulo III · A cor</span><span>VIII</span></div>
+      <div class="foot"><span>TriboTax · Manual da Marca</span><span class="pageno">VIII</span></div>
+    </div>
+    <div style="height:100%;display:grid;grid-template-rows:auto 1fr;gap:60px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end;">
+        <div>
+          <div class="chapter-num" style="font-size:160px;">III</div>
+          <h2 class="title" style="margin-top:24px;">Argila, <em>floresta</em>, terracota.</h2>
+        </div>
+        <p class="body" style="font-size:22px;">
+          Três famílias, uma dominante. A argila é pele: ocupa 70% de qualquer composição. A floresta estrutura — rodapés, blocos de autoridade. A terracota pontua — nunca preenche.
+        </p>
       </div>
-      <div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;line-height:1.02;color:#E7DEC9">A herança<br>que <em style="font-style:italic;color:#C07D6E">não se inventaria</em></div>
-        <div style="color:rgba(231,222,201,0.55);font-family:'Inter Tight',sans-serif;font-size:0.85rem;line-height:1.55;margin-top:14px">Sobre a diferença entre dividir terra e dividir ofício.</div>
+
+      <div class="four-col" style="gap:32px;">
+        <div class="swatch">
+          <div class="block" style="background:var(--clay-50);"></div>
+          <div class="name">Argila 50</div>
+          <div class="hex">#F6F1E8</div>
+          <div>Base · 70%</div>
+        </div>
+        <div class="swatch">
+          <div class="block" style="background:var(--forest-900);"></div>
+          <div class="name">Floresta 900</div>
+          <div class="hex">#14251D</div>
+          <div>Estrutura · 20%</div>
+        </div>
+        <div class="swatch">
+          <div class="block" style="background:var(--copper-500);"></div>
+          <div class="name">Terracota 500</div>
+          <div class="hex">#8F3A2E</div>
+          <div>Acento · 8%</div>
+        </div>
+        <div class="swatch">
+          <div class="block" style="background:var(--ink-900);"></div>
+          <div class="name">Tinta 900</div>
+          <div class="hex">#121210</div>
+          <div>Texto · 2%</div>
+        </div>
       </div>
     </div>
-    <div class="app-card">
-      <div style="font-family:var(--f-mono);font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-500)">Assinatura de e-mail</div>
-      <div style="border-left:1px solid var(--rule);padding-left:16px;">
-        <div style="display:flex;align-items:center;gap:14px;">
-          <svg style="width:28px;height:28px;color:var(--forest-900)" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="100" cy="100" r="88"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/><path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/><circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/></svg>
-          <div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:1.2rem">Alex Amadeu</div>
-            <div style="font-family:var(--f-mono);font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-500);margin-top:2px">Fundador · TriboTax</div>
+  </section>
+
+  <!-- ————————————— 09 ESCALA DE COR ————————————— -->
+  <section class="slide" data-screen-label="09 Escala">
+    <div class="chrome">
+      <div class="head"><span>Capítulo III · Escalas</span><span>IX</span></div>
+      <div class="foot"><span>TriboTax · Manual da Marca</span><span class="pageno">IX</span></div>
+    </div>
+    <div style="height:100%;display:grid;grid-template-rows:auto 1fr;gap:48px;">
+      <div>
+        <div class="eyebrow">Famílias completas</div>
+        <h3 class="sub" style="margin-top:16px;">Nove passos, <em>três famílias</em>.</h3>
+      </div>
+      <div style="display:grid;grid-template-rows:repeat(3,1fr);gap:32px;">
+        <!-- clay -->
+        <div>
+          <div class="mono" style="color:var(--fg-muted);margin-bottom:10px;">Argila · clay</div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid var(--rule);">
+            <div style="background:var(--clay-50);  padding:24px;font-family:var(--f-mono);font-size:12px;">50<br/>#F6F1E8</div>
+            <div style="background:var(--clay-100); padding:24px;font-family:var(--f-mono);font-size:12px;">100<br/>#EFE7D8</div>
+            <div style="background:var(--clay-200); padding:24px;font-family:var(--f-mono);font-size:12px;">200<br/>#E3D7C2</div>
+            <div style="background:var(--clay-300); padding:24px;font-family:var(--f-mono);font-size:12px;">300<br/>#CBBBA0</div>
+            <div style="background:var(--clay-400); padding:24px;font-family:var(--f-mono);font-size:12px;color:var(--clay-50);">400<br/>#A89778</div>
           </div>
         </div>
-        <div style="margin-top:16px;font-family:var(--f-mono);font-size:0.68rem;line-height:1.8;color:var(--ink-700)">alex@tribotax.com.br<br>tribotax.com.br</div>
+        <!-- forest -->
+        <div>
+          <div class="mono" style="color:var(--fg-muted);margin-bottom:10px;">Floresta · forest</div>
+          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:0;border:1px solid var(--rule);">
+            <div style="background:var(--forest-200);padding:24px;font-family:var(--f-mono);font-size:12px;">200<br/>#C8D4CC</div>
+            <div style="background:var(--forest-500);padding:24px;font-family:var(--f-mono);font-size:12px;color:var(--clay-50);">500<br/>#4A7360</div>
+            <div style="background:var(--forest-600);padding:24px;font-family:var(--f-mono);font-size:12px;color:var(--clay-50);">600<br/>#325647</div>
+            <div style="background:var(--forest-700);padding:24px;font-family:var(--f-mono);font-size:12px;color:var(--clay-50);">700<br/>#234032</div>
+            <div style="background:var(--forest-800);padding:24px;font-family:var(--f-mono);font-size:12px;color:var(--clay-50);">800<br/>#1B3226</div>
+            <div style="background:var(--forest-900);padding:24px;font-family:var(--f-mono);font-size:12px;color:var(--clay-50);">900<br/>#14251D</div>
+          </div>
+        </div>
+        <!-- copper / terracota -->
+        <div>
+          <div class="mono" style="color:var(--fg-muted);margin-bottom:10px;">Terracota · copper</div>
+          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:0;border:1px solid var(--rule);">
+            <div style="background:var(--copper-200);padding:24px;font-family:var(--f-mono);font-size:12px;">200<br/>#D9A99C</div>
+            <div style="background:var(--copper-300);padding:24px;font-family:var(--f-mono);font-size:12px;">300<br/>#C07D6E</div>
+            <div style="background:var(--copper-400);padding:24px;font-family:var(--f-mono);font-size:12px;color:var(--clay-50);">400<br/>#A8594B</div>
+            <div style="background:var(--copper-500);padding:24px;font-family:var(--f-mono);font-size:12px;color:var(--clay-50);">500<br/>#8F3A2E</div>
+            <div style="background:var(--copper-600);padding:24px;font-family:var(--f-mono);font-size:12px;color:var(--clay-50);">600<br/>#7A2B22</div>
+            <div style="background:var(--copper-700);padding:24px;font-family:var(--f-mono);font-size:12px;color:var(--clay-50);">700<br/>#5E1F1A</div>
+          </div>
+        </div>
       </div>
-      <div style="font-family:var(--f-mono);font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-500)">Confidencial · cliente-advogado</div>
     </div>
-  </div>
-  <div style="margin-top:3.5rem;">
-    <div class="eyebrow">Estrutura · Grid</div>
-    <h3 style="font-family:var(--f-display);font-size:2rem;font-weight:500;margin-bottom:0.5rem">Doze colunas, <em style="font-style:italic;color:var(--copper-500)">margens largas</em>.</h3>
-    <p class="lede" style="max-width:60ch">Tudo se alinha em 12 colunas com calhas de 32 px. Os títulos pedem espaço; as margens nunca descem abaixo de 56 px (digital) ou 24 mm (impresso).</p>
-    <div class="grid-specs">
-      <div class="mono-sm">Baseline · 8 px</div>
-      <div class="mono-sm">Escala vertical · 8 · 16 · 24 · 32 · 48 · 64 · 96 · 144</div>
-      <div class="mono-sm">Máx. leitura · 720 px / 62 ch</div>
+  </section>
+
+  <!-- ————————————— 10 PROPORÇÃO ————————————— -->
+  <section class="slide" data-screen-label="10 Proporção cromática">
+    <div class="chrome">
+      <div class="head"><span>Capítulo III · Proporção</span><span>X</span></div>
+      <div class="foot"><span>TriboTax · Manual da Marca</span><span class="pageno">X</span></div>
     </div>
-  </div>
-</section>
+    <div style="height:100%;display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:center;">
+      <div>
+        <div class="eyebrow">Regra 70 · 20 · 8 · 2</div>
+        <h3 class="sub" style="margin-top:16px;">A <em>terracota</em> é pontuação, não texto.</h3>
+        <p class="body" style="font-size:21px;margin-top:32px;max-width:44ch;">
+          Se uma composição parece quente demais, provavelmente está. O acento vive no selo, no grifo, na citação numerada — não em títulos inteiros, nunca em corpos de texto.
+        </p>
+      </div>
+      <div style="display:grid;grid-template-rows:1fr 1fr 1fr 1fr;height:600px;border:1px solid var(--rule);">
+        <div style="background:var(--clay-50);display:flex;align-items:center;padding:0 32px;font-family:var(--f-display);font-size:32px;grid-row:span 7;"><span>70% <em style="color:var(--copper-500);font-style:italic;font-size:22px;margin-left:16px;">Argila — o papel</em></span></div>
+        <div style="background:var(--forest-900);color:var(--clay-50);display:flex;align-items:center;padding:0 32px;font-family:var(--f-display);font-size:32px;grid-row:span 2;"><span>20% <em style="color:var(--copper-300);font-style:italic;font-size:22px;margin-left:16px;">Floresta — a autoridade</em></span></div>
+        <div style="background:var(--copper-500);color:var(--clay-50);display:flex;align-items:center;padding:0 32px;font-family:var(--f-display);font-size:28px;"><span>8% <em style="color:rgba(255,255,255,0.75);font-style:italic;font-size:20px;margin-left:16px;">Terracota — o selo</em></span></div>
+        <div style="background:var(--ink-900);color:var(--clay-50);display:flex;align-items:center;padding:0 32px;font-family:var(--f-mono);font-size:14px;letter-spacing:0.18em;text-transform:uppercase;"><span>2% tinta — o texto</span></div>
+      </div>
+    </div>
+  </section>
 
-<!-- CLOSING -->
-<div class="closing">
-  <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="100" cy="100" r="88"/>
-    <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/>
-    <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/>
-    <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/>
-    <circle cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"/>
-  </svg>
-  <div class="wordmark">Tribo<span>Tax</span>.</div>
-  <p class="fin">fim — manual v1.0 · 2026</p>
-</div>
+  <!-- ————————————— 11 CAPÍTULO IV — TIPOGRAFIA ————————————— -->
+  <section class="slide" data-screen-label="11 Cap IV — Tipografia">
+    <div class="chrome">
+      <div class="head"><span>Capítulo IV · A tipografia</span><span>XI</span></div>
+      <div class="foot"><span>TriboTax · Manual da Marca</span><span class="pageno">XI</span></div>
+    </div>
+    <div style="height:100%;display:grid;grid-template-rows:auto 1fr;gap:48px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end;">
+        <div>
+          <div class="chapter-num" style="font-size:160px;">IV</div>
+          <h2 class="title" style="margin-top:24px;">Serifa que <em>respira</em>.</h2>
+        </div>
+        <p class="body" style="font-size:22px;">
+          A marca fala em serifa editorial — pausa, autoridade, tempo longo. O texto corrente fala em sans neutra, para não atrapalhar a serifa. A mono é sinalização técnica, marginália.
+        </p>
+      </div>
 
-</div><!-- #manual -->
+      <div class="specimen">
+        <div class="label">Cormorant Garamond · display</div>
+        <div class="big">A herança <em>rural</em><br/>precisa de <em>tempo</em>.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-top:48px;padding-top:32px;border-top:1px solid var(--rule);">
+          <div>
+            <div class="label" style="margin-bottom:18px;">Inter Tight · corpo</div>
+            <div class="sample-body">A contabilidade rural vive em dois calendários. O fiscal, de curto fôlego: DARF, GFIP, LCDPR. E o da terra, que mede em ciclos de três a trinta anos — sucessão, benfeitoria, desapropriação. Escrever para o produtor é traduzir entre esses dois tempos sem pressa.</div>
+          </div>
+          <div>
+            <div class="label" style="margin-bottom:18px;">JetBrains Mono · marginália</div>
+            <div class="sample-mono">CAP. IV · §01 — 07<br/>LCDPR · EFD · DITR<br/>Lei 8.023/90<br/>IN RFB 83/2001<br/>MP 2.158-35/2001</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<script>
-document.getElementById('gate-form').addEventListener('submit', function(e) {
-  e.preventDefault();
-  if (document.getElementById('gate-input').value === 'tribotax2026') {
-    sessionStorage.setItem('tt-auth', '1');
-    document.getElementById('gate').style.display = 'none';
-    document.getElementById('manual').style.visibility = 'visible';
-  } else {
-    document.getElementById('gate-error').textContent = 'senha incorreta';
-    document.getElementById('gate-input').value = '';
-    document.getElementById('gate-input').focus();
-  }
-});
-if (sessionStorage.getItem('tt-auth') === '1') {
-  document.getElementById('gate').style.display = 'none';
-  document.getElementById('manual').style.visibility = 'visible';
-}
-</script>
+  <!-- ————————————— 12 ESCALA TIPO ————————————— -->
+  <section class="slide clay-dark" data-screen-label="12 Escala tipo">
+    <div class="chrome">
+      <div class="head"><span>Capítulo IV · Escala</span><span>XII</span></div>
+      <div class="foot"><span>TriboTax · Manual da Marca</span><span class="pageno">XII</span></div>
+    </div>
+    <div style="height:100%;display:grid;grid-template-rows:auto 1fr;gap:48px;">
+      <div>
+        <div class="eyebrow">Seis degraus</div>
+        <h3 class="sub" style="margin-top:16px;">Do <em>manifesto</em> à marginália.</h3>
+      </div>
+      <div style="display:grid;grid-template-rows:repeat(6,auto);gap:28px;align-content:center;">
+        <div style="display:grid;grid-template-columns:200px 120px 1fr;gap:40px;align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:20px;">
+          <span class="mono" style="color:var(--fg-muted);">Display · 120</span>
+          <span class="mono" style="color:var(--copper-500);">manifesto</span>
+          <span style="font-family:var(--f-display);font-size:96px;line-height:1;letter-spacing:-0.02em;">Herança <em style="font-style:italic;color:var(--copper-500);">longa</em></span>
+        </div>
+        <div style="display:grid;grid-template-columns:200px 120px 1fr;gap:40px;align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:20px;">
+          <span class="mono" style="color:var(--fg-muted);">Title · 72</span>
+          <span class="mono" style="color:var(--copper-500);">seção</span>
+          <span style="font-family:var(--f-display);font-size:64px;line-height:1.02;letter-spacing:-0.015em;">O nó antes <em style="font-style:italic;">do luto</em></span>
+        </div>
+        <div style="display:grid;grid-template-columns:200px 120px 1fr;gap:40px;align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:20px;">
+          <span class="mono" style="color:var(--fg-muted);">Subtitle · 44</span>
+          <span class="mono" style="color:var(--copper-500);">bloco</span>
+          <span style="font-family:var(--f-display);font-size:40px;line-height:1.1;">Planejamento sucessório para a família rural</span>
+        </div>
+        <div style="display:grid;grid-template-columns:200px 120px 1fr;gap:40px;align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:20px;">
+          <span class="mono" style="color:var(--fg-muted);">Body · 19</span>
+          <span class="mono" style="color:var(--copper-500);">corpo</span>
+          <span style="font-family:var(--f-body);font-size:19px;line-height:1.6;">Texto corrente em Inter Tight. Comprimento alvo: 62 caracteres por linha. Ritmo: parágrafo curto, frase pontual.</span>
+        </div>
+        <div style="display:grid;grid-template-columns:200px 120px 1fr;gap:40px;align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:20px;">
+          <span class="mono" style="color:var(--fg-muted);">Small · 13</span>
+          <span class="mono" style="color:var(--copper-500);">rodapé</span>
+          <span style="font-family:var(--f-body);font-size:13px;line-height:1.5;color:var(--ink-500);">Notas, rodapés, legendas e metadados operacionais ficam em 13px — sempre neutros, sempre discretos.</span>
+        </div>
+        <div style="display:grid;grid-template-columns:200px 120px 1fr;gap:40px;align-items:baseline;">
+          <span class="mono" style="color:var(--fg-muted);">Mono · 11</span>
+          <span class="mono" style="color:var(--copper-500);">técnico</span>
+          <span class="mono" style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;">cap · iv · §03 — marginália técnica</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ————————————— 13 CAPÍTULO V — VOZ ————————————— -->
+  <section class="slide deep" data-screen-label="13 Cap V — Voz">
+    <div class="chrome">
+      <div class="head"><span>Capítulo V · A voz</span><span>XIII</span></div>
+      <div class="foot"><span>TriboTax · Manual da Marca</span><span class="pageno">XIII</span></div>
+    </div>
+    <div style="height:100%;display:grid;grid-template-rows:auto 1fr;gap:60px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end;">
+        <div>
+          <div class="chapter-num" style="font-size:160px;">V</div>
+          <h2 class="title" style="margin-top:24px;">Fala <em>direta</em>, pausa <em>longa</em>.</h2>
+        </div>
+        <p class="body" style="font-size:22px;color:var(--fg-on-deep-muted);">
+          A voz TriboTax é de quem visita a fazenda de botina e volta para o cartório de gravata. Traduz termo técnico sem infantilizar. Usa italico para a ênfase que a oralidade não cabe. Evita anglicismo, jargão de consultoria, exclamação.
+        </p>
+      </div>
+
+      <div class="voice-pair">
+        <div class="voice-col">
+          <h4>Dizer assim</h4>
+          <div class="stack-md">
+            <div class="yes">"A <em>herança rural</em> não começa no cartório. Começa no almoço de domingo."</div>
+            <div class="yes">"Revisamos seis anos de apurações. <em>Foi dinheiro que voltou.</em>"</div>
+            <div class="yes">"Se o seu contador nunca andou no pasto, <em>ele está lendo o balanço errado.</em>"</div>
+          </div>
+        </div>
+        <div class="voice-col">
+          <h4>Nunca assim</h4>
+          <div class="stack-md">
+            <div class="no">"Soluções disruptivas em compliance tributário rural."</div>
+            <div class="no">"Agronegócio 4.0 potencializando seu ROI fiscal!"</div>
+            <div class="no">"Clique aqui e fale com nossos especialistas!!!"</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ————————————— 14 PALAVRÁRIO ————————————— -->
+  <section class="slide" data-screen-label="14 Palavrário">
+    <div class="chrome">
+      <div class="head"><span>Capítulo V · Palavrário</span><span>XIV</span></div>
+      <div class="foot"><span>TriboTax · Manual da Marca</span><span class="pageno">XIV</span></div>
+    </div>
+    <div style="height:100%;display:grid;grid-template-columns:1fr 1.3fr;gap:100px;align-items:center;">
+      <div>
+        <div class="eyebrow">Vocabulário de marca</div>
+        <h3 class="sub" style="margin-top:16px;">Palavras <em>nossas</em>, palavras <em>proibidas</em>.</h3>
+        <p class="body" style="font-size:19px;margin-top:32px;">
+          A marca não usa superlativo, não promete transformação, não fala em "jornada". Prefere verbos de ofício: revisar, atestar, apurar, conduzir.
+        </p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;">
+        <div>
+          <div class="mono" style="color:var(--forest-700);font-weight:500;margin-bottom:20px;">+ USAR</div>
+          <ul style="list-style:none;padding:0;margin:0;font-family:var(--f-display);font-size:26px;line-height:1.6;">
+            <li>conduzir</li>
+            <li>apurar</li>
+            <li>atestar</li>
+            <li><em style="color:var(--copper-500);">revisar</em></li>
+            <li>herança</li>
+            <li>propriedade</li>
+            <li>pasto · safra · benfeitoria</li>
+            <li>LCDPR · DITR · ITR</li>
+            <li>cartório · testamento</li>
+            <li><em style="color:var(--copper-500);">sucessão</em></li>
+          </ul>
+        </div>
+        <div>
+          <div class="mono" style="color:var(--copper-600);font-weight:500;margin-bottom:20px;">− EVITAR</div>
+          <ul style="list-style:none;padding:0;margin:0;font-family:var(--f-display);font-size:26px;line-height:1.6;color:var(--ink-500);">
+            <li style="text-decoration:line-through;text-decoration-color:var(--copper-500);">solução</li>
+            <li style="text-decoration:line-through;text-decoration-color:var(--copper-500);">inovador</li>
+            <li style="text-decoration:line-through;text-decoration-color:var(--copper-500);">potencializar</li>
+            <li style="text-decoration:line-through;text-decoration-color:var(--copper-500);">disruptivo</li>
+            <li style="text-decoration:line-through;text-decoration-color:var(--copper-500);">jornada</li>
+            <li style="text-decoration:line-through;text-decoration-color:var(--copper-500);">ecossistema</li>
+            <li style="text-decoration:line-through;text-decoration-color:var(--copper-500);">agro 4.0</li>
+            <li style="text-decoration:line-through;text-decoration-color:var(--copper-500);">compliance</li>
+            <li style="text-decoration:line-through;text-decoration-color:var(--copper-500);">stakeholder</li>
+            <li style="text-decoration:line-through;text-decoration-color:var(--copper-500);">ROI fiscal</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ————————————— 15 CAPÍTULO VI — USO ————————————— -->
+  <section class="slide clay-dark" data-screen-label="15 Cap VI — Aplicação">
+    <div class="chrome">
+      <div class="head"><span>Capítulo VI · Aplicação</span><span>XV</span></div>
+      <div class="foot"><span>TriboTax · Manual da Marca</span><span class="pageno">XV</span></div>
+    </div>
+    <div style="height:100%;display:grid;grid-template-rows:auto 1fr;gap:48px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end;">
+        <div>
+          <div class="chapter-num" style="font-size:160px;">VI</div>
+          <h2 class="title" style="margin-top:24px;">A marca <em>em uso</em>.</h2>
+        </div>
+        <p class="body" style="font-size:22px;">
+          Três superfícies-teste: documento técnico, peça editorial, assinatura de e-mail. Se a marca respira nesses três, está viva.
+        </p>
+      </div>
+
+      <div class="three-col" style="gap:32px;">
+        <!-- capa de relatório -->
+        <div style="background:var(--clay-50);border:1px solid var(--rule);aspect-ratio:3/4;padding:40px;display:flex;flex-direction:column;justify-content:space-between;">
+          <div>
+            <svg viewBox="0 0 200 200" style="width:48px;height:48px;color:var(--forest-900);"><use href="#tt-mark"/></svg>
+            <div class="mono" style="margin-top:20px;color:var(--fg-muted);">Relatório 03/2026 · sigiloso</div>
+          </div>
+          <div>
+            <div style="font-family:var(--f-display);font-size:44px;line-height:1.05;">Apuração <em style="font-style:italic;color:var(--copper-500);">LCDPR</em><br/>Fazenda Santa Rita</div>
+            <div style="border-top:1px solid var(--rule);margin-top:24px;padding-top:16px;font-family:var(--f-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--fg-muted);">
+              TriboTax · Jan — Dez 2025
+            </div>
+          </div>
+        </div>
+
+        <!-- editorial piece -->
+        <div style="background:var(--forest-900);color:var(--clay-50);aspect-ratio:3/4;padding:40px;display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <svg viewBox="0 0 200 200" style="width:40px;height:40px;color:var(--copper-300);"><use href="#tt-mark"/></svg>
+            <div class="mono" style="color:var(--copper-300);">Ensaio · nº 07</div>
+          </div>
+          <div>
+            <div style="font-family:var(--f-display);font-size:48px;line-height:1.02;color:var(--clay-50);">A herança<br/>que <em style="font-style:italic;color:var(--copper-300);">não se inventaria</em></div>
+            <div style="color:rgba(231,222,201,0.6);font-family:var(--f-body);font-size:15px;line-height:1.55;margin-top:20px;max-width:32ch;">Sobre a diferença entre dividir terra e dividir ofício.</div>
+          </div>
+        </div>
+
+        <!-- assinatura de email -->
+        <div style="background:var(--clay-50);border:1px solid var(--rule);aspect-ratio:3/4;padding:40px;display:flex;flex-direction:column;justify-content:space-between;">
+          <div class="mono" style="color:var(--fg-muted);">Assinatura de e-mail</div>
+          <div style="border-left:1px solid var(--rule);padding-left:20px;">
+            <div style="display:flex;align-items:center;gap:16px;">
+              <svg viewBox="0 0 200 200" style="width:36px;height:36px;color:var(--forest-900);"><use href="#tt-mark"/></svg>
+              <div>
+                <div style="font-family:var(--f-display);font-size:20px;">Alex Amadeu</div>
+                <div style="font-family:var(--f-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--fg-muted);margin-top:2px;">Fundador · TriboTax</div>
+              </div>
+            </div>
+            <div style="margin-top:20px;font-family:var(--f-mono);font-size:12px;line-height:1.8;color:var(--ink-700);">
+              alex@tribotax.com.br<br/>
+              +55 11 9 · · · · · · · · ·<br/>
+              tribotax.com.br
+            </div>
+          </div>
+          <div class="mono" style="font-size:10px;color:var(--fg-muted);">Confidencial · cliente-advogado</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ————————————— 16 GRID ————————————— -->
+  <section class="slide" data-screen-label="16 Grid & ritmo">
+    <div class="chrome">
+      <div class="head"><span>Capítulo VI · Grid & ritmo</span><span>XVI</span></div>
+      <div class="foot"><span>TriboTax · Manual da Marca</span><span class="pageno">XVI</span></div>
+    </div>
+    <div style="height:100%;display:grid;grid-template-columns:1fr 1.2fr;gap:80px;align-items:stretch;">
+      <div style="display:flex;flex-direction:column;justify-content:center;">
+        <div class="eyebrow">Estrutura</div>
+        <h3 class="sub" style="margin-top:16px;">Doze colunas, <em>margens largas</em>.</h3>
+        <p class="body" style="font-size:21px;margin-top:32px;">
+          Tudo se alinha em 12 colunas com calhas de 32 px. Os títulos pedem espaço; as margens externas nunca descem abaixo de 56 px (digital) ou 24 mm (impresso). Em caso de dúvida: <em>mais respiro.</em>
+        </p>
+        <div class="stack-md" style="margin-top:40px;">
+          <div class="mono" style="color:var(--fg-muted);">Baseline · 8 px</div>
+          <div class="mono" style="color:var(--fg-muted);">Escala vertical · 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96 · 144 · 200</div>
+          <div class="mono" style="color:var(--fg-muted);">Máx. leitura · 720 px / 62 ch</div>
+        </div>
+      </div>
+
+      <div style="position:relative;border:1px solid var(--rule);background:var(--clay-50);padding:48px;">
+        <!-- 12 col guides -->
+        <div style="position:absolute;inset:48px;display:grid;grid-template-columns:repeat(12,1fr);gap:16px;pointer-events:none;">
+          <div style="background:rgba(143,58,46,0.06);"></div>
+          <div style="background:rgba(143,58,46,0.06);"></div>
+          <div style="background:rgba(143,58,46,0.06);"></div>
+          <div style="background:rgba(143,58,46,0.06);"></div>
+          <div style="background:rgba(143,58,46,0.06);"></div>
+          <div style="background:rgba(143,58,46,0.06);"></div>
+          <div style="background:rgba(143,58,46,0.06);"></div>
+          <div style="background:rgba(143,58,46,0.06);"></div>
+          <div style="background:rgba(143,58,46,0.06);"></div>
+          <div style="background:rgba(143,58,46,0.06);"></div>
+          <div style="background:rgba(143,58,46,0.06);"></div>
+          <div style="background:rgba(143,58,46,0.06);"></div>
+        </div>
+        <!-- demo content using the grid -->
+        <div style="position:relative;display:grid;grid-template-columns:repeat(12,1fr);gap:16px;">
+          <div style="grid-column:1 / span 12;" class="mono" style="color:var(--fg-muted);font-size:11px;">Cap · VI · §02</div>
+          <div style="grid-column:1 / span 8;margin-top:40px;font-family:var(--f-display);font-size:56px;line-height:1;letter-spacing:-0.02em;">A terra tem <em style="font-style:italic;color:var(--copper-500);">memória</em> fiscal.</div>
+          <div style="grid-column:1 / span 6;margin-top:40px;font-family:var(--f-body);font-size:17px;line-height:1.55;color:var(--ink-700);">Um ciclo de apurações mal feitas se paga por três gerações. É por isso que começamos pelo laudo, não pelo cliente.</div>
+          <div style="grid-column:8 / span 4;margin-top:40px;align-self:end;font-family:var(--f-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--fg-muted);border-top:1px solid var(--rule);padding-top:12px;">figura 01 · laudo técnico</div>
+        </div>
+        <div class="mono" style="position:absolute;bottom:20px;right:24px;color:var(--fg-muted);">12 col · 16 gutter · 48 margem</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ————————————— 17 ENCERRAMENTO ————————————— -->
+  <section class="slide deep" data-screen-label="17 Encerramento">
+    <div class="chrome">
+      <div class="head"><span>Assinatura</span><span>XVII</span></div>
+      <div class="foot"><span>TriboTax · Manual da Marca · v1.0</span><span class="pageno">XVII</span></div>
+    </div>
+    <div class="closing">
+      <div>
+        <div class="mark-big"><svg><use href="#tt-mark"/></svg></div>
+        <div class="eyebrow" style="justify-content:center;color:var(--copper-300);">Onde a dúvida encontra laudo</div>
+        <div style="font-family:var(--f-display);font-style:italic;font-weight:400;font-size:120px;line-height:1;margin-top:40px;color:var(--clay-50);">
+          Tribo<span style="color:var(--copper-300);">Tax</span>.
+        </div>
+        <div class="mono" style="margin-top:64px;color:var(--copper-300);letter-spacing:0.3em;">fim — manual v1.0 · março de 2026</div>
+      </div>
+    </div>
+  </section>
+
+</deck-stage>
+
 </body>
 </html>
