@@ -111,7 +111,7 @@
     .philosophy-body p + p { margin-top: 1em; }
     .philosophy-grid {
       display: grid;
-      grid-template-columns: 1.1fr 1fr;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
       gap: var(--sp-9);
       margin-top: 40px;
       align-items: start;
@@ -273,7 +273,7 @@
       overflow: hidden;
     }
     .alex-photo img {
-      width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%;
+      width: 100%; height: 100%; object-fit: cover; object-position: 50% 10%;
       filter: grayscale(0.3) contrast(1.05);
       mix-blend-mode: luminosity;
       opacity: 0.95;
@@ -416,13 +416,13 @@
   <section class="philosophy">
     <div class="container">
       <div class="eyebrow">Filosofia fundadora · Roma, 70 d.C.</div>
-      <div class="philosophy-grid reveal">
-        <blockquote class="philosophy-quote">
+      <div class="philosophy-grid">
+        <blockquote class="philosophy-quote reveal">
           O dinheiro<br/>
           <span class="drop">não tem cheiro.</span>
         </blockquote>
 
-        <div class="philosophy-body" style="padding-top: 8px">
+        <div class="philosophy-body reveal" style="padding-top: 8px">
           <p>
             Foi o que o imperador Vespasiano respondeu ao filho, quando este questionou a dignidade de um imposto sobre coletores de urina. A máxima atravessou dois mil anos e virou a filosofia operacional do fisco brasileiro: não importa a origem, importa o fato gerador.
           </p>
@@ -663,7 +663,7 @@
   <section class="tight">
     <div class="container">
       <div class="alex-row reveal">
-        <div class="alex-photo"><img src="assets/img/alex-amadeu.jpg" alt="Retrato de Alex Amadeu" /></div>
+        <div class="alex-photo"><img src="assets/img/alex-amadeu-2.jpg" alt="Retrato de Alex Amadeu" /></div>
         <div>
           <span class="eyebrow">Mentor · fundador</span>
           <div style="height: 24px"></div>
