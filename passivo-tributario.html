@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Passivo Tributário · TriboTax</title>
+<meta name="description" content="Empresas com dívida ativa na PGFN têm direito a redução e contestação. Diagnóstico gratuito em 48h: CAPAG efetiva, prescrição e decadência analisados juntos." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="stylesheet" href="assets/css/tokens.css" />
+<style>
+
+/* ── Hero ─────────────────────────────────────────────────── */
+.hero {
+  padding: clamp(56px,8vw,120px) 0 clamp(72px,10vw,144px);
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 50% 70% at 100% 0%, rgba(143,58,46,0.12), transparent 65%);
+  pointer-events: none;
+}
+.hero-bg-symbol {
+  position: absolute; right: clamp(-20px,-2vw,20px); top: 40px;
+  font-family: var(--f-display); font-style: italic; font-weight: 300;
+  font-size: clamp(240px,28vw,480px); line-height: 1;
+  color: rgba(143,58,46,0.05); user-select: none; pointer-events: none;
+  z-index: 0;
+}
+.hero .container { position: relative; z-index: 1; }
+.hero h1 { margin: 20px 0 0; max-width: 16ch; }
+.hero h1 em { font-style: italic; color: var(--copper-500); }
+.hero .lede { margin-top: 32px; }
+.hero-meta {
+  margin-top: var(--sp-8);
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: var(--sp-5);
+  border-top: 1px solid var(--rule);
+  padding-top: var(--sp-5);
+}
+@media (max-width:640px) { .hero-meta { grid-template-columns: 1fr 1fr; } }
+.hero-meta .stat .num {
+  font-family: var(--f-display);
+  font-size: clamp(32px,3.2vw,48px);
+  line-height: 1; color: var(--forest-900);
+  letter-spacing: -0.02em;
+}
+.hero-meta .stat .lbl {
+  font-family: var(--f-mono); font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--fg-muted); margin-top: 6px;
+}
+
+/* ── O Problema ───────────────────────────────────────────── */
+.problema { background: var(--clay-100); }
+.problema-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--sp-6); margin-top: var(--sp-7);
+}
+@media (max-width:720px) { .problema-grid { grid-template-columns: 1fr; } }
+.p-card {
+  padding: var(--sp-6); border-radius: var(--radius-m);
+  background: var(--clay-50); border: 1px solid var(--clay-200);
+  display: flex; flex-direction: column; gap: var(--sp-4);
+}
+.p-card-icon {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: grid; place-items: center;
+}
+.p-card h4 { font-family: var(--f-display); font-size: clamp(22px,2vw,28px); line-height: 1.1; margin: 0; }
+.p-card p { font-size: 15px; line-height: 1.6; color: var(--ink-700); margin: 0; }
+.p-card .tag {
+  display: inline-block; font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: var(--radius-s);
+  background: var(--forest-900); color: var(--clay-50);
+  align-self: flex-start;
+}
+
+/* ── PRCP ──────────────────────────────────────────────────── */
+.prcp-intro {
+  display: grid; grid-template-columns: 1.1fr 1fr;
+  gap: var(--sp-9); align-items: start;
+}
+@media (max-width:860px) { .prcp-intro { grid-template-columns: 1fr; } }
+.law-cite {
+  padding: var(--sp-5) var(--sp-6);
+  border-left: 3px solid var(--forest-800);
+  background: rgba(20,37,29,0.04);
+  border-radius: 0 var(--radius-m) var(--radius-m) 0;
+}
+.law-cite .ref {
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--forest-700); margin-bottom: 10px;
+}
+.law-cite p { font-size: 14px; line-height: 1.65; color: var(--ink-700); font-style: italic; margin: 0; }
+.law-cite p strong { font-style: normal; color: var(--forest-900); }
+
+/* ── Tabela CAPAG ──────────────────────────────────────────── */
+.capag-table-wrap { overflow-x: auto; margin-top: var(--sp-6); }
+.capag-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 14px;
+}
+.capag-table th {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; text-align: left;
+  padding: 12px 16px; background: var(--forest-900); color: var(--clay-50);
+}
+.capag-table td {
+  padding: 14px 16px; border-bottom: 1px solid var(--clay-200);
+  color: var(--ink-700); vertical-align: top;
+}
+.capag-table tr:last-child td { border-bottom: none; }
+.capag-table .row-a td { background: rgba(143,58,46,0.04); }
+.capag-table .row-d td { background: rgba(20,37,29,0.05); font-weight: 500; }
+.capag-table .cls {
+  font-family: var(--f-display); font-size: 28px;
+  font-style: italic; color: var(--copper-500);
+  line-height: 1;
+}
+.cls-d { color: var(--forest-700) !important; }
+
+/* ── Métodos CAPAG Efetiva ─────────────────────────────────── */
+.metodos-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--sp-5); margin-top: var(--sp-6);
+}
+@media (max-width:640px) { .metodos-grid { grid-template-columns: 1fr; } }
+.metodo-card {
+  padding: var(--sp-6); border-radius: var(--radius-m);
+  border: 1px solid var(--clay-200); background: var(--clay-50);
+}
+.metodo-card h5 {
+  font-family: var(--f-display); font-size: 20px;
+  margin: 0 0 12px; color: var(--forest-900);
+}
+.metodo-card .formula {
+  font-family: var(--f-mono); font-size: 11px;
+  letter-spacing: 0.06em; padding: 10px 12px;
+  background: var(--clay-100); border-radius: var(--radius-s);
+  color: var(--forest-800); margin-bottom: 12px;
+}
+.metodo-card p { font-size: 13px; line-height: 1.6; color: var(--ink-700); margin: 0; }
+
+/* ── Dark: prescrição/decadência ───────────────────────────── */
+.prescricao-section {
+  background: var(--forest-900); color: var(--fg-on-deep);
+  position: relative; overflow: hidden;
+}
+.prescricao-section::before {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 55% 60% at 90% 20%, rgba(143,58,46,0.22), transparent 60%),
+    radial-gradient(ellipse 40% 50% at 0% 90%, rgba(35,64,50,0.3), transparent 60%);
+  pointer-events: none;
+}
+.prescricao-section .container { position: relative; z-index: 2; }
+.inst-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--sp-5); margin-top: var(--sp-7);
+}
+@media (max-width:720px) { .inst-grid { grid-template-columns: 1fr; } }
+.inst-card {
+  padding: var(--sp-6); border-radius: var(--radius-m);
+  border: 1px solid var(--rule-deep);
+}
+.inst-card .inst-label {
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--copper-300); margin-bottom: 12px;
+}
+.inst-card h4 {
+  font-family: var(--f-display); font-size: clamp(22px,2vw,28px);
+  font-weight: 500; margin: 0 0 12px; color: var(--fg-on-deep);
+}
+.inst-card p { font-size: 14px; line-height: 1.65; color: var(--fg-on-deep-muted); margin: 0 0 10px; }
+.inst-card .prazo {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--copper-400);
+}
+
+.timeline-ext {
+  margin-top: var(--sp-8);
+  display: flex; flex-direction: column; gap: var(--sp-5);
+}
+.tl-row {
+  display: grid; grid-template-columns: 40px 1fr;
+  gap: var(--sp-5); align-items: start;
+}
+.tl-marker-ext {
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+}
+.tl-dot-ext {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--copper-500); margin-top: 5px; flex-shrink: 0;
+}
+.tl-dot-ext.dim { background: rgba(192,125,110,0.35); }
+.tl-dot-ext.green { background: rgba(165,214,167,0.7); }
+.tl-line-ext { width: 1px; background: var(--rule-deep); flex: 1; min-height: 32px; margin: 4px 0; }
+.tl-body-ext .tl-label-ext {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--copper-300); margin-bottom: 5px;
+}
+.tl-body-ext p { font-size: 14px; line-height: 1.6; color: var(--fg-on-deep-muted); margin: 0; }
+.tl-body-ext p strong { color: var(--fg-on-deep); }
+
+/* ── Metodologia ───────────────────────────────────────────── */
+.metodologia-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 2px; background: var(--rule); margin-top: var(--sp-7);
+}
+@media (max-width:860px) { .metodologia-grid { grid-template-columns: 1fr; } }
+.met-step {
+  background: var(--clay-50); padding: var(--sp-6) var(--sp-6) var(--sp-7);
+  position: relative;
+}
+.met-step .num-big {
+  font-family: var(--f-display); font-style: italic;
+  font-size: 72px; line-height: 1; color: var(--copper-500);
+  letter-spacing: -0.02em; margin-bottom: var(--sp-4);
+}
+.met-step h4 {
+  font-family: var(--f-display); font-size: clamp(20px,1.8vw,26px);
+  line-height: 1.1; margin: 0 0 12px; color: var(--forest-900);
+}
+.met-step p { font-size: 14px; line-height: 1.6; color: var(--ink-700); margin: 0; }
+
+/* ── Integração (highlight box) ───────────────────────────── */
+.integration-box {
+  background: var(--forest-900); color: var(--fg-on-deep);
+  border-radius: var(--radius-m); padding: var(--sp-7);
+  position: relative; overflow: hidden; margin-top: var(--sp-7);
+}
+.integration-box::before {
+  content: ""; position: absolute; top: -30px; right: -30px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(143,58,46,0.3), transparent 65%);
+}
+.integration-box .int-label {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--copper-300); margin-bottom: 16px;
+}
+.integration-box p {
+  font-size: clamp(15px,1.2vw,18px); line-height: 1.65;
+  color: var(--fg-on-deep-muted); max-width: 72ch;
+  position: relative; z-index: 1; margin: 0;
+}
+.integration-box p strong { color: var(--fg-on-deep); }
+
+/* ── Trust Strip ──────────────────────────────────────────── */
+.trust-strip {
+  background: var(--clay-200);
+  padding: var(--sp-5) 0;
+  border-top: 1px solid var(--clay-300);
+  border-bottom: 1px solid var(--clay-300);
+}
+.trust-inner {
+  display: flex; align-items: center; justify-content: center;
+  gap: var(--sp-7); flex-wrap: wrap;
+}
+.trust-item {
+  display: flex; align-items: center; gap: var(--sp-3);
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-700);
+}
+.trust-item svg { flex-shrink: 0; }
+
+/* ── CTA Captura ──────────────────────────────────────────── */
+.cta-section {
+  background: var(--copper-500); color: #1A0E08;
+  position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.08 0 0 0 0 0.05 0 0 0 0.22 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.5; mix-blend-mode: multiply; pointer-events: none;
+}
+.cta-section .container { position: relative; z-index: 2; }
+.cta-capture-layout {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--sp-9); align-items: center;
+}
+@media (max-width:860px) { .cta-capture-layout { grid-template-columns: 1fr; } }
+.cta-section h2 {
+  font-family: var(--f-display); font-size: clamp(36px,4vw,64px);
+  line-height: 1.04; font-weight: 500; margin: 0 0 16px;
+  letter-spacing: -0.015em;
+}
+.cta-section h2 em { color: #3A1A0B; font-style: italic; }
+.cta-section .cta-lede { font-size: 17px; line-height: 1.6; color: #2A1208; max-width: 52ch; margin: 0 0 var(--sp-5); }
+.cta-checklist {
+  margin: 0; padding: 0; list-style: none;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.cta-checklist li {
+  padding-left: 20px; position: relative;
+  font-size: 14px; color: #2A1208; line-height: 1.5;
+}
+.cta-checklist li::before {
+  content: ""; position: absolute; left: 0; top: 9px;
+  width: 10px; height: 1px; background: #1A0E08;
+}
+
+/* ── Lead Form ────────────────────────────────────────────── */
+.cta-form-wrap {
+  background: rgba(246,241,232,0.95);
+  border-radius: var(--radius-m); padding: var(--sp-6);
+  border: 1px solid rgba(42,18,8,0.1);
+}
+.form-headline {
+  font-family: var(--f-display); font-size: 22px; font-style: italic;
+  color: #1A0E08; margin: 0 0 var(--sp-4);
+}
+.lead-form { display: flex; flex-direction: column; gap: var(--sp-3); }
+.form-input {
+  width: 100%; padding: 13px 16px;
+  font-family: var(--f-body); font-size: 15px; color: #1A0E08;
+  background: #fff; border: 1px solid rgba(42,18,8,0.2);
+  border-radius: var(--radius-s);
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.form-input:focus {
+  outline: none; border-color: #1A0E08;
+  box-shadow: 0 0 0 3px rgba(26,14,8,0.06);
+}
+.form-input::placeholder { color: rgba(42,18,8,0.4); }
+.lead-btn {
+  background: #1A0E08; color: var(--copper-300);
+  justify-content: center; width: 100%; padding: 15px 20px;
+  font-size: 15px; margin-top: var(--sp-2); cursor: pointer;
+  display: inline-flex; align-items: center; gap: 12px;
+  border-radius: var(--radius-s);
+  transition: background .25s ease;
+}
+.lead-btn:hover { background: #2C1811; }
+.lead-btn .arrow { width: 16px; height: 10px; }
+.lead-btn .arrow path { stroke: currentColor; fill: none; stroke-width: 1.4; }
+.form-note {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(42,18,8,0.45); text-align: center; margin: 4px 0 0;
+}
+
+/* ── Sticky Mobile CTA ────────────────────────────────────── */
+.sticky-cta-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #1A0E08; padding: 16px 20px;
+  z-index: 50; display: none;
+  border-top: 2px solid rgba(143,58,46,0.5);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+}
+.sticky-cta-bar a {
+  color: var(--copper-300); font-size: 15px; font-weight: 500;
+  text-decoration: none; display: flex; align-items: center;
+  gap: 10px; width: 100%; justify-content: center;
+}
+
+</style>
+</head>
+<body>
+<header id="tt-nav"></header>
+
+<!-- ── HERO ──────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-bg-symbol">§</div>
+  <div class="container reveal">
+    <span class="eyebrow">Passivo Tributário · PGFN · Dívida Ativa</span>
+    <h1 class="h-display h-1">Dívida ativa<br>não é <em>sentença.</em><br>É negociação.</h1>
+    <p class="lede">
+      Empresas com passivo tributário na PGFN têm acesso a dois instrumentos jurídicos
+      que podem reduzir — ou até eliminar — a dívida. O problema é que quase ninguém aplica os dois juntos.
+    </p>
+    <div class="hero-meta">
+      <div class="stat"><span class="num">100%</span><span class="lbl">Desconto possível<br>sobre o principal</span></div>
+      <div class="stat"><span class="num">5 anos</span><span class="lbl">Prazo fatal para<br>cobrar o crédito</span></div>
+      <div class="stat"><span class="num">48h</span><span class="lbl">Para diagnóstico<br>do seu passivo</span></div>
+    </div>
+    <div style="margin-top: var(--sp-7); display:flex; gap:12px; flex-wrap:wrap;">
+      <a href="#captura" class="btn btn-primary">
+        Diagnóstico gratuito em 48h
+        <svg class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+      </a>
+      <a href="#como-atuamos" class="btn btn-ghost">Ver metodologia</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRUST STRIP ─────────────────────────────────────────── -->
+<div class="trust-strip">
+  <div class="container">
+    <div class="trust-inner">
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span>OAB/SP credenciado</span>
+      </div>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Diagnóstico em 48h</span>
+      </div>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>100% administrativo</span>
+      </div>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>Sem risco judicial</span>
+      </div>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span>100% gratuito</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── O PROBLEMA ────────────────────────────────────────── -->
+<section class="problema">
+  <div class="container">
+    <div class="reveal">
+      <span class="eyebrow">O problema</span>
+      <h2 class="h-display h-2" style="margin-top:20px; max-width:20ch">
+        Dois erros que custam caro — e ninguém te conta.
+      </h2>
+      <p class="lede" style="margin-top:20px">
+        Ao receber uma notificação da PGFN, a maioria das empresas aceita o valor e negocia as parcelas.
+        Essa postura ignora questionamentos que podem mudar completamente o resultado.
+      </p>
+    </div>
+    <div class="problema-grid">
+      <div class="p-card reveal">
+        <div class="p-card-icon" style="background: rgba(143,58,46,0.1);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8F3A2E" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="#8F3A2E"/></svg>
+        </div>
+        <h4 class="h-display">CAPAG superestimada</h4>
+        <p>A PGFN calcula sua capacidade de pagamento automaticamente — a partir de faturamento e notas fiscais. Esse número não reflete o que sobra no caixa após custos, folha e dívidas. A classificação resultante limita os descontos que você poderia acessar.</p>
+        <span class="tag">PRCP · Art. 30</span>
+      </div>
+      <div class="p-card reveal">
+        <div class="p-card-icon" style="background: rgba(20,37,29,0.08);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14251D" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h4 class="h-display">Créditos prescritos na dívida</h4>
+        <p>Muitas inscrições em dívida ativa incluem créditos tributários cujo prazo de exigibilidade já expirou. Pagar ou parcelar um crédito prescrito é pagar uma dívida que juridicamente não existe mais — e isso é mais comum do que parece.</p>
+        <span class="tag">CTN · Arts. 173 e 174</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRCP ───────────────────────────────────────────────── -->
+<section>
+  <div class="container">
+    <div class="reveal">
+      <span class="eyebrow">Instrumento I · Transação Tributária</span>
+      <h2 class="h-display h-2" style="margin-top:20px; max-width:22ch">
+        PRCP — Pedido de Revisão<br>da Capacidade de <em>Pagamento</em>
+      </h2>
+    </div>
+
+    <div class="prcp-intro" style="margin-top: var(--sp-7)">
+      <div class="reveal">
+        <p style="font-size:17px; line-height:1.6; color:var(--ink-700); max-width:54ch; margin:0 0 var(--sp-5)">
+          A <strong>Portaria PGFN 6.757/2022</strong> garante ao contribuinte o direito de contestar
+          a CAPAG presumida apresentando demonstrativos financeiros reais. Ao provar que a
+          capacidade efetiva de pagamento é inferior à calculada pelo fisco, a classificação
+          muda — e os descontos acessíveis aumentam significativamente.
+        </p>
+        <div class="law-cite">
+          <div class="ref">Art. 30 · Portaria PGFN 6.757/2022</div>
+          <p>"O sujeito passivo poderá apresentar pedido de revisão da capacidade de pagamento, acompanhado de <strong>laudo técnico elaborado por profissional habilitado</strong> e documentação comprobatória, demonstrando que a capacidade efetiva de pagamento é inferior à presumida."</p>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="capag-table-wrap">
+          <table class="capag-table">
+            <thead>
+              <tr>
+                <th>Classe</th>
+                <th>Razão CAPAG</th>
+                <th>Desconto s/ principal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-a">
+                <td><span class="cls">A</span></td>
+                <td>≥ 80%</td>
+                <td>Até 30%</td>
+              </tr>
+              <tr>
+                <td><span class="cls">B</span></td>
+                <td>50% – 79%</td>
+                <td>Até 50%</td>
+              </tr>
+              <tr>
+                <td><span class="cls">C</span></td>
+                <td>25% – 49%</td>
+                <td>Até 65%</td>
+              </tr>
+              <tr class="row-d">
+                <td><span class="cls cls-d">D</span></td>
+                <td>&lt; 25%</td>
+                <td><strong>Até 100%</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small" style="margin-top:10px">Lei 13.988/2020 · Portaria PGFN 6.757/2022</p>
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top: var(--sp-7)">
+      <div class="eyebrow" style="margin-bottom:16px">Como calculamos a CAPAG Efetiva</div>
+      <div class="metodos-grid">
+        <div class="metodo-card">
+          <h5>Método 1 — ROA × 5</h5>
+          <div class="formula">Resultado Operacional Ajustado × 5 + PL Realizável</div>
+          <p>Apurado pela DRE real: receita líquida menos custos operacionais efetivos — pessoal, aluguel, serviços, insumos. Elimina as distorções do faturamento bruto usado pela PGFN.</p>
+        </div>
+        <div class="metodo-card">
+          <h5>Método 2 — FCO × 5</h5>
+          <div class="formula">Fluxo de Caixa Operacional × 5 + PL Realizável</div>
+          <p>Apurado pelo DFC Método Direto. Reflete o caixa efetivamente gerado pela operação — o indicador mais preciso da capacidade real de pagamento. A PGFN aceita o método mais favorável ao contribuinte.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRESCRIÇÃO E DECADÊNCIA ────────────────────────────── -->
+<section class="prescricao-section on-deep">
+  <div class="container">
+    <div class="reveal">
+      <span class="eyebrow" style="color:var(--copper-300)">Instrumento II · Extinção do Crédito</span>
+      <h2 class="h-display h-2" style="margin-top:20px; max-width:22ch; color:var(--fg-on-deep)">
+        O tempo extingue o crédito —<br>se a empresa <em>souber disso.</em>
+      </h2>
+      <p style="font-size:17px; line-height:1.6; color:var(--fg-on-deep-muted); max-width:60ch; margin-top:24px">
+        O CTN impõe ao Fisco prazos fatais para constituir e cobrar seus créditos. Quando esses
+        prazos expiram, o crédito tributário se extingue por força de lei — e deve ser cancelado
+        da dívida ativa. Identificar créditos prescritos ou decaídos dentro de um passivo tributário
+        é, muitas vezes, a redução mais eficaz.
+      </p>
+    </div>
+
+    <div class="inst-grid">
+      <div class="inst-card reveal">
+        <div class="inst-label">Decadência · CTN Art. 173</div>
+        <h4>Direito de lançar o crédito</h4>
+        <p>A Fazenda tem <strong style="color:var(--fg-on-deep)">5 anos</strong> para constituir (lançar) o crédito tributário. Se não o fizer dentro desse prazo, o direito de lançar perece definitivamente. Crédito decaído não pode ser cobrado, compensado ou incluído em parcelamento.</p>
+        <div class="prazo">Prazo: 5 anos · extingue o crédito · irrecuperável</div>
+      </div>
+      <div class="inst-card reveal" style="background: rgba(143,58,46,0.08); border-color:rgba(143,58,46,0.25)">
+        <div class="inst-label">Prescrição · CTN Art. 174</div>
+        <h4>Direito de cobrar o crédito</h4>
+        <p>Após o lançamento definitivo, a Fazenda tem <strong style="color:var(--fg-on-deep)">5 anos</strong> para ajuizar a execução fiscal. Se não o fizer — ou se houver inércia processual — o crédito se extingue pela prescrição, inclusive intercorrente (Súmula STJ 314).</p>
+        <div class="prazo">Prazo: 5 anos · extingue o crédito · inclusive intercorrente</div>
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top: var(--sp-7)">
+      <div class="eyebrow" style="color:var(--copper-300); margin-bottom:20px">O ciclo de vida do crédito tributário</div>
+      <div class="timeline-ext">
+        <div class="tl-row">
+          <div class="tl-marker-ext"><div class="tl-dot-ext"></div><div class="tl-line-ext"></div></div>
+          <div class="tl-body-ext">
+            <div class="tl-label-ext">Fato gerador</div>
+            <p>Ocorre o fato gerador. Inicia o <strong>prazo decadencial de 5 anos</strong> para a Fazenda lançar o crédito. Para tributos sujeitos a homologação (Art. 150, §4° CTN), o prazo conta da data do fato.</p>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-marker-ext"><div class="tl-dot-ext dim"></div><div class="tl-line-ext"></div></div>
+          <div class="tl-body-ext">
+            <div class="tl-label-ext">Lançamento / constituição</div>
+            <p>Crédito constituído por auto de infração, notificação ou DCTF. Se não houver lançamento no prazo decadencial → <strong>crédito extinto por decadência.</strong></p>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-marker-ext"><div class="tl-dot-ext"></div><div class="tl-line-ext"></div></div>
+          <div class="tl-body-ext">
+            <div class="tl-label-ext">Inscrição em dívida ativa</div>
+            <p>Crédito inscrito na PGFN. Inicia o <strong>prazo prescricional de 5 anos</strong> para ajuizamento da execução fiscal. Causas de interrupção: despacho que ordena a citação, reconhecimento da dívida, início da cobrança judicial.</p>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-marker-ext"><div class="tl-dot-ext dim"></div><div class="tl-line-ext"></div></div>
+          <div class="tl-body-ext">
+            <div class="tl-label-ext">Prescrição intercorrente · Súmula 314 STJ</div>
+            <p>Mesmo após o ajuizamento, se o processo ficar paralisado por mais de 5 anos por inércia da Fazenda → <strong>prescrição intercorrente.</strong> O STJ consolidou o entendimento na Súmula 314.</p>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-marker-ext"><div class="tl-dot-ext green"></div></div>
+          <div class="tl-body-ext">
+            <div class="tl-label-ext">Extinção · CTN Art. 156, V</div>
+            <p>Crédito extinto por decadência ou prescrição. <strong>Deve ser cancelado da dívida ativa</strong> e excluído de qualquer acordo ou parcelamento vigente.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── METODOLOGIA ────────────────────────────────────────── -->
+<section id="como-atuamos">
+  <div class="container">
+    <div class="reveal">
+      <span class="eyebrow">Como atuamos</span>
+      <h2 class="h-display h-2" style="margin-top:20px; max-width:22ch">
+        Análise integrada<br>antes de qualquer <em>negociação.</em>
+      </h2>
+      <p class="lede" style="margin-top:24px">
+        A TriboTax não negocia dívida no automático. Antes de qualquer proposta à PGFN,
+        realizamos auditoria do passivo em duas dimensões — <strong>tempo</strong> (prescrição/decadência)
+        e <strong>capacidade</strong> (CAPAG efetiva).
+      </p>
+    </div>
+
+    <div class="metodologia-grid">
+      <div class="met-step reveal">
+        <div class="num-big">1.</div>
+        <h4>Levantamento e qualificação do passivo</h4>
+        <p>Mapeamos todas as inscrições — PGFN e RFB — com identificação de competência, tributo, forma de constituição e data. Classificamos cada crédito por natureza e origem.</p>
+      </div>
+      <div class="met-step reveal">
+        <div class="num-big">2.</div>
+        <h4>Análise de prescrição e decadência (crédito a crédito)</h4>
+        <p>Para cada inscrição, calculamos os prazos considerando causas de interrupção e suspensão. Identificamos os créditos juridicamente inexigíveis a serem excluídos do passivo.</p>
+      </div>
+      <div class="met-step reveal">
+        <div class="num-big">3.</div>
+        <h4>Cálculo da CAPAG Efetiva e laudo técnico</h4>
+        <p>Com os demonstrativos contábeis reais, calculamos a capacidade de pagamento pelos dois métodos legais. Identificamos a divergência com a CAPAG presumida e elaboramos o laudo para o PRCP.</p>
+      </div>
+    </div>
+
+    <div class="integration-box reveal">
+      <div class="int-label">O diferencial da abordagem integrada</div>
+      <p>
+        Quando analisamos prescrição e CAPAG juntos, o <strong>saldo prescrito identificado reduz a base da dívida</strong> —
+        o que por si só já pode melhorar a classificação CAPAG (menor dívida, mesma capacidade = melhor ratio).
+        Tratar os dois instrumentos separadamente perde essa sinergia.
+        <strong>Os dois se potencializam — e é isso que a TriboTax aplica.</strong>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA CAPTURA ────────────────────────────────────────── -->
+<section id="captura" class="cta-section">
+  <div class="container">
+    <div class="cta-capture-layout reveal">
+      <div>
+        <span class="eyebrow" style="color:#2A1208; opacity:0.7">Próximo passo</span>
+        <h2 style="margin-top:16px">Descubra o real<br>tamanho da sua <em>dívida.</em></h2>
+        <p class="cta-lede">Em 48 horas, entregamos um diagnóstico com a CAPAG efetiva calculada e os créditos com exigibilidade questionável identificados. Gratuito, sem compromisso.</p>
+        <ul class="cta-checklist">
+          <li>CAPAG Efetiva calculada pelos dois métodos legais</li>
+          <li>Créditos prescritos ou decaídos identificados</li>
+          <li>Estimativa do potencial de redução da dívida</li>
+          <li>Processo 100% administrativo — sem risco judicial</li>
+        </ul>
+      </div>
+      <div class="cta-form-wrap">
+        <p class="form-headline">Diagnóstico gratuito em 48h</p>
+        <form class="lead-form" onsubmit="submitLead(event,'Passivo Tributário / PGFN')">
+          <input class="form-input" type="text" name="nome" placeholder="Nome completo" required>
+          <input class="form-input" type="tel" name="whatsapp" placeholder="WhatsApp com DDD" required>
+          <input class="form-input" type="text" name="empresa" placeholder="Empresa (opcional)">
+          <button type="submit" class="lead-btn">
+            Quero meu diagnóstico
+            <svg class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+          </button>
+        </form>
+        <p class="form-note">Sem compromisso · 100% gratuito · OAB/SP</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STICKY MOBILE CTA ──────────────────────────────────── -->
+<div class="sticky-cta-bar" id="sticky-bar">
+  <a href="#captura">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C07D6E" stroke-width="1.8" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Diagnóstico gratuito — 48h
+    <svg class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9" stroke="#C07D6E" fill="none" stroke-width="1.4"/></svg>
+  </a>
+</div>
+
+<footer id="tt-footer"></footer>
+<script src="assets/js/site.js"></script>
+<script>
+// Número WhatsApp da TriboTax — altere aqui quando necessário
+const TRIBOTAX_WHATSAPP = '5511999999999';
+
+function submitLead(e, servico) {
+  e.preventDefault();
+  const f = e.target;
+  const nome = f.nome.value.trim();
+  const wpp = f.whatsapp.value.trim();
+  const empresa = f.empresa ? f.empresa.value.trim() : '';
+  const msg = empresa
+    ? `Olá TriboTax! Meu nome é *${nome}*, da empresa *${empresa}*. Quero solicitar o diagnóstico gratuito de *${servico}*. Meu WhatsApp: ${wpp}`
+    : `Olá TriboTax! Meu nome é *${nome}*. Quero solicitar o diagnóstico gratuito de *${servico}*. Meu WhatsApp: ${wpp}`;
+  window.open(`https://wa.me/${TRIBOTAX_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// Sticky bar: aparece no mobile após rolar além do hero, some quando #captura está visível
+const stickyBar = document.getElementById('sticky-bar');
+if (stickyBar) {
+  function updateSticky() {
+    if (window.innerWidth > 768) { stickyBar.style.display = 'none'; return; }
+    const captura = document.getElementById('captura');
+    const capturaTop = captura ? captura.getBoundingClientRect().top : Infinity;
+    stickyBar.style.display = (window.scrollY > 500 && capturaTop > window.innerHeight) ? 'flex' : 'none';
+  }
+  window.addEventListener('scroll', updateSticky, { passive: true });
+  window.addEventListener('resize', updateSticky, { passive: true });
+  updateSticky();
+}
+</script>
+</body>
+</html>

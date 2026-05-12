@@ -1,5 +1,7 @@
 // TriboTax — partials compartilhados + interações
 // Convenção: todas as páginas incluem <header id="tt-nav"></header> e <footer id="tt-footer"></footer>
+// ⚠ Altere TRIBOTAX_WHATSAPP para o número real (código país + DDD + número, ex: 5511999999999)
+const TRIBOTAX_WHATSAPP = window.TRIBOTAX_WHATSAPP || '5511999999999';
 
 const NAV_LINKS = [
   { href: '/', label: 'Início' },
@@ -75,8 +77,8 @@ function renderFooter() {
           <div>
             <div class="kicker" style="color:#A7AE9E">Contato</div>
             <div style="margin-top:16px; display:flex; flex-direction:column; gap:10px; font-size:14px">
-              <a href="/contato">contato@tribotax.com.br</a>
-              <a href="/contato">WhatsApp institucional</a>
+              <a href="mailto:contato@tribotax.com.br">contato@tribotax.com.br</a>
+              <a href="https://wa.me/${TRIBOTAX_WHATSAPP}" target="_blank" rel="noopener">WhatsApp</a>
               <a href="#">LinkedIn</a>
               <a href="#">Instagram</a>
             </div>
