@@ -186,7 +186,7 @@ body > * { position: relative; z-index: 2; }
 
 /* ——— Nav ——— */
 .nav {
-  position: sticky; top: 0; z-index: 20;
+  position: sticky; top: 0; z-index: 100;
   background: rgba(246, 241, 232, 0.85);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--rule);
@@ -240,7 +240,7 @@ body > * { position: relative; z-index: 2; }
   opacity: 0; visibility: hidden; transform: translateY(-6px);
   transition: opacity .2s ease, transform .2s ease, visibility .2s;
   box-shadow: 0 16px 48px rgba(20,37,29,0.18), 0 2px 8px rgba(20,37,29,0.06);
-  z-index: 30;
+  z-index: 200;
 }
 .nav-dropdown-menu::before {
   content: ""; position: absolute; top: -10px; left: 0; right: 0; height: 10px;
