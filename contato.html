@@ -107,7 +107,7 @@
 <section class="form-wrap">
   <div class="container">
     <div class="form-grid">
-      <form class="form-card reveal" id="diagForm" onsubmit="event.preventDefault(); document.getElementById('diagForm').style.display='none'; document.getElementById('success').classList.add('on');">
+      <form class="form-card reveal" id="diagForm">
         <div class="field">
           <label for="nome">Nome completo</label>
           <input id="nome" name="nome" type="text" required placeholder="Como devemos te chamar" />
@@ -213,5 +213,31 @@
 
 <footer id="tt-footer"></footer>
 <script src="assets/js/site.js"></script>
+<script>
+document.getElementById('diagForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const f = e.target;
+  const getVal = id => (f.elements[id] ? f.elements[id].value.trim() : '');
+  const getRadio = name => { const el = f.querySelector(`input[name="${name}"]:checked`); return el ? el.value : ''; };
+  fetch('https://n8n.gabrielgouvea.com.br/webhook/tribotax-lead', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      nome: getVal('nome'),
+      email: getVal('email'),
+      whats: getVal('whats'),
+      empresa: getVal('empresa'),
+      cargo: getVal('cargo'),
+      regime: getRadio('regime'),
+      setor: getRadio('setor'),
+      contexto: getVal('contexto'),
+      servico: 'Diagnóstico Geral',
+      origem: location.pathname
+    })
+  }).catch(() => {});
+  document.getElementById('diagForm').style.display = 'none';
+  document.getElementById('success').classList.add('on');
+});
+</script>
 </body>
 </html>

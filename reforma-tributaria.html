@@ -963,6 +963,11 @@ function submitLead(e, servico) {
   const nome = f.nome.value.trim();
   const wpp = f.whatsapp.value.trim();
   const empresa = f.empresa ? f.empresa.value.trim() : '';
+  fetch('https://n8n.gabrielgouvea.com.br/webhook/tribotax-lead', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nome, whatsapp: wpp, empresa, servico, origem: location.pathname })
+  }).catch(() => {});
   const msg = empresa
     ? `Olá TriboTax! Meu nome é *${nome}*, da empresa *${empresa}*. Quero solicitar o diagnóstico gratuito de *${servico}*. Meu WhatsApp: ${wpp}`
     : `Olá TriboTax! Meu nome é *${nome}*. Quero solicitar o diagnóstico gratuito de *${servico}*. Meu WhatsApp: ${wpp}`;
