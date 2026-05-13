@@ -92,6 +92,7 @@ body::before {
   z-index: 1;
 }
 body > * { position: relative; z-index: 2; }
+body > header { z-index: 50; }
 
 /* ——— Tipografia editorial ——— */
 .h-display {
