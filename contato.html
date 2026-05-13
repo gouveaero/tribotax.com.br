@@ -219,7 +219,7 @@ document.getElementById('diagForm').addEventListener('submit', function(e) {
   const f = e.target;
   const getVal = id => (f.elements[id] ? f.elements[id].value.trim() : '');
   const getRadio = name => { const el = f.querySelector(`input[name="${name}"]:checked`); return el ? el.value : ''; };
-  fetch('https://n8n.gabrielgouvea.com.br/webhook/tribotax-lead', {
+  fetch('https://n8n.gabrielgouvea.com.br/webhook/f484ff6a-2bf3-440b-b23c-dcfe76eaf968', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
