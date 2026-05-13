@@ -7,14 +7,49 @@ const NAV_LINKS = [
   { href: '/', label: 'Início' },
   { href: '/manifesto', label: 'Manifesto' },
   { href: '/metodo', label: 'Método' },
+  { label: 'Serviços', children: [
+    { href: '/passivo-tributario', label: 'Passivo Tributário' },
+    { href: '/equiparacao-hospitalar', label: 'Equiparação Hospitalar' },
+    { href: '/reforma-tributaria', label: 'Reforma Tributária' },
+  ]},
   { href: '/sobre-alex', label: 'Alex Amadeu' },
   { href: '/contato', label: 'Contato' },
 ];
 
+function renderNavItem(l, activePage) {
+  if (l.children) {
+    const isActiveParent = l.children.some(c => c.href === activePage);
+    const items = l.children.map(c =>
+      `<a href="${c.href}" class="${c.href===activePage?'active':''}">${c.label}</a>`
+    ).join('');
+    return `
+      <div class="nav-dropdown">
+        <button type="button" class="nav-dropdown-toggle ${isActiveParent?'active':''}" aria-haspopup="true" aria-expanded="false">
+          ${l.label}
+          <svg class="nav-chevron" width="10" height="7" viewBox="0 0 12 8"><path d="M1 1.5L6 6L11 1.5" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
+        </button>
+        <div class="nav-dropdown-menu" role="menu">${items}</div>
+      </div>
+    `;
+  }
+  return `<a href="${l.href}" class="${l.href===activePage?'active':''}">${l.label}</a>`;
+}
+
+function renderDrawerItem(l, activePage) {
+  if (l.children) {
+    const items = l.children.map(c =>
+      `<a href="${c.href}" class="drawer-sub ${c.href===activePage?'active':''}">${c.label}</a>`
+    ).join('');
+    return `<span class="drawer-group-label">${l.label}</span>${items}`;
+  }
+  return `<a href="${l.href}" class="${l.href===activePage?'active':''}">${l.label}</a>`;
+}
+
 function renderNav(activePage) {
   const nav = document.getElementById('tt-nav');
   if (!nav) return;
-  const links = NAV_LINKS.map(l => `<a href="${l.href}" class="${l.href===activePage?'active':''}">${l.label}</a>`).join('');
+  const navLinks = NAV_LINKS.map(l => renderNavItem(l, activePage)).join('');
+  const drawerLinks = NAV_LINKS.map(l => renderDrawerItem(l, activePage)).join('');
   nav.innerHTML = `
     <nav class="nav" aria-label="Navegação principal">
       <div class="container nav-inner">
@@ -23,7 +58,7 @@ function renderNav(activePage) {
             <span>Tribo<span style="font-style:italic">Tax</span></span>
             <span class="dot" aria-hidden="true"></span>
           </a>
-          <div class="nav-links">${links}</div>
+          <div class="nav-links">${navLinks}</div>
         </div>
         <div class="nav-right">
           <a class="btn btn-ghost" href="/contato#diagnostico">
@@ -36,7 +71,7 @@ function renderNav(activePage) {
         </button>
       </div>
       <div class="nav-drawer" aria-hidden="true">
-        ${links}
+        ${drawerLinks}
         <a class="btn btn-primary nav-drawer-cta" href="/contato#diagnostico">Diagnóstico →</a>
       </div>
     </nav>
@@ -55,10 +90,12 @@ function renderNav(activePage) {
 function renderFooter() {
   const f = document.getElementById('tt-footer');
   if (!f) return;
+  const topLevel = NAV_LINKS.filter(l => l.href);
+  const services = (NAV_LINKS.find(l => l.children) || {}).children || [];
   f.innerHTML = `
     <footer class="footer on-deep">
       <div class="container">
-        <div class="grid grid-4" style="align-items:start">
+        <div class="grid grid-5" style="align-items:start">
           <div class="footer-brand">
             <div class="brand" style="color:#E7DEC9; font-size:28px">
               <span>Tribo<span style="font-style:italic">Tax</span></span>
@@ -71,7 +108,13 @@ function renderFooter() {
           <div>
             <div class="kicker" style="color:#A7AE9E">Navegação</div>
             <div style="margin-top:16px; display:flex; flex-direction:column; gap:10px; font-size:14px">
-              ${NAV_LINKS.map(l => `<a href="${l.href}">${l.label}</a>`).join('')}
+              ${topLevel.map(l => `<a href="${l.href}">${l.label}</a>`).join('')}
+            </div>
+          </div>
+          <div>
+            <div class="kicker" style="color:#A7AE9E">Serviços</div>
+            <div style="margin-top:16px; display:flex; flex-direction:column; gap:10px; font-size:14px">
+              ${services.map(l => `<a href="${l.href}">${l.label}</a>`).join('')}
             </div>
           </div>
           <div>
