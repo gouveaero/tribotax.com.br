@@ -1,7 +1,7 @@
 // TriboTax — partials compartilhados + interações
 // Convenção: todas as páginas incluem <header id="tt-nav"></header> e <footer id="tt-footer"></footer>
 // ⚠ Altere TRIBOTAX_WHATSAPP para o número real (código país + DDD + número, ex: 5511999999999)
-const TRIBOTAX_WHATSAPP = window.TRIBOTAX_WHATSAPP || '5511999999999';
+const TRIBOTAX_WHATSAPP = window.TRIBOTAX_WHATSAPP || '554799975701';
 
 const NAV_LINKS = [
   { href: '/', label: 'Início' },
@@ -129,7 +129,6 @@ function renderFooter() {
         </div>
         <div class="rule" style="margin-top: 72px; padding-top: 24px; display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap">
           <span class="small mono">© 2026 TRIBOTAX · ADVOCACIA TRIBUTÁRIA</span>
-          <span class="small mono">ALEX AMADEU · OAB/SP 000.000 · CONTEÚDO INFORMATIVO, NÃO CONSTITUI PROMESSA DE RESULTADO</span>
         </div>
       </div>
     </footer>
