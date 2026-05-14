@@ -693,24 +693,24 @@
 <footer id="tt-footer"></footer>
 <script src="assets/js/site.js"></script>
 <script>
-// Número WhatsApp da TriboTax — altere aqui quando necessário
-const TRIBOTAX_WHATSAPP = '554799975701';
-
 function submitLead(e, servico) {
   e.preventDefault();
   const f = e.target;
   const nome = f.nome.value.trim();
   const wpp = f.whatsapp.value.trim();
   const empresa = f.empresa ? f.empresa.value.trim() : '';
+  const p = new URLSearchParams(location.search);
+  const utms = {
+    utm_source: p.get('utm_source') || '', utm_medium: p.get('utm_medium') || '',
+    utm_campaign: p.get('utm_campaign') || '', utm_content: p.get('utm_content') || '',
+    utm_term: p.get('utm_term') || ''
+  };
   fetch('https://n8n.gabrielgouvea.com.br/webhook/f484ff6a-2bf3-440b-b23c-dcfe76eaf968', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nome, whatsapp: wpp, empresa, servico, origem: location.pathname })
+    body: JSON.stringify({ nome, whatsapp: wpp, empresa, servico, origem: location.pathname, ...utms })
   }).catch(() => {});
-  const msg = empresa
-    ? `Olá TriboTax! Meu nome é *${nome}*, da empresa *${empresa}*. Quero solicitar o diagnóstico gratuito de *${servico}*. Meu WhatsApp: ${wpp}`
-    : `Olá TriboTax! Meu nome é *${nome}*. Quero solicitar o diagnóstico gratuito de *${servico}*. Meu WhatsApp: ${wpp}`;
-  window.open(`https://wa.me/${TRIBOTAX_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+  location.href = '/obrigado?' + new URLSearchParams({ nome, wpp, empresa, servico }).toString();
 }
 
 // Sticky bar: aparece no mobile após rolar além do hero, some quando #captura está visível
