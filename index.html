@@ -57,22 +57,34 @@
     .stat .num { font-family: var(--f-display); font-size: clamp(32px, 3vw, 44px); line-height: 1; color: var(--forest-800); letter-spacing: -0.02em; }
     .stat .lbl { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-muted); }
 
-    /* Hero logo morph */
-    .hero-logo-morph {
-      font-family: var(--f-display);
-      font-weight: 500;
-      font-size: clamp(72px, 9.5vw, 140px);
-      line-height: 1;
-      letter-spacing: -0.01em;
-      color: var(--forest-900);
-      display: inline-flex; align-items: baseline; gap: 14px;
-      margin-bottom: var(--sp-8);
-      will-change: opacity, transform;
+    /* Logo construction animation */
+    @keyframes tt-draw {
+      from { stroke-dashoffset: 1; }
+      to   { stroke-dashoffset: 0; }
     }
-    .hero-logo-morph em { font-style: italic; font-weight: 400; }
-    .hero-logo-morph .dot {
-      width: 8px; height: 8px; background: var(--copper-500);
-      border-radius: 50%; display: inline-block; transform: translateY(-5px);
+    @keyframes tt-pop-in {
+      0%   { opacity: 0; transform: scale(0.2); }
+      55%  { transform: scale(1.18); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .logo-anim-ring {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: tt-draw 1.6s var(--ease-out-expo) both;
+    }
+    .logo-anim-petal {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: tt-draw 1.3s var(--ease-out-expo) both;
+    }
+    .logo-anim-dot {
+      opacity: 0;
+      transform-origin: 100px 100px;
+      animation: tt-pop-in 0.55s var(--ease-out-expo) both;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .logo-anim-ring, .logo-anim-petal { stroke-dashoffset: 0; animation: none; }
+      .logo-anim-dot { opacity: 1; animation: none; }
     }
 
     /* Pecunia Non Olet — filosofia fundadora (seção dark) */
@@ -352,11 +364,7 @@
   <section class="hero">
     <div class="container">
 
-      <div class="hero-logo-morph" id="hero-logo-morph">
-        Tribo<em>Tax</em><span class="dot" aria-hidden="true"></span>
-      </div>
-
-      <div class="hero-grid" style="margin-top:0">
+      <div class="hero-grid">
         <div class="reveal" data-delay="80">
           <span class="kicker">O que somos</span>
           <h1 class="h-display h-1">
@@ -364,6 +372,9 @@
             atravessa o fisco<br/>
             <em class="h-italic pecunia">sozinho.</em>
           </h1>
+          <p class="lede" style="margin-top: 32px; max-width: 52ch">
+            A TriboTax é a consultoria tributária que trocou a frieza do escritório pela lógica da tribo. Somos um círculo de inteligência coletiva para líderes que carregam patrimônio, operação e legado. O sistema fiscal brasileiro não é feito para ser enfrentado em silêncio.
+          </p>
           <div style="display: flex; gap: 14px; margin-top: 36px; flex-wrap: wrap">
             <a class="btn btn-primary" href="/contato#diagnostico">
               Solicitar diagnóstico
@@ -371,27 +382,42 @@
             </a>
             <a class="btn btn-ghost" href="/manifesto">Ler o manifesto</a>
           </div>
-          <p class="lede" style="margin-top: 32px; max-width: 52ch">
-            A TriboTax é a consultoria tributária que trocou a frieza do escritório pela lógica da tribo. Somos um círculo de inteligência coletiva para líderes que carregam patrimônio, operação e legado. O sistema fiscal brasileiro não é feito para ser enfrentado em silêncio.
-          </p>
         </div>
 
         <div class="hero-right reveal" data-delay="220">
           <div class="knot-mark" aria-hidden="true">
-            <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="100" cy="100" r="94" opacity="0.22"/>
-              <circle cx="100" cy="100" r="80" opacity="0.4"/>
-              <!-- Trifólio entrelaçado, linhas duplas para sugerir corda -->
-              <g>
-                <path d="M100 28 C 62 62, 62 108, 100 142 C 138 108, 138 62, 100 28 Z"/>
-                <path d="M100 28 C 62 62, 62 108, 100 142 C 138 108, 138 62, 100 28 Z" transform="rotate(120 100 100)"/>
-                <path d="M100 28 C 62 62, 62 108, 100 142 C 138 108, 138 62, 100 28 Z" transform="rotate(240 100 100)"/>
-                <!-- linhas internas para espessura ótica -->
-                <path d="M100 38 C 70 68, 70 102, 100 132 C 130 102, 130 68, 100 38 Z" opacity="0.4"/>
-                <path d="M100 38 C 70 68, 70 102, 100 132 C 130 102, 130 68, 100 38 Z" transform="rotate(120 100 100)" opacity="0.4"/>
-                <path d="M100 38 C 70 68, 70 102, 100 132 C 130 102, 130 68, 100 38 Z" transform="rotate(240 100 100)" opacity="0.4"/>
-              </g>
-              <circle cx="100" cy="100" r="5" fill="currentColor" stroke="none"/>
+            <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <!-- Outer ring — draws clockwise -->
+              <circle class="logo-anim-ring" cx="100" cy="100" r="90" stroke-width="0.7" opacity="0.18" pathLength="1"
+                      style="animation-delay:.08s"/>
+              <!-- Mid ring — draws slightly behind -->
+              <circle class="logo-anim-ring" cx="100" cy="100" r="72" stroke-width="0.7" opacity="0.32" pathLength="1"
+                      style="animation-delay:.32s"/>
+              <!-- Petal 1 — draws from top, anchors the composition -->
+              <path class="logo-anim-petal" stroke-width="0.95"
+                    d="M100 26 C 64 56, 64 112, 100 144 C 136 112, 136 56, 100 26 Z"
+                    pathLength="1" style="animation-delay:.62s"/>
+              <!-- Inner trace petal 1 — subtle second line at slight offset for depth -->
+              <path class="logo-anim-petal" stroke-width="0.5" opacity="0.38"
+                    d="M100 36 C 72 62, 72 108, 100 134 C 128 108, 128 62, 100 36 Z"
+                    pathLength="1" style="animation-delay:.78s"/>
+              <!-- Petal 2 — crosses over petal 1 at 120° -->
+              <path class="logo-anim-petal" stroke-width="0.95"
+                    d="M100 26 C 64 56, 64 112, 100 144 C 136 112, 136 56, 100 26 Z"
+                    transform="rotate(120 100 100)" pathLength="1" style="animation-delay:1.08s"/>
+              <path class="logo-anim-petal" stroke-width="0.5" opacity="0.38"
+                    d="M100 36 C 72 62, 72 108, 100 134 C 128 108, 128 62, 100 36 Z"
+                    transform="rotate(120 100 100)" pathLength="1" style="animation-delay:1.22s"/>
+              <!-- Petal 3 — completes the trefoil weave -->
+              <path class="logo-anim-petal" stroke-width="0.95"
+                    d="M100 26 C 64 56, 64 112, 100 144 C 136 112, 136 56, 100 26 Z"
+                    transform="rotate(240 100 100)" pathLength="1" style="animation-delay:1.54s"/>
+              <path class="logo-anim-petal" stroke-width="0.5" opacity="0.38"
+                    d="M100 36 C 72 62, 72 108, 100 134 C 128 108, 128 62, 100 36 Z"
+                    transform="rotate(240 100 100)" pathLength="1" style="animation-delay:1.68s"/>
+              <!-- Center dot — pops in last, anchors the eye -->
+              <circle class="logo-anim-dot" cx="100" cy="100" r="5.5" fill="currentColor" stroke="none"
+                      style="animation-delay:2.05s"/>
             </svg>
           </div>
           <div style="text-align: right; margin-top: 24px">
@@ -525,7 +551,7 @@
         <div class="right-row">
           <span class="order">V.</span>
           <div class="title">Consultoria recorrente · Zeladoria fiscal</div>
-          <p class="desc">Um parceiro permanente dentro da sua operação. Monitoramento legislativo, radar de jurisprudência, pareceres sob demanda e presença contínua ao lado do seu time contábil. A tribo não te visita. Ela fica.</p>
+          <p class="desc">Um parceiro permanente dentro da sua operação. Radar de jurisprudência tributária atualizado semanalmente por análise computacional, pareceres sob demanda e presença contínua ao lado do seu time contábil. A tribo não te visita. Ela fica.</p>
           <span class="sector">Clientes corporativos<br/>de contrato anual</span>
         </div>
       </div>
@@ -543,7 +569,7 @@
           <em class="h-italic" style="color: var(--copper-400)">Transformar.</em>
         </h2>
         <p class="lede" style="max-width: 58ch; margin-top: 32px">
-          Toda operação que chega à TriboTax passa pelo mesmo anel: da intervenção tática imediata à reestruturação estratégica do ecossistema fiscal. Não oferecemos projetos. Oferecemos um caminho.
+          Toda operação que chega à TriboTax passa pelo mesmo anel: da intervenção tática imediata à reestruturação estratégica do ecossistema fiscal. Análise computacional de 200 mil precedentes tributários. Julgamento humano de cada oportunidade. Não oferecemos projetos. Oferecemos um caminho.
         </p>
       </div>
 
