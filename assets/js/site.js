@@ -135,11 +135,13 @@ function renderFooter() {
   `;
 }
 
-// Reveal-on-scroll
+// Reveal-on-scroll with optional stagger delay via data-delay attr
 function setupReveal() {
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
+        const delay = e.target.dataset.delay || 0;
+        if (delay) e.target.style.transitionDelay = delay + 'ms';
         e.target.classList.add('in');
         io.unobserve(e.target);
       }
@@ -148,10 +150,74 @@ function setupReveal() {
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 }
 
+// Nav scroll state: transparent at top → clay when scrolled
+function setupNavScroll() {
+  const nav = document.querySelector('.nav');
+  if (!nav) return;
+  const update = () => nav.classList.toggle('scrolled', window.scrollY > 60);
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+}
+
+// Stat counter: animates .count-up[data-count] when entering viewport
+function setupCountUp() {
+  const ease = t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      const el = e.target;
+      const target = parseFloat(el.dataset.count);
+      const suffix = el.dataset.suffix || '';
+      const isFloat = String(target).includes('.');
+      const duration = 900;
+      const start = performance.now();
+      const tick = (now) => {
+        const p = Math.min((now - start) / duration, 1);
+        const val = target * ease(p);
+        el.textContent = (isFloat ? val.toFixed(1) : Math.round(val)) + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.count-up[data-count]').forEach(el => io.observe(el));
+}
+
+// Parallax on hero background symbols (passive scroll, transform only)
+function setupParallax() {
+  const els = document.querySelectorAll('.hero-bg-symbol, .hero-bg-year');
+  if (!els.length) return;
+  const update = () => {
+    const y = window.scrollY;
+    els.forEach(el => { el.style.transform = `translateY(${y * 0.28}px)`; });
+  };
+  window.addEventListener('scroll', update, { passive: true });
+}
+
+// Hero logo morph: fades out as user scrolls through home hero
+function setupLogoMorph() {
+  const logo = document.getElementById('hero-logo-morph');
+  if (!logo) return;
+  const hero = document.querySelector('.hero');
+  const update = () => {
+    const heroH = hero ? hero.offsetHeight : 600;
+    const p = Math.min(1, window.scrollY / (heroH * 0.5));
+    logo.style.opacity = Math.max(0, 1 - p * 1.6);
+    logo.style.transform = `translateY(${-p * 28}px) scale(${1 - p * 0.06})`;
+  };
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+}
+
 // Init
 window.addEventListener('DOMContentLoaded', () => {
   const active = location.pathname.replace(/\/$/, '') || '/';
   renderNav(active);
   renderFooter();
   setupReveal();
+  setupNavScroll();
+  setupCountUp();
+  setupParallax();
+  setupLogoMorph();
 });

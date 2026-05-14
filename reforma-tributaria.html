@@ -32,10 +32,9 @@
   color: rgba(231,222,201,0.04); user-select: none; pointer-events: none;
   z-index: 0; letter-spacing: -0.04em;
 }
-.hero .container { position: relative; z-index: 1; }
-.hero h1 { margin: 20px 0 0; max-width: 18ch; color: var(--fg-on-deep); }
-.hero h1 em { font-style: italic; color: var(--copper-400); }
-.hero .lede { margin-top: 32px; color: var(--fg-on-deep-muted); }
+.hero h1 { max-width: 18ch; color: var(--fg-on-deep); }
+.hero h1 em { color: var(--copper-400); }
+.hero .lede { color: var(--fg-on-deep-muted); }
 
 .hero-grid {
   display: grid; grid-template-columns: 1.2fr 1fr;
@@ -82,7 +81,7 @@
 }
 .muda-card .muda-icon {
   font-family: var(--f-display); font-style: italic;
-  font-size: 48px; line-height: 1; color: var(--copper-500);
+  font-size: 48px; line-height: 1; color: var(--forest-700);
   margin-bottom: var(--sp-3);
 }
 .muda-card h4 {
@@ -191,7 +190,7 @@
 }
 .comp-card ul li::before {
   content: ""; position: absolute; left: 0; top: 9px;
-  width: 8px; height: 1px; background: var(--copper-500);
+  width: 8px; height: 1px; background: var(--forest-600);
 }
 
 /* ── Princípios IVA Dual ──────────────────────────────────── */
@@ -208,7 +207,7 @@
 }
 .princ-num {
   font-family: var(--f-display); font-style: italic;
-  font-size: 32px; color: var(--copper-500); line-height: 1;
+  font-size: 32px; color: var(--forest-800); line-height: 1;
 }
 .princ-body h5 { font-size: 15px; font-weight: 600; color: var(--forest-900); margin: 0 0 8px; }
 .princ-body p { font-size: 13px; line-height: 1.6; color: var(--ink-700); margin: 0; }
@@ -334,7 +333,7 @@
 
 /* ── CTA Captura ──────────────────────────────────────────── */
 .cta-section {
-  background: var(--copper-500); color: #1A0E08;
+  background: var(--copper-500); color: var(--ink-900);
   position: relative; overflow: hidden;
 }
 .cta-section::before {
@@ -353,19 +352,19 @@
   line-height: 1.04; font-weight: 500; margin: 0 0 16px;
   letter-spacing: -0.015em;
 }
-.cta-section h2 em { color: #3A1A0B; font-style: italic; }
-.cta-section .cta-lede { font-size: 17px; line-height: 1.6; color: #2A1208; max-width: 52ch; margin: 0 0 var(--sp-5); }
+.cta-section h2 em { color: var(--copper-700); font-style: italic; }
+.cta-section .cta-lede { font-size: 17px; line-height: 1.6; color: var(--ink-900); max-width: 52ch; margin: 0 0 var(--sp-5); }
 .cta-checklist {
   margin: 0; padding: 0; list-style: none;
   display: flex; flex-direction: column; gap: 10px;
 }
 .cta-checklist li {
   padding-left: 20px; position: relative;
-  font-size: 14px; color: #2A1208; line-height: 1.5;
+  font-size: 14px; color: var(--ink-900); line-height: 1.5;
 }
 .cta-checklist li::before {
   content: ""; position: absolute; left: 0; top: 9px;
-  width: 10px; height: 1px; background: #1A0E08;
+  width: 10px; height: 1px; background: var(--forest-900);
 }
 
 /* ── Lead Form ────────────────────────────────────────────── */
@@ -376,32 +375,36 @@
 }
 .form-headline {
   font-family: var(--f-display); font-size: 22px; font-style: italic;
-  color: #1A0E08; margin: 0 0 var(--sp-4);
+  color: var(--ink-900); margin: 0 0 var(--sp-4);
 }
 .lead-form { display: flex; flex-direction: column; gap: var(--sp-3); }
 .form-input {
   width: 100%; padding: 13px 16px;
-  font-family: var(--f-body); font-size: 15px; color: #1A0E08;
+  font-family: var(--f-body); font-size: 15px; color: var(--ink-900);
   background: #fff; border: 1px solid rgba(42,18,8,0.2);
   border-radius: var(--radius-s);
   transition: border-color .2s ease, box-shadow .2s ease;
 }
 .form-input:focus {
-  outline: none; border-color: #1A0E08;
+  outline: none; border-color: var(--ink-900);
   box-shadow: 0 0 0 3px rgba(26,14,8,0.06);
 }
 .form-input::placeholder { color: rgba(42,18,8,0.4); }
 .lead-btn {
-  background: #1A0E08; color: var(--copper-300);
+  background: var(--forest-900); color: var(--copper-300);
   justify-content: center; width: 100%; padding: 15px 20px;
   font-size: 15px; margin-top: var(--sp-2); cursor: pointer;
   display: inline-flex; align-items: center; gap: 12px;
   border-radius: var(--radius-s);
   transition: background .25s ease;
 }
-.lead-btn:hover { background: #2C1811; }
+.lead-btn:hover { background: var(--forest-800); }
 .lead-btn .arrow { width: 16px; height: 10px; }
 .lead-btn .arrow path { stroke: currentColor; fill: none; stroke-width: 1.4; }
+.form-error {
+  font-size: 13px; color: var(--copper-500); text-align: center; margin: 0;
+}
+.form-error a { color: inherit; text-decoration: underline; }
 .form-note {
   font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.12em;
   text-transform: uppercase; color: rgba(42,18,8,0.45); text-align: center; margin: 4px 0 0;
@@ -410,7 +413,7 @@
 /* ── Sticky Mobile CTA ────────────────────────────────────── */
 .sticky-cta-bar {
   position: fixed; bottom: 0; left: 0; right: 0;
-  background: #1A0E08; padding: 16px 20px;
+  background: var(--forest-900); padding: 16px 20px;
   z-index: 50; display: none;
   border-top: 2px solid rgba(143,58,46,0.5);
   box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
@@ -421,31 +424,42 @@
   gap: 10px; width: 100%; justify-content: center;
 }
 
+/* ── Mobile: hero enxuto ──────────────────────────────────── */
+@media (max-width: 860px) {
+  .hero { padding: 32px 0 40px; }
+  .hero-grid > div:first-child h1 { font-size: clamp(38px,9vw,52px); }
+  .hero-cta { margin-top: 20px; }
+  .novos-impostos { margin-top: var(--sp-5); }
+  .sticky-cta-bar { display: block !important; }
+  .sticky-cta-bar.form-in-view { display: none !important; }
+  body { padding-bottom: 72px; }
+}
+
 </style>
 </head>
 <body>
 <header id="tt-nav"></header>
 
 <!-- ── HERO ──────────────────────────────────────────────── -->
-<section class="hero on-deep">
+<section class="hero hero-lp on-deep">
   <div class="hero-bg-year">2033</div>
   <div class="container">
     <div class="hero-grid">
-      <div class="reveal">
+      <div>
         <span class="eyebrow" style="color:var(--copper-300)">Reforma Tributária · EC 132/2023 · LC 214/2024</span>
-        <h1 class="h-display h-1">A maior mudança<br>tributária em<br><em>50 anos.</em></h1>
-        <p class="lede">
+        <h1 class="h-display h-1">A maior mudança tributária em <em>50 anos.</em></h1>
+        <div class="hero-cta" style="margin-top:var(--sp-6); display:flex; gap:var(--sp-4); flex-wrap:wrap;">
+          <a href="#captura" class="btn btn-primary on-deep">
+            Diagnóstico de impacto grátis
+            <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+          </a>
+          <a href="#timeline" class="btn btn-ghost on-deep">Ver cronograma</a>
+        </div>
+        <p class="lede" style="margin-top:var(--sp-6)">
           A Reforma Tributária extingue PIS, COFINS, IPI, ICMS e ISS e cria três novos
           tributos num modelo de IVA dual. Entre 2026 e 2033, toda empresa precisa entender
           as regras novas e reposicionar sua estrutura fiscal. Quem não se preparar vai pagar mais.
         </p>
-        <div style="margin-top: var(--sp-6); display: flex; gap: var(--sp-4); flex-wrap: wrap;">
-          <a href="#captura" class="btn btn-primary on-deep">
-            Diagnóstico de impacto grátis
-            <svg class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
-          </a>
-          <a href="#timeline" class="btn btn-ghost on-deep">Ver cronograma</a>
-        </div>
       </div>
       <div class="novos-impostos reveal">
         <div class="ni-badge">
@@ -486,23 +500,23 @@
   <div class="container">
     <div class="trust-inner">
       <div class="trust-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
         <span>OAB/MG credenciado</span>
       </div>
       <div class="trust-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         <span>Diagnóstico em 48h</span>
       </div>
       <div class="trust-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
         <span>Protocolo IBS/CBS</span>
       </div>
       <div class="trust-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         <span>Janela 2026–2027</span>
       </div>
       <div class="trust-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         <span>100% gratuito</span>
       </div>
     </div>
@@ -827,19 +841,19 @@
           <div style="font-family:var(--f-mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--copper-300); margin-bottom:14px">Quem pode ser afetado</div>
           <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:10px; font-size:14px; color:var(--fg-on-deep-muted)">
             <li style="padding-left:16px; position:relative">
-              <span style="position:absolute; left:0; top:9px; width:8px; height:1px; background:var(--copper-500); display:block"></span>
+              <span style="position:absolute; left:0; top:9px; width:8px; height:1px; background:var(--forest-600); display:block"></span>
               Distribuidores com alto volume de notas
             </li>
             <li style="padding-left:16px; position:relative">
-              <span style="position:absolute; left:0; top:9px; width:8px; height:1px; background:var(--copper-500); display:block"></span>
+              <span style="position:absolute; left:0; top:9px; width:8px; height:1px; background:var(--forest-600); display:block"></span>
               Construtoras com ciclos longos de obra
             </li>
             <li style="padding-left:16px; position:relative">
-              <span style="position:absolute; left:0; top:9px; width:8px; height:1px; background:var(--copper-500); display:block"></span>
+              <span style="position:absolute; left:0; top:9px; width:8px; height:1px; background:var(--forest-600); display:block"></span>
               Prestadores de serviço com faturamento concentrado
             </li>
             <li style="padding-left:16px; position:relative">
-              <span style="position:absolute; left:0; top:9px; width:8px; height:1px; background:var(--copper-500); display:block"></span>
+              <span style="position:absolute; left:0; top:9px; width:8px; height:1px; background:var(--forest-600); display:block"></span>
               Grupos com intercompany de alta frequência
             </li>
           </ul>
@@ -916,8 +930,8 @@
   <div class="container">
     <div class="cta-capture-layout reveal">
       <div>
-        <span class="eyebrow" style="color:#2A1208; opacity:0.7">Próximo passo</span>
-        <h2 style="margin-top:16px">Quanto a Reforma<br>vai custar para <em>você.</em></h2>
+        <span class="eyebrow" style="color:var(--ink-900); opacity:0.7">Próximo passo</span>
+        <h2 style="margin-top:16px">Quanto a Reforma vai custar para <em>você.</em></h2>
         <p class="cta-lede">Em 48 horas, entregamos um diagnóstico com o impacto estimado da Reforma na sua operação, as janelas de otimização disponíveis e um protocolo de transição IBS/CBS.</p>
         <ul class="cta-checklist">
           <li>Impacto da alíquota IVA na sua cadeia de valor</li>
@@ -929,12 +943,12 @@
       <div class="cta-form-wrap">
         <p class="form-headline">Diagnóstico de impacto em 48h</p>
         <form class="lead-form" onsubmit="submitLead(event,'Reforma Tributária / IVA Dual')">
-          <input class="form-input" type="text" name="nome" placeholder="Nome completo" required>
-          <input class="form-input" type="tel" name="whatsapp" placeholder="WhatsApp com DDD" required>
-          <input class="form-input" type="text" name="empresa" placeholder="Empresa (opcional)">
+          <input class="form-input" type="text" name="nome" placeholder="Nome completo" aria-label="Nome completo" required>
+          <input class="form-input" type="tel" name="whatsapp" placeholder="WhatsApp com DDD" aria-label="WhatsApp com DDD" required>
+          <input class="form-input" type="text" name="empresa" placeholder="Empresa (opcional)" aria-label="Empresa (opcional)">
           <button type="submit" class="lead-btn">
             Diagnóstico de impacto
-            <svg class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+            <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
           </button>
         </form>
         <p class="form-note">Sem compromisso · 100% gratuito · LC 214/2024</p>
@@ -946,18 +960,19 @@
 <!-- ── STICKY MOBILE CTA ──────────────────────────────────── -->
 <div class="sticky-cta-bar" id="sticky-bar">
   <a href="#captura">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C07D6E" stroke-width="1.8" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C07D6E" stroke-width="1.8" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
     Diagnóstico de impacto · gratuito
-    <svg class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9" stroke="#C07D6E" fill="none" stroke-width="1.4"/></svg>
+    <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9" stroke="#C07D6E" fill="none" stroke-width="1.4"/></svg>
   </a>
 </div>
 
 <footer id="tt-footer"></footer>
 <script src="assets/js/site.js"></script>
 <script>
-function submitLead(e, servico) {
+async function submitLead(e, servico) {
   e.preventDefault();
   const f = e.target;
+  const btn = f.querySelector('button[type="submit"]');
   const nome = f.nome.value.trim();
   const wpp = f.whatsapp.value.trim();
   const empresa = f.empresa ? f.empresa.value.trim() : '';
@@ -967,25 +982,34 @@ function submitLead(e, servico) {
     utm_campaign: p.get('utm_campaign') || '', utm_content: p.get('utm_content') || '',
     utm_term: p.get('utm_term') || ''
   };
-  fetch('https://n8n.gabrielgouvea.com.br/webhook/f484ff6a-2bf3-440b-b23c-dcfe76eaf968', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nome, whatsapp: wpp, empresa, servico, origem: location.pathname, ...utms })
-  }).catch(() => {});
-  location.href = '/obrigado?' + new URLSearchParams({ nome, wpp, empresa, servico }).toString();
+  const originalHTML = btn.innerHTML;
+  btn.disabled = true;
+  btn.textContent = 'Enviando…';
+  try {
+    await fetch('https://n8n.gabrielgouvea.com.br/webhook/f484ff6a-2bf3-440b-b23c-dcfe76eaf968', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome, whatsapp: wpp, empresa, servico, origem: location.pathname, ...utms })
+    });
+    location.href = '/obrigado?' + new URLSearchParams({ nome, wpp, empresa, servico }).toString();
+  } catch (_) {
+    btn.disabled = false;
+    btn.innerHTML = originalHTML;
+    let errEl = f.querySelector('.form-error');
+    if (!errEl) { errEl = document.createElement('p'); errEl.className = 'form-error'; f.appendChild(errEl); }
+    errEl.innerHTML = 'Algo deu errado. <a href="https://wa.me/554799975701" target="_blank" rel="noopener">Fale via WhatsApp →</a>';
+  }
 }
 
+// Sticky bar: visível em mobile, some quando #captura está em view
 const stickyBar = document.getElementById('sticky-bar');
-if (stickyBar) {
-  function updateSticky() {
-    if (window.innerWidth > 768) { stickyBar.style.display = 'none'; return; }
-    const captura = document.getElementById('captura');
-    const capturaTop = captura ? captura.getBoundingClientRect().top : Infinity;
-    stickyBar.style.display = (window.scrollY > 500 && capturaTop > window.innerHeight) ? 'flex' : 'none';
+if (stickyBar && 'IntersectionObserver' in window) {
+  const capturaSection = document.getElementById('captura');
+  if (capturaSection) {
+    new IntersectionObserver((entries) => {
+      stickyBar.classList.toggle('form-in-view', entries[0].isIntersecting);
+    }, { threshold: 0.3 }).observe(capturaSection);
   }
-  window.addEventListener('scroll', updateSticky, { passive: true });
-  window.addEventListener('resize', updateSticky, { passive: true });
-  updateSticky();
 }
 </script>
 </body>

@@ -57,14 +57,22 @@
     .stat .num { font-family: var(--f-display); font-size: clamp(32px, 3vw, 44px); line-height: 1; color: var(--forest-800); letter-spacing: -0.02em; }
     .stat .lbl { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-muted); }
 
-    /* Tagline ornamental */
-    .ornament-row {
-      display: flex; align-items: center; gap: 24px;
-      font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.24em;
-      text-transform: uppercase; color: var(--fg-muted);
+    /* Hero logo morph */
+    .hero-logo-morph {
+      font-family: var(--f-display);
+      font-weight: 500;
+      font-size: clamp(72px, 9.5vw, 140px);
+      line-height: 1;
+      letter-spacing: -0.01em;
+      color: var(--forest-900);
+      display: inline-flex; align-items: baseline; gap: 14px;
+      margin-bottom: var(--sp-8);
+      will-change: opacity, transform;
     }
-    .ornament-row::before, .ornament-row::after {
-      content: ""; flex: 1; height: 1px; background: var(--rule);
+    .hero-logo-morph em { font-style: italic; font-weight: 400; }
+    .hero-logo-morph .dot {
+      width: 8px; height: 8px; background: var(--copper-500);
+      border-radius: 50%; display: inline-block; transform: translateY(-5px);
     }
 
     /* Pecunia Non Olet — filosofia fundadora (seção dark) */
@@ -343,32 +351,32 @@
   <!-- ———————— HERO ———————— -->
   <section class="hero">
     <div class="container">
-      <div class="ornament-row reveal">
-        <span>Advocacia tributária · MMXXVI</span>
-        <span>Inteligência Coletiva · Resiliência Fiscal</span>
+
+      <div class="hero-logo-morph" id="hero-logo-morph">
+        Tribo<em>Tax</em><span class="dot" aria-hidden="true"></span>
       </div>
 
-      <div class="hero-grid" style="margin-top: 56px">
-        <div class="reveal">
+      <div class="hero-grid" style="margin-top:0">
+        <div class="reveal" data-delay="80">
           <span class="kicker">O que somos</span>
           <h1 class="h-display h-1">
             Ninguém<br/>
             atravessa o fisco<br/>
             <em class="h-italic pecunia">sozinho.</em>
           </h1>
-          <p class="lede" style="margin-top: 32px; max-width: 52ch">
-            A TriboTax é a consultoria tributária que trocou a frieza do escritório pela lógica da tribo. Somos um círculo de inteligência coletiva para líderes que carregam patrimônio, operação e legado. Entenderam que o sistema fiscal brasileiro não é feito para ser enfrentado em silêncio.
-          </p>
-          <div style="display: flex; gap: 14px; margin-top: 40px; flex-wrap: wrap">
+          <div style="display: flex; gap: 14px; margin-top: 36px; flex-wrap: wrap">
             <a class="btn btn-primary" href="/contato#diagnostico">
               Solicitar diagnóstico
-              <svg class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+              <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
             </a>
             <a class="btn btn-ghost" href="/manifesto">Ler o manifesto</a>
           </div>
+          <p class="lede" style="margin-top: 32px; max-width: 52ch">
+            A TriboTax é a consultoria tributária que trocou a frieza do escritório pela lógica da tribo. Somos um círculo de inteligência coletiva para líderes que carregam patrimônio, operação e legado. O sistema fiscal brasileiro não é feito para ser enfrentado em silêncio.
+          </p>
         </div>
 
-        <div class="hero-right reveal">
+        <div class="hero-right reveal" data-delay="220">
           <div class="knot-mark" aria-hidden="true">
             <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="100" cy="100" r="94" opacity="0.22"/>
@@ -392,7 +400,7 @@
         </div>
       </div>
 
-      <div class="hero-footer reveal">
+      <div class="hero-footer reveal" data-delay="360">
         <div class="stat">
           <span class="num">I.</span>
           <span class="lbl">Diagnóstico</span>
