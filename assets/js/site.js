@@ -11,6 +11,7 @@ const NAV_LINKS = [
     { href: '/passivo-tributario', label: 'Passivo Tributário' },
     { href: '/equiparacao-hospitalar', label: 'Equiparação Hospitalar' },
     { href: '/reforma-tributaria', label: 'Reforma Tributária' },
+    { href: '/monitor-tributario/', label: 'Monitor Tributário' },
   ]},
   { href: '/sobre-alex', label: 'Alex Amadeu' },
   { href: '/contato', label: 'Contato' },
