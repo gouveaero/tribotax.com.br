@@ -12,7 +12,7 @@ const NAV_LINKS = [
     { href: '/equiparacao-hospitalar', label: 'Equiparação Hospitalar' },
     { href: '/reforma-tributaria', label: 'Reforma Tributária' },
     { href: '/monitor-tributario/', label: 'Monitor Tributário' },
-    { href: '/reclassificador-fiscal', label: 'Reclassificador Fiscal' },
+    { href: '/reclassificador-fiscal/', label: 'Reclassificador Fiscal' },
   ]},
   { href: '/sobre-alex', label: 'Alex Amadeu' },
   { href: '/contato', label: 'Contato' },
