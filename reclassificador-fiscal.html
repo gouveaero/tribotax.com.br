@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reclassificador Fiscal IBS/CBS · Do NCM ao cClassTrib · TriboTax</title>
+<meta name="description" content="Reclassifique seu catálogo de NCM para cClassTrib com base legal rastreável. Motor de 3 camadas — determinístico, contextual e IA. Preparado para a Reforma Tributária (LC 214/2025).">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* mini-nav */
+  .site-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
+    padding:14px 28px;background:rgba(20,37,29,.85);backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(246,241,232,.07)}
+  .site-nav .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--argila);font-size:14px;font-weight:600;letter-spacing:.02em}
+  .site-nav .logo svg{width:28px;height:28px;flex:none}
+  .site-nav .back{font-size:13px;color:var(--argila-mut);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+  .site-nav .back:hover{color:var(--argila)}
+  .hero{padding-top:120px!important}
+</style>
+  :root{
+    --floresta:#14251D; --floresta-2:#0e1b14; --argila:#F6F1E8; --terracota:#8F3A2E;
+    --argila-mut:rgba(246,241,232,.58); --argila-faint:rgba(246,241,232,.12);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:
+      radial-gradient(1100px 620px at 50% -8%, #1c3527 0%, transparent 55%),
+      radial-gradient(700px 500px at 84% 12%, rgba(143,58,46,.14) 0%, transparent 55%),
+      var(--floresta);
+    background-attachment:fixed;
+    color:var(--argila);
+    font-family:'Inter Tight',-apple-system,Segoe UI,Roboto,sans-serif;
+    min-height:100%;
+    overflow-x:hidden;
+  }
+  /* sutil textura de grid */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;opacity:.5;
+    background-image:linear-gradient(var(--argila-faint) 1px,transparent 1px),
+                     linear-gradient(90deg,var(--argila-faint) 1px,transparent 1px);
+    background-size:64px 64px;mask-image:radial-gradient(900px 600px at 50% 30%,#000 0%,transparent 75%);
+    -webkit-mask-image:radial-gradient(900px 600px at 50% 30%,#000 0%,transparent 75%);
+  }
+  .hero{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:56px 28px;text-align:center;width:100%;
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:9px;
+    font-size:12px;letter-spacing:.28em;text-transform:uppercase;font-weight:600;
+    color:var(--terracota);
+    border:1px solid rgba(143,58,46,.4);border-radius:30px;padding:7px 16px;
+    background:rgba(143,58,46,.08);
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--terracota);
+    box-shadow:0 0 10px var(--terracota);animation:pulse 2.4s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  h1{
+    font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;
+    font-size:clamp(40px,7vw,82px);line-height:1.02;letter-spacing:-.01em;
+    margin:26px 0 0;color:var(--argila);
+  }
+  h1 .em{font-style:italic;color:#cfae6b;background:linear-gradient(90deg,#e9c987,#cfae6b);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .sub{
+    margin:20px auto 0;max-width:560px;font-size:clamp(15px,2vw,18px);line-height:1.6;
+    color:var(--argila-mut);font-weight:400;
+  }
+  /* moldura da animação */
+  .stage{
+    margin:40px auto 0;max-width:760px;position:relative;
+    border:1px solid var(--argila-faint);border-radius:22px;
+    background:linear-gradient(180deg,rgba(246,241,232,.04),rgba(246,241,232,.01));
+    padding:26px 26px 18px;backdrop-filter:blur(2px);
+  }
+  .stage-labels{display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:6px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--argila-mut)}
+  .stage-labels .from{color:var(--argila-mut)}
+  .stage-labels .arrow{flex:1;height:1px;margin:0 14px;background:linear-gradient(90deg,transparent,var(--argila-faint),transparent);position:relative}
+  .stage-labels .to{color:#cfae6b;font-weight:600}
+  .cpu-wrap{width:100%;max-width:680px;margin:0 auto;display:block}
+  .legend{display:flex;justify-content:center;gap:22px;margin-top:10px;flex-wrap:wrap;
+    font-size:11.5px;color:var(--argila-mut)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .legend i{width:7px;height:7px;border-radius:50%;display:inline-block}
+  .cta{display:flex;gap:14px;justify-content:center;margin-top:38px;flex-wrap:wrap}
+  .btn{font-family:'Inter Tight';font-size:15px;font-weight:600;padding:13px 26px;border-radius:12px;
+    cursor:pointer;border:1px solid transparent;text-decoration:none;transition:.18s;display:inline-flex;align-items:center;gap:9px}
+  .btn.primary{background:var(--terracota);color:#fff;box-shadow:0 8px 26px rgba(143,58,46,.32)}
+  .btn.primary:hover{filter:brightness(1.08);transform:translateY(-1px)}
+  .btn.ghost{background:transparent;color:var(--argila);border-color:var(--argila-faint)}
+  .btn.ghost:hover{background:rgba(246,241,232,.05)}
+  .foot{margin-top:30px;font-size:12px;color:rgba(246,241,232,.4);letter-spacing:.02em}
+
+  /* ===== animação CPU (porte do componente React) ===== */
+  .cpu-architecture{
+    offset-anchor:10px 0px;
+    animation:animation-path;
+    animation-iteration-count:infinite;
+    animation-timing-function:cubic-bezier(0.75,-0.01,0,0.99);
+  }
+  .cpu-line-1{offset-path:path("M 10 20 h 79.5 q 5 0 5 5 v 30");animation-duration:5s;animation-delay:1s}
+  .cpu-line-2{offset-path:path("M 180 10 h -69.7 q -5 0 -5 5 v 40");animation-delay:6s;animation-duration:2s}
+  .cpu-line-3{offset-path:path("M 130 20 v 21.8 q 0 5 -5 5 h -25");animation-delay:4s;animation-duration:6s}
+  .cpu-line-4{offset-path:path("M 170 80 v -21.8 q 0 -5 -5 -5 h -65");animation-delay:3s;animation-duration:3s}
+  .cpu-line-5{offset-path:path("M 135 65 h 15 q 5 0 5 5 v 10 q 0 5 -5 5 h -39.8 q -5 0 -5 -5 v -35");animation-delay:9s;animation-duration:4s}
+  .cpu-line-6{offset-path:path("M 94.8 95 v -46");animation-delay:3s;animation-duration:7s}
+  .cpu-line-7{offset-path:path("M 88 88 v -15 q 0 -5 -5 -5 h -10 q -5 0 -5 -5 v -5 q 0 -5 5 -5 h 28");animation-delay:4s;animation-duration:4s}
+  .cpu-line-8{offset-path:path("M 30 30 h 25 q 5 0 5 5 v 6.5 q 0 5 5 5 h 35");animation-delay:3s;animation-duration:3s}
+  @keyframes animation-path{0%{offset-distance:0%}100%{offset-distance:100%}}
+
+  /* ===== indicador de scroll ===== */
+  .scroll-cue{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);
+    font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(246,241,232,.4);
+    display:flex;flex-direction:column;align-items:center;gap:7px}
+  .scroll-cue .mouse{width:20px;height:32px;border:1.5px solid rgba(246,241,232,.3);border-radius:12px;position:relative}
+  .scroll-cue .mouse::after{content:"";position:absolute;top:6px;left:50%;transform:translateX(-50%);
+    width:3px;height:6px;border-radius:3px;background:rgba(246,241,232,.5);animation:wheel 1.8s infinite}
+  @keyframes wheel{0%{opacity:1;top:6px}70%{opacity:0;top:16px}100%{opacity:0}}
+
+  /* ===== seção genérica ===== */
+  .section{max-width:1060px;margin:0 auto;padding:100px 28px}
+  .sec-head{text-align:center;max-width:680px;margin:0 auto 60px}
+  .sec-eyebrow{font-size:12px;letter-spacing:.28em;text-transform:uppercase;font-weight:600;color:var(--terracota)}
+  .sec-title{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;
+    font-size:clamp(30px,4.4vw,46px);line-height:1.08;margin:14px 0 0;color:var(--argila)}
+  .sec-sub{margin:16px auto 0;max-width:560px;font-size:16px;line-height:1.6;color:var(--argila-mut)}
+
+  /* ===== passos ===== */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;position:relative}
+  .step{position:relative;border:1px solid var(--argila-faint);border-radius:18px;
+    background:linear-gradient(180deg,rgba(246,241,232,.035),rgba(246,241,232,.008));
+    padding:30px 26px;transition:.22s}
+  .step:hover{border-color:rgba(143,58,46,.45);transform:translateY(-3px);
+    background:linear-gradient(180deg,rgba(246,241,232,.06),rgba(246,241,232,.015))}
+  .step .num{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--terracota);
+    border:1px solid rgba(143,58,46,.4);width:36px;height:36px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+  .step .ico{margin-bottom:14px;color:#cfae6b}
+  .step h3{font-family:'Cormorant Garamond',serif;font-size:25px;font-weight:600;margin:0 0 8px;color:var(--argila)}
+  .step p{margin:0;font-size:14px;line-height:1.6;color:var(--argila-mut)}
+  .step .tag{display:inline-block;margin-top:14px;font-size:11px;font-weight:600;letter-spacing:.04em;
+    color:#cfae6b;background:rgba(207,174,107,.1);border:1px solid rgba(207,174,107,.22);padding:3px 10px;border-radius:20px}
+  .step .arrow-x{position:absolute;top:48px;right:-22px;color:rgba(246,241,232,.25);z-index:2}
+  .step:last-child .arrow-x{display:none}
+  @media(max-width:820px){.steps{grid-template-columns:1fr}.step .arrow-x{display:none}}
+
+  /* faixa de prova/contraste */
+  .proofbar{max-width:1060px;margin:0 auto;padding:0 28px}
+  .proofbar .inner{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;
+    border-top:1px solid var(--argila-faint);padding-top:40px}
+  .proof{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--argila-mut)}
+  .proof b{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--argila);font-weight:600}
+
+  /* ===== Bloco 3 · Por que agora (card estilo StreakCard) ===== */
+  .urgency-card{max-width:640px;margin:0 auto;border:1px solid var(--argila-faint);border-radius:22px;
+    background:linear-gradient(180deg,rgba(246,241,232,.05),rgba(246,241,232,.012));
+    padding:28px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+  .uc-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+  .uc-head .left{display:flex;align-items:center;gap:10px}
+  .uc-head h3{font-family:'Cormorant Garamond',serif;font-size:25px;font-weight:600;margin:0;color:var(--argila)}
+  .uc-head .flame{color:var(--terracota);filter:drop-shadow(0 0 8px rgba(143,58,46,.5))}
+  .uc-head .link{font-size:13px;font-weight:600;color:var(--argila-mut);text-decoration:none;white-space:nowrap}
+  .uc-head .link:hover{color:#cfae6b}
+  .uc-big{font-weight:700;font-size:clamp(46px,9vw,64px);line-height:1;letter-spacing:-.02em;margin:6px 0 2px;
+    background:linear-gradient(90deg,#e9c987,#cfae6b);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .uc-big .u{font-size:24px;font-weight:500;color:var(--argila-mut);-webkit-text-fill-color:initial;margin-left:10px}
+  .uc-cap{font-size:14px;color:var(--argila-mut);margin:0 0 20px}
+  /* linha do tempo / meses de 2026 */
+  .uc-tl-label{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--argila-mut);margin-bottom:8px}
+  .uc-tl-label .now{color:#cfae6b;font-weight:600}
+  .uc-months{display:flex;gap:5px;align-items:flex-end}
+  .mdot{flex:1;height:10px;border-radius:3px;background:rgba(246,241,232,.1)}
+  .mdot.done{background:linear-gradient(180deg,#8F3A2E,#b5503f)}
+  .mdot.now{background:linear-gradient(180deg,#e9c987,#cfae6b);height:16px;box-shadow:0 0 12px rgba(207,174,107,.6)}
+  .uc-mlabels{display:flex;gap:5px;margin-top:6px}
+  .uc-mlabels span{flex:1;text-align:center;font-size:9px;color:rgba(246,241,232,.38)}
+  .uc-stats{margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;border-top:1px dashed var(--argila-faint);padding-top:18px}
+  .uc-stats .lbl{font-size:12px;color:var(--argila-mut);margin:0 0 4px}
+  .uc-stats .val{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--argila);margin:0;line-height:1.1}
+  .uc-stats .val.ok{color:#7fd6a0}
+  .uc-stats .r{text-align:right}
+  /* expansível "por que é urgente" */
+  details.uc-how{margin-top:20px;border-top:1px solid var(--argila-faint);padding-top:18px}
+  details.uc-how summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;
+    background:rgba(246,241,232,.04);border:1px solid var(--argila-faint);border-radius:14px;padding:13px 16px;
+    font-size:16px;font-weight:600;color:var(--argila)}
+  details.uc-how summary::-webkit-details-marker{display:none}
+  details.uc-how summary .chev{transition:.2s;color:var(--argila-mut)}
+  details.uc-how[open] summary .chev{transform:rotate(180deg)}
+  .uc-items{padding:18px 8px 4px;display:flex;flex-direction:column;gap:16px}
+  .uc-item{display:flex;align-items:flex-start;gap:12px}
+  .uc-item .ic{color:var(--terracota);margin-top:1px;flex:none}
+  .uc-item p{margin:0;font-size:14.5px;line-height:1.55;color:var(--argila-mut)}
+  .uc-item b{color:var(--argila);font-weight:600}
+
+  /* ===== Bloco 4 · Diferenciais do motor (card estilo StreakCard) ===== */
+  .motor-card{max-width:660px;margin:0 auto;border:1px solid var(--argila-faint);border-radius:22px;
+    background:linear-gradient(180deg,rgba(246,241,232,.05),rgba(246,241,232,.012));
+    padding:28px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+  .mc-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+  .mc-head .left{display:flex;align-items:center;gap:10px}
+  .mc-head h3{font-family:'Cormorant Garamond',serif;font-size:25px;font-weight:600;margin:0;color:var(--argila)}
+  .mc-head .chip{color:#cfae6b;filter:drop-shadow(0 0 8px rgba(207,174,107,.4))}
+  .mc-head .link{font-size:13px;font-weight:600;color:var(--argila-mut);text-decoration:none;white-space:nowrap}
+  .mc-head .link:hover{color:#cfae6b}
+  .mc-big{font-weight:700;font-size:clamp(46px,9vw,62px);line-height:1;letter-spacing:-.02em;margin:6px 0 2px;
+    background:linear-gradient(90deg,#e9c987,#cfae6b);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .mc-big .u{font-size:22px;font-weight:500;color:var(--argila-mut);-webkit-text-fill-color:initial;margin-left:10px}
+  .mc-cap{font-size:14px;color:var(--argila-mut);margin:0 0 20px}
+  /* barra de distribuição de confiança (análogo ao "calendário") */
+  .mc-tl-label{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--argila-mut);margin-bottom:8px}
+  .mc-bar{display:flex;height:14px;border-radius:8px;overflow:hidden;gap:2px}
+  .mc-seg{height:100%;transition:.2s}
+  .mc-seg.alta{background:linear-gradient(180deg,#7fd6a0,#5cb888)}
+  .mc-seg.media{background:linear-gradient(180deg,#e9c987,#cfae6b)}
+  .mc-seg.baixa{background:linear-gradient(180deg,#b5503f,#8F3A2E)}
+  .mc-legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:10px;font-size:12px;color:var(--argila-mut)}
+  .mc-legend span{display:inline-flex;align-items:center;gap:6px}
+  .mc-legend i{width:9px;height:9px;border-radius:3px;display:inline-block}
+  .mc-stats{margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;border-top:1px dashed var(--argila-faint);padding-top:18px}
+  .mc-stats .lbl{font-size:12px;color:var(--argila-mut);margin:0 0 4px}
+  .mc-stats .val{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--argila);margin:0;line-height:1.1}
+  .mc-stats .r{text-align:right}
+  details.mc-how{margin-top:20px;border-top:1px solid var(--argila-faint);padding-top:18px}
+  details.mc-how summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;
+    background:rgba(246,241,232,.04);border:1px solid var(--argila-faint);border-radius:14px;padding:13px 16px;
+    font-size:16px;font-weight:600;color:var(--argila)}
+  details.mc-how summary::-webkit-details-marker{display:none}
+  details.mc-how summary .chev{transition:.2s;color:var(--argila-mut)}
+  details.mc-how[open] summary .chev{transform:rotate(180deg)}
+  .mc-items{padding:18px 6px 4px;display:flex;flex-direction:column;gap:16px}
+  .mc-item{display:flex;align-items:flex-start;gap:12px}
+  .mc-item .ic{color:#cfae6b;margin-top:1px;flex:none}
+  .mc-item p{margin:0;font-size:14.5px;line-height:1.55;color:var(--argila-mut)}
+  .mc-item b{color:var(--argila);font-weight:600}
+
+  /* ===== Bloco 5 · Upload do extrato (funcional) ===== */
+  .upload-card{max-width:880px;margin:0 auto;border:1px solid var(--argila-faint);border-radius:22px;
+    background:linear-gradient(180deg,rgba(246,241,232,.05),rgba(246,241,232,.012));
+    padding:26px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+  .drop{border:1.5px dashed rgba(246,241,232,.22);border-radius:18px;padding:42px 24px;text-align:center;
+    transition:.2s;cursor:pointer;background:rgba(246,241,232,.015)}
+  .drop:hover,.drop.drag{border-color:#cfae6b;background:rgba(207,174,107,.06)}
+  .drop .ic{color:#cfae6b;margin-bottom:14px}
+  .drop h3{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;margin:0 0 6px;color:var(--argila)}
+  .drop p{margin:0;font-size:14px;color:var(--argila-mut)}
+  .drop .pick{display:inline-flex;align-items:center;gap:8px;margin-top:18px;background:var(--terracota);color:#fff;
+    font-weight:600;font-size:14px;padding:11px 22px;border-radius:11px;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(143,58,46,.3)}
+  .drop .pick:hover{filter:brightness(1.08)}
+  .drop .hint{margin-top:14px;font-size:12px;color:var(--argila-mut)}
+  .drop .hint a{color:#cfae6b;text-decoration:none;font-weight:600}
+  .drop .hint a:hover{text-decoration:underline}
+  /* resultados */
+  .res{display:none;margin-top:6px}
+  .res.show{display:block;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .res-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+  .res-top .file{font-size:13px;color:var(--argila-mut)}
+  .res-top .file b{color:var(--argila)}
+  .res-top .again{font-size:13px;font-weight:600;color:#cfae6b;background:none;border:none;cursor:pointer}
+  .res-kpis{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+  .rk{flex:1;min-width:120px;background:rgba(246,241,232,.04);border:1px solid var(--argila-faint);border-radius:12px;padding:12px 14px}
+  .rk .n{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;line-height:1}
+  .rk .l{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--argila-mut);margin-top:3px}
+  .rk.ok .n{color:#7fd6a0}.rk.rev .n{color:#cfae6b}.rk.zero .n{color:#7fd6a0}.rk.tot .n{color:var(--argila)}
+  .progress{height:8px;border-radius:6px;background:rgba(246,241,232,.08);overflow:hidden;margin-bottom:16px}
+  .progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8F3A2E,#cfae6b);transition:width .5s ease}
+  .rtbl-wrap{border:1px solid var(--argila-faint);border-radius:14px;overflow:hidden;overflow-x:auto}
+  table.rtbl{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
+  table.rtbl thead th{background:rgba(246,241,232,.05);text-align:left;padding:10px 12px;font-size:11px;
+    text-transform:uppercase;letter-spacing:.3px;color:var(--argila-mut);font-weight:600;white-space:nowrap}
+  table.rtbl tbody td{padding:10px 12px;border-top:1px solid var(--argila-faint);color:var(--argila);vertical-align:middle}
+  table.rtbl .ncm{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--argila-mut)}
+  table.rtbl .cc{font-family:ui-monospace,Menlo,monospace;font-weight:700;color:#cfae6b}
+  .cbadge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap}
+  .cbadge.alta{background:rgba(124,214,160,.14);color:#7fd6a0}
+  .cbadge.rev{background:rgba(207,174,107,.14);color:#cfae6b}
+  .ben{font-size:12px}
+  .ben.zero{color:#7fd6a0}.ben.red{color:#cfae6b}.ben.int{color:var(--argila-mut)}
+  .res-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;flex-wrap:wrap;font-size:12.5px;color:var(--argila-mut)}
+  .res-foot .exp{display:inline-flex;align-items:center;gap:8px;background:rgba(246,241,232,.05);border:1px solid var(--argila-faint);
+    color:var(--argila);font-weight:600;font-size:13px;padding:9px 16px;border-radius:10px;cursor:pointer}
+  .lead-banner{margin-top:18px;border:1px solid rgba(143,58,46,.35);border-radius:16px;
+    background:linear-gradient(120deg,rgba(143,58,46,.14),rgba(207,174,107,.06));
+    padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+  .lb-txt{max-width:560px}
+  .lb-txt strong{display:block;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--argila);margin-bottom:4px}
+  .lb-txt span{font-size:13.5px;color:var(--argila-mut);line-height:1.5}
+  .lb-cta{white-space:nowrap;background:var(--terracota);color:#fff;font-weight:600;font-size:14px;
+    padding:12px 20px;border-radius:11px;text-decoration:none;box-shadow:0 8px 22px rgba(143,58,46,.3)}
+  .lb-cta:hover{filter:brightness(1.08)}
+
+  /* ===== Bloco 5 · Exemplo prático (antes × depois) ===== */
+  .ex-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
+  .ex-tab{border:1px solid var(--argila-faint);background:rgba(246,241,232,.03);color:var(--argila-mut);
+    padding:9px 16px;border-radius:30px;font-size:13px;font-weight:600;cursor:pointer;transition:.18s}
+  .ex-tab:hover{border-color:rgba(207,174,107,.4);color:var(--argila)}
+  .ex-tab.active{background:rgba(207,174,107,.12);border-color:#cfae6b;color:#cfae6b}
+  .compare{position:relative;max-width:920px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;
+    border:1px solid var(--argila-faint);border-radius:20px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+  .compare-arrow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;
+    width:38px;height:38px;border-radius:50%;background:var(--floresta);border:1px solid #cfae6b;color:#cfae6b;
+    display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+  .col{padding:26px}
+  .col.antes{background:rgba(246,241,232,.02);border-right:1px solid var(--argila-faint)}
+  .col.depois{background:linear-gradient(180deg,rgba(207,174,107,.09),rgba(124,214,160,.03))}
+  .col .tag{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 10px;border-radius:20px;margin-bottom:14px}
+  .col.antes .tag{background:rgba(246,241,232,.06);color:var(--argila-mut)}
+  .col.depois .tag{background:rgba(207,174,107,.16);color:#cfae6b}
+  .col h4{font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:600;margin:0;color:var(--argila);line-height:1.15}
+  .col .sysname{font-size:12.5px;color:var(--argila-mut);margin:4px 0 12px}
+  .mono{font-family:ui-monospace,Menlo,monospace}
+  .mono.gold{color:#cfae6b;font-weight:700}
+  .crow{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--argila-faint);font-size:13px}
+  .crow .k{color:var(--argila-mut)}
+  .crow .v{color:var(--argila);font-weight:600;text-align:right}
+  .col.depois .crow .v.hl{color:#7fd6a0}
+  .efeito{max-width:920px;margin:18px auto 0;border:1px solid rgba(143,58,46,.3);border-radius:16px;
+    background:linear-gradient(120deg,rgba(143,58,46,.12),rgba(207,174,107,.05));padding:20px 22px}
+  .efeito .ef-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .efeito .ef-head svg{color:#cfae6b;flex:none}
+  .efeito h5{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:600;margin:0;color:var(--argila)}
+  .efeito>p{margin:0;font-size:14.5px;line-height:1.6;color:var(--argila-mut)}
+  .efeito .risco{display:flex;align-items:flex-start;gap:10px;margin-top:14px;padding-top:14px;border-top:1px dashed rgba(143,58,46,.3)}
+  .efeito .risco svg{color:var(--terracota);flex:none;margin-top:1px}
+  .efeito .risco p{margin:0;font-size:13.5px;line-height:1.55;color:var(--argila)}
+  .ilustrativo{max-width:920px;margin:12px auto 18px;font-size:11.5px;color:rgba(246,241,232,.4);text-align:center}
+  @media(max-width:640px){.compare{grid-template-columns:1fr}
+    .col.antes{border-right:none;border-bottom:1px solid var(--argila-faint)}
+    .compare-arrow{transform:translate(-50%,-50%) rotate(90deg)}}
+
+  /* ===== Bloco 6 · Para contabilidades (white-label) ===== */
+  .wl-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:34px;max-width:980px;margin:0 auto;align-items:center}
+  .wl-benefit{display:flex;gap:13px;align-items:flex-start;margin-bottom:18px}
+  .wl-benefit .ic{width:38px;height:38px;flex:none;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(207,174,107,.12);color:#cfae6b}
+  .wl-benefit h4{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;margin:0 0 3px;color:var(--argila)}
+  .wl-benefit p{margin:0;font-size:13.5px;line-height:1.5;color:var(--argila-mut)}
+  .wl-cta{display:inline-flex;align-items:center;gap:8px;margin-top:8px;background:var(--terracota);color:#fff;
+    font-weight:600;font-size:15px;padding:13px 24px;border-radius:12px;text-decoration:none;box-shadow:0 8px 24px rgba(143,58,46,.3)}
+  .wl-cta:hover{filter:brightness(1.08)}
+  .wl-mock{border:1px solid var(--argila-faint);border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.4);background:#0e1b14}
+  .wl-mbar{background:rgba(246,241,232,.06);padding:8px 12px;display:flex;align-items:center;gap:6px}
+  .wl-mbar .d{width:9px;height:9px;border-radius:50%}
+  .wl-mbar .u{flex:1;margin-left:6px;background:rgba(0,0,0,.25);border-radius:5px;padding:3px 10px;font-size:10.5px;color:var(--argila-mut)}
+  .wl-mtop{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--argila-faint)}
+  .wl-brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;color:var(--argila)}
+  .wl-brand .logo{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#8F3A2E,#cfae6b);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700}
+  .wl-powered{font-size:10px;color:var(--argila-mut)}
+  .wl-powered b{color:#cfae6b}
+  .wl-mkpi{display:flex;gap:8px;padding:12px 14px}
+  .wl-mkpi div{flex:1;background:rgba(246,241,232,.04);border:1px solid var(--argila-faint);border-radius:9px;padding:8px 10px}
+  .wl-mkpi .n{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--argila);line-height:1}
+  .wl-mkpi .l{font-size:9.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--argila-mut);margin-top:2px}
+  .wl-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 14px;border-top:1px solid var(--argila-faint);font-size:12px}
+  .wl-row .cli{color:var(--argila);font-weight:600}
+  .wl-row .sk{color:var(--argila-mut);font-size:11px}
+  .wl-st{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap}
+  .wl-st.ok{background:rgba(124,214,160,.14);color:#7fd6a0}
+  .wl-st.rev{background:rgba(207,174,107,.14);color:#cfae6b}
+  .wl-st.proc{background:rgba(246,241,232,.08);color:var(--argila-mut)}
+  @media(max-width:760px){.wl-grid{grid-template-columns:1fr}}
+
+  /* ===== Bloco 7 · CTA final (sem preço) ===== */
+  .cta-sec{position:relative}
+  .cta-sec::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(700px 420px at 50% 30%,rgba(143,58,46,.16),transparent 65%)}
+  .cta-final{position:relative;max-width:720px;margin:0 auto;text-align:center;
+    border:1px solid var(--argila-faint);border-radius:26px;padding:46px 36px;
+    background:linear-gradient(180deg,rgba(246,241,232,.06),rgba(246,241,232,.015));box-shadow:0 30px 70px rgba(0,0,0,.4)}
+  .cta-final h2{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(30px,4.6vw,46px);
+    line-height:1.08;margin:14px 0 0;color:var(--argila)}
+  .cta-final .csub{margin:16px auto 26px;max-width:520px;font-size:16px;line-height:1.6;color:var(--argila-mut)}
+  .lead-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:520px;margin:0 auto;text-align:left}
+  .lead-form .full{grid-column:1 / -1}
+  .lead-form label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--argila-mut);margin-bottom:5px}
+  .lead-form input,.lead-form select{width:100%;background:rgba(246,241,232,.05);border:1px solid var(--argila-faint);
+    border-radius:11px;padding:12px 13px;color:var(--argila);font-size:14px;font-family:'Inter Tight'}
+  .lead-form input::placeholder{color:rgba(246,241,232,.35)}
+  .lead-form input:focus,.lead-form select:focus{outline:none;border-color:#cfae6b;background:rgba(207,174,107,.06)}
+  .lead-form select{appearance:none;cursor:pointer}
+  .lead-form select option{background:var(--floresta);color:var(--argila)}
+  .lead-submit{grid-column:1 / -1;margin-top:4px;background:var(--terracota);color:#fff;border:none;cursor:pointer;
+    font-family:'Inter Tight';font-weight:600;font-size:16px;padding:15px;border-radius:12px;box-shadow:0 10px 28px rgba(143,58,46,.34);transition:.18s}
+  .lead-submit:hover{filter:brightness(1.08);transform:translateY(-1px)}
+  .reassure{margin:18px 0 0;font-size:12.5px;color:rgba(246,241,232,.45)}
+  .alt-contact{margin-top:14px;font-size:13px;color:var(--argila-mut)}
+  .alt-contact a{color:#cfae6b;text-decoration:none;font-weight:600}
+  .cta-success{display:none;flex-direction:column;align-items:center;gap:12px;padding:18px 0}
+  .cta-success.show{display:flex;animation:fade .4s ease}
+  .cta-success .ck{width:60px;height:60px;border-radius:50%;background:rgba(124,214,160,.14);
+    display:flex;align-items:center;justify-content:center;color:#7fd6a0}
+  .cta-success h3{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;margin:0;color:var(--argila)}
+  .cta-success p{margin:0;font-size:15px;color:var(--argila-mut);max-width:420px}
+  @media(max-width:560px){.lead-form{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+  <nav class="site-nav">
+    <a class="logo" href="/">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="6" fill="#14251D"/>
+        <path d="M8 10h16M12 10v12M20 10v12" stroke="#F6F1E8" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      TriboTax
+    </a>
+    <a class="back" href="/">← Voltar ao site</a>
+  </nav>
+
+  <main class="hero">
+    <span class="eyebrow"><span class="dot"></span>Reforma Tributária · LC 214/2025</span>
+
+    <h1>Do NCM ao <span class="em">cClassTrib</span>.<br>Seu catálogo, reclassificado.</h1>
+
+    <p class="sub">Conectamos a classificação fiscal antiga à nova sistemática da Reforma — produto a produto, com base legal rastreável e revisão técnica.</p>
+
+    <div class="stage">
+      <div class="stage-labels">
+        <span class="from">NCM · sistema atual</span>
+        <span class="arrow"></span>
+        <span class="to">cClassTrib · IBS/CBS</span>
+      </div>
+
+      <!-- ===== CPU Architecture (porte fiel do componente) ===== -->
+      <svg class="cpu-wrap" style="color:rgba(246,241,232,.16)" width="100%" height="100%" viewBox="0 0 200 100">
+        <g stroke="currentColor" fill="none" stroke-width="0.3" stroke-dasharray="100 100" pathLength="100" marker-start="url(#cpu-circle-marker)">
+          <path stroke-dasharray="100 100" pathLength="100" d="M 10 20 h 79.5 q 5 0 5 5 v 30"/>
+          <path stroke-dasharray="100 100" pathLength="100" d="M 180 10 h -69.7 q -5 0 -5 5 v 30"/>
+          <path d="M 130 20 v 21.8 q 0 5 -5 5 h -10"/>
+          <path d="M 170 80 v -21.8 q 0 -5 -5 -5 h -50"/>
+          <path stroke-dasharray="100 100" pathLength="100" d="M 135 65 h 15 q 5 0 5 5 v 10 q 0 5 -5 5 h -39.8 q -5 0 -5 -5 v -20"/>
+          <path d="M 94.8 95 v -36"/>
+          <path d="M 88 88 v -15 q 0 -5 -5 -5 h -10 q -5 0 -5 -5 v -5 q 0 -5 5 -5 h 14"/>
+          <path d="M 30 30 h 25 q 5 0 5 5 v 6.5 q 0 5 5 5 h 20"/>
+          <animate attributeName="stroke-dashoffset" from="100" to="0" dur="1s" fill="freeze" calcMode="spline" keySplines="0.25,0.1,0.5,1" keyTimes="0; 1"/>
+        </g>
+
+        <g mask="url(#cpu-mask-1)"><circle class="cpu-architecture cpu-line-1" cx="0" cy="0" r="8" fill="url(#cpu-blue-grad)"/></g>
+        <g mask="url(#cpu-mask-2)"><circle class="cpu-architecture cpu-line-2" cx="0" cy="0" r="8" fill="url(#cpu-yellow-grad)"/></g>
+        <g mask="url(#cpu-mask-3)"><circle class="cpu-architecture cpu-line-3" cx="0" cy="0" r="8" fill="url(#cpu-pinkish-grad)"/></g>
+        <g mask="url(#cpu-mask-4)"><circle class="cpu-architecture cpu-line-4" cx="0" cy="0" r="8" fill="url(#cpu-white-grad)"/></g>
+        <g mask="url(#cpu-mask-5)"><circle class="cpu-architecture cpu-line-5" cx="0" cy="0" r="8" fill="url(#cpu-green-grad)"/></g>
+        <g mask="url(#cpu-mask-6)"><circle class="cpu-architecture cpu-line-6" cx="0" cy="0" r="8" fill="url(#cpu-orange-grad)"/></g>
+        <g mask="url(#cpu-mask-7)"><circle class="cpu-architecture cpu-line-7" cx="0" cy="0" r="8" fill="url(#cpu-cyan-grad)"/></g>
+        <g mask="url(#cpu-mask-8)"><circle class="cpu-architecture cpu-line-8" cx="0" cy="0" r="8" fill="url(#cpu-rose-grad)"/></g>
+
+        <g>
+          <g fill="url(#cpu-connection-gradient)">
+            <rect x="93" y="37" width="2.5" height="5" rx="0.7"/>
+            <rect x="104" y="37" width="2.5" height="5" rx="0.7"/>
+            <rect x="116.3" y="44" width="2.5" height="5" rx="0.7" transform="rotate(90 116.25 45.5)"/>
+            <rect x="122.8" y="44" width="2.5" height="5" rx="0.7" transform="rotate(90 116.25 45.5)"/>
+            <rect x="104" y="16" width="2.5" height="5" rx="0.7" transform="rotate(180 105.25 39.5)"/>
+            <rect x="114.5" y="16" width="2.5" height="5" rx="0.7" transform="rotate(180 105.25 39.5)"/>
+            <rect x="80" y="-13.6" width="2.5" height="5" rx="0.7" transform="rotate(270 115.25 19.5)"/>
+            <rect x="87" y="-13.6" width="2.5" height="5" rx="0.7" transform="rotate(270 115.25 19.5)"/>
+          </g>
+          <rect x="85" y="40" width="30" height="20" rx="2" fill="#181818" filter="url(#cpu-light-shadow)"/>
+          <text x="100" y="51.6" font-size="3.5" text-anchor="middle" fill="url(#cpu-text-gradient)" font-weight="600" letter-spacing="0.04em">cClassTrib</text>
+        </g>
+
+        <defs>
+          <mask id="cpu-mask-1"><path d="M 10 20 h 79.5 q 5 0 5 5 v 24" stroke-width="0.5" stroke="white"/></mask>
+          <mask id="cpu-mask-2"><path d="M 180 10 h -69.7 q -5 0 -5 5 v 24" stroke-width="0.5" stroke="white"/></mask>
+          <mask id="cpu-mask-3"><path d="M 130 20 v 21.8 q 0 5 -5 5 h -10" stroke-width="0.5" stroke="white"/></mask>
+          <mask id="cpu-mask-4"><path d="M 170 80 v -21.8 q 0 -5 -5 -5 h -50" stroke-width="0.5" stroke="white"/></mask>
+          <mask id="cpu-mask-5"><path d="M 135 65 h 15 q 5 0 5 5 v 10 q 0 5 -5 5 h -39.8 q -5 0 -5 -5 v -20" stroke-width="0.5" stroke="white"/></mask>
+          <mask id="cpu-mask-6"><path d="M 94.8 95 v -36" stroke-width="0.5" stroke="white"/></mask>
+          <mask id="cpu-mask-7"><path d="M 88 88 v -15 q 0 -5 -5 -5 h -10 q -5 0 -5 -5 v -5 q 0 -5 5 -5 h 14" stroke-width="0.5" stroke="white"/></mask>
+          <mask id="cpu-mask-8"><path d="M 30 30 h 25 q 5 0 5 5 v 6.5 q 0 5 5 5 h 20" stroke-width="0.5" stroke="white"/></mask>
+
+          <radialGradient id="cpu-blue-grad" fx="1"><stop offset="0%" stop-color="#00E8ED"/><stop offset="50%" stop-color="#08F"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+          <radialGradient id="cpu-yellow-grad" fx="1"><stop offset="0%" stop-color="#FFD800"/><stop offset="50%" stop-color="#FFD800"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+          <radialGradient id="cpu-pinkish-grad" fx="1"><stop offset="0%" stop-color="#830CD1"/><stop offset="50%" stop-color="#FF008B"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+          <radialGradient id="cpu-white-grad" fx="1"><stop offset="0%" stop-color="white"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+          <radialGradient id="cpu-green-grad" fx="1"><stop offset="0%" stop-color="#22c55e"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+          <radialGradient id="cpu-orange-grad" fx="1"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+          <radialGradient id="cpu-cyan-grad" fx="1"><stop offset="0%" stop-color="#06b6d4"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+          <radialGradient id="cpu-rose-grad" fx="1"><stop offset="0%" stop-color="#f43f5e"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+
+          <filter id="cpu-light-shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="1.5" dy="1.5" stdDeviation="1" flood-color="black" flood-opacity="0.1"/>
+          </filter>
+          <marker id="cpu-circle-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="18" markerHeight="18">
+            <circle cx="5" cy="5" r="2" fill="black" stroke="#232323" stroke-width="0.5">
+              <animate attributeName="r" values="0; 3; 2" dur="0.5s"/>
+            </circle>
+          </marker>
+          <linearGradient id="cpu-connection-gradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#4F4F4F"/><stop offset="60%" stop-color="#121214"/>
+          </linearGradient>
+          <linearGradient id="cpu-text-gradient" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#a98a4b"><animate attributeName="offset" values="-2; -1; 0" dur="5s" repeatCount="indefinite" calcMode="spline" keyTimes="0; 0.5; 1" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/></stop>
+            <stop offset="25%" stop-color="#F6F1E8"><animate attributeName="offset" values="-1; 0; 1" dur="5s" repeatCount="indefinite" calcMode="spline" keyTimes="0; 0.5; 1" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/></stop>
+            <stop offset="50%" stop-color="#a98a4b"><animate attributeName="offset" values="0; 1; 2;" dur="5s" repeatCount="indefinite" calcMode="spline" keyTimes="0; 0.5; 1" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/></stop>
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <div class="legend">
+        <span><i style="background:#22c55e"></i> Alíquota zero</span>
+        <span><i style="background:#FFD800"></i> Redução 60%</span>
+        <span><i style="background:#08F"></i> Tributação integral</span>
+        <span><i style="background:#FF008B"></i> Regime específico</span>
+      </div>
+    </div>
+
+    <div class="cta">
+      <a class="btn primary" href="#cta">Iniciar reclassificação →</a>
+      <a class="btn ghost" href="/reclassificador-fiscal/tabela.html">Ver a tabela cClassTrib</a>
+    </div>
+
+    <p class="foot">606 NCMs mapeados · 382 medicamentos · 142 classificações cClassTrib · base legal LC 214/2025</p>
+
+    <div class="scroll-cue"><div class="mouse"></div>Como funciona</div>
+  </main>
+
+  <!-- ===== BLOCO 2 · COMO FUNCIONA ===== -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-eyebrow">Como funciona</span>
+      <h2 class="sec-title">Três passos do catálogo antigo à conformidade</h2>
+      <p class="sec-sub">Você envia o que já tem. O motor faz o trabalho pesado. O especialista garante a segurança jurídica.</p>
+    </div>
+
+    <div class="steps">
+      <!-- 1 -->
+      <div class="step">
+        <div class="num">1</div>
+        <div class="ico">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <h3>Envie seu extrato</h3>
+        <p>Suba a planilha de produtos ativos exportada do seu ERP — Excel ou CSV. Só precisamos do código, descrição e NCM.</p>
+        <span class="tag">Excel · CSV · XML NF-e</span>
+        <div class="arrow-x">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="step">
+        <div class="num">2</div>
+        <div class="ico">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/>
+          </svg>
+        </div>
+        <h3>O motor reclassifica</h3>
+        <p>Camada determinística cruza os 606 NCMs dos Anexos da LC 214; a IA cobre o restante por descrição. Cada item recebe CST, cClassTrib, base legal e score de confiança.</p>
+        <span class="tag">Anexos LC 214 + IA</span>
+        <div class="arrow-x">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="step">
+        <div class="num">3</div>
+        <div class="ico">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <h3>Revise e exporte</h3>
+        <p>O especialista valida os casos sensíveis (baixa confiança). Você exporta a tabela pronta para o ERP, com trilha de auditoria para defesa fiscal.</p>
+        <span class="tag">Revisão técnica · trilha auditável</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- faixa de prova -->
+  <div class="proofbar">
+    <div class="inner">
+      <div class="proof"><b>606</b> NCMs mapeados</div>
+      <div class="proof"><b>382</b> medicamentos por princípio ativo</div>
+      <div class="proof"><b>142</b> classificações cClassTrib</div>
+      <div class="proof"><b>100%</b> com base legal rastreável</div>
+    </div>
+  </div>
+
+  <!-- ===== BLOCO 3 · POR QUE AGORA ===== -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-eyebrow">Por que agora</span>
+      <h2 class="sec-title">A janela já está aberta — e fechando</h2>
+      <p class="sec-sub">A Reforma não é um evento de 2033. A exigência fiscal sobre seu catálogo já começou — e o impacto financeiro chega em 2027.</p>
+    </div>
+
+    <div class="urgency-card" aria-label="Conta-regressiva da Reforma">
+      <header class="uc-head">
+        <div class="left">
+          <svg class="flame" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+          <h3>Conta-regressiva da Reforma</h3>
+        </div>
+        <a class="link" href="/reforma-tributaria.html">Ver linha do tempo →</a>
+      </header>
+
+      <p class="uc-big"><span id="uc-days">—</span><span class="u">dias</span></p>
+      <p class="uc-cap">até a <b style="color:#cfae6b">CBS cheia</b> e o fim do PIS/COFINS — <b style="color:#cfae6b">1º/1/2027</b>.</p>
+
+      <div class="uc-tl-label">
+        <span>2026 · ano-teste (em curso)</span>
+        <span class="now" id="uc-nowlabel">você está aqui</span>
+      </div>
+      <div class="uc-months" id="uc-months"></div>
+      <div class="uc-mlabels"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
+
+      <div class="uc-stats">
+        <div>
+          <p class="lbl">Fase atual</p>
+          <p class="val">Ano-teste 2026</p>
+        </div>
+        <div class="r">
+          <p class="lbl">NF-e exige cClassTrib?</p>
+          <p class="val ok">Sim, já</p>
+        </div>
+      </div>
+
+      <details class="uc-how">
+        <summary>
+          <span>Por que isso é urgente?</span>
+          <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="uc-items">
+          <div class="uc-item">
+            <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <p><b>A NF-e da fase-teste 2026 já traz o grupo IBS/CBS.</b> Emitir sem o cClassTrib correto gera rejeição e inconformidade — não dá para esperar 2027.</p>
+          </div>
+          <div class="uc-item">
+            <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+            <p><b>Em 1º/1/2027 a CBS entra com alíquota cheia e o PIS/COFINS é extinto.</b> Classificação errada vira imposto pago a mais ou crédito perdido — direto no caixa.</p>
+          </div>
+          <div class="uc-item">
+            <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            <p><b>Reclassificar todo o catálogo leva semanas.</b> Quem começa agora chega pronto para a virada — sem correria, sem risco de parar o faturamento.</p>
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===== BLOCO 4 · DIFERENCIAIS DO MOTOR ===== -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-eyebrow">Diferenciais do motor</span>
+      <h2 class="sec-title">Não é um de-para. É um motor que entende contexto.</h2>
+      <p class="sec-sub">A maioria das ferramentas tenta casar NCM com cClassTrib direto — e erra. O nosso decide em camadas, com base legal e confiança medida.</p>
+    </div>
+
+    <div class="motor-card" aria-label="Diferenciais do motor de classificação">
+      <header class="mc-head">
+        <div class="left">
+          <svg class="chip" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg>
+          <h3>O motor de 3 camadas</h3>
+        </div>
+        <a class="link" href="/reclassificador-fiscal/tabela.html">Ver tabela completa →</a>
+      </header>
+
+      <p class="mc-big">≈80%<span class="u">automático</span></p>
+      <p class="mc-cap">dos itens classificados <b style="color:#cfae6b">sem revisão obrigatória</b> — o especialista foca só no que importa.</p>
+
+      <div class="mc-tl-label">
+        <span>Distribuição de confiança</span>
+        <span style="color:#cfae6b;font-weight:600">por item</span>
+      </div>
+      <div class="mc-bar">
+        <div class="mc-seg alta"  style="flex:81"></div>
+        <div class="mc-seg media" style="flex:15"></div>
+        <div class="mc-seg baixa" style="flex:4"></div>
+      </div>
+      <div class="mc-legend">
+        <span><i style="background:#5cb888"></i> Alta · 81% (liberado)</span>
+        <span><i style="background:#cfae6b"></i> Média · 15% (revisão rápida)</span>
+        <span><i style="background:#8F3A2E"></i> Baixa · 4% (revisão obrigatória)</span>
+      </div>
+
+      <div class="mc-stats">
+        <div>
+          <p class="lbl">Cobertura determinística</p>
+          <p class="val">606 NCMs</p>
+        </div>
+        <div class="r">
+          <p class="lbl">Base legal</p>
+          <p class="val">100% rastreável</p>
+        </div>
+      </div>
+
+      <details class="mc-how" open>
+        <summary>
+          <span>O que torna o motor diferente?</span>
+          <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="mc-items">
+          <div class="mc-item">
+            <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg>
+            <p><b>Decide em 3 camadas, não no chute.</b> Determinística (Anexos da LC 214) → regras de contexto → IA com score. Nada de “casar NCM e torcer”.</p>
+          </div>
+          <div class="mc-item">
+            <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            <p><b>Entende contexto — mesma NCM, benefício diferente.</b> Dispositivos médicos a 60%, ou zero se o comprador é órgão público. O motor trata a condicional; não força uma resposta única.</p>
+          </div>
+          <div class="mc-item">
+            <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>
+            <p><b>Medicamentos por princípio ativo, não só por NCM.</b> São 382 princípios ativos — vários no mesmo NCM. Classificar só por código super-tributaria ou daria zero indevido.</p>
+          </div>
+          <div class="mc-item">
+            <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7v5c0 4.5 3.5 7.5 8 9 4.5-1.5 8-4.5 8-9V7l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg>
+            <p><b>Toda decisão cita a LC 214.</b> Artigo, anexo e justificativa em cada item — a trilha que sustenta uma fiscalização futura.</p>
+          </div>
+          <div class="mc-item">
+            <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            <p><b>Default seguro.</b> Quando nenhuma hipótese se aplica, cai em tributação integral (000001) — nunca um benefício “inventado”.</p>
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===== BLOCO 5 · EXEMPLO PRÁTICO (antes × depois) ===== -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-eyebrow">Exemplo prático</span>
+      <h2 class="sec-title">O que muda, na prática, para um produto seu</h2>
+      <p class="sec-sub">A reclassificação de um produto e o efeito real no negócio — a regra atual ao lado da Reforma. Escolha um exemplo:</p>
+    </div>
+
+    <div class="ex-tabs" id="exTabs">
+      <button class="ex-tab active" data-p="arroz">🌾 Arroz · cesta básica</button>
+      <button class="ex-tab" data-p="medicamento">💊 Medicamento</button>
+      <button class="ex-tab" data-p="cadeira">🪑 Produto industrial</button>
+    </div>
+
+    <div class="compare">
+      <div class="compare-arrow">→</div>
+      <div class="col antes">
+        <span class="tag">Antes · regra atual</span>
+        <h4 id="exName">—</h4>
+        <p class="sysname">NCM <span id="exNcm" class="mono">—</span> · classificação por mercadoria</p>
+        <div id="exAntes"></div>
+      </div>
+      <div class="col depois">
+        <span class="tag">Depois · Reforma IBS/CBS</span>
+        <h4 id="exName2">—</h4>
+        <p class="sysname">cClassTrib <span id="exCc" class="mono gold">—</span> · CST <span id="exCst" class="mono">—</span></p>
+        <div id="exDepois"></div>
+      </div>
+    </div>
+
+    <div class="efeito">
+      <div class="ef-head">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+        <h5 id="efT">—</h5>
+      </div>
+      <p id="efP">—</p>
+      <div class="risco">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <p id="efRisco">—</p>
+      </div>
+    </div>
+
+    <p class="ilustrativo">Valores e alíquotas ilustrativos. A alíquota de referência do IBS/CBS é estimada (~26,5%) e será fixada pelos entes federativos; benefícios e classificações conforme a LC 214/2025.</p>
+
+    <div class="lead-banner" style="max-width:920px;margin-left:auto;margin-right:auto">
+      <div class="lb-txt">
+        <strong>Quer ver isso no seu catálogo?</strong>
+        <span>Na apresentação aplicamos o motor ao seu mix real e mostramos, item a item, o efeito no seu caixa — com a base legal de cada decisão.</span>
+      </div>
+      <a class="lb-cta" href="#cta">Agendar apresentação →</a>
+    </div>
+  </section>
+
+  <!-- ===== BLOCO 6 · PARA CONTABILIDADES (white-label) ===== -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-eyebrow">Para contabilidades parceiras</span>
+      <h2 class="sec-title">Ofereça a reclassificação à sua carteira — com a sua marca.</h2>
+      <p class="sec-sub">Uma nova receita recorrente, sem construir tecnologia: o motor e a base legal são da TriboTax; a marca e a relação com o cliente são suas.</p>
+    </div>
+
+    <div class="wl-grid">
+      <!-- benefícios -->
+      <div>
+        <div class="wl-benefit">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+          <div><h4>A marca é sua</h4><p>Logo, cores e domínio da sua contabilidade. O cliente vê você na frente; o motor TriboTax trabalha nos bastidores (“powered by”).</p></div>
+        </div>
+        <div class="wl-benefit">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></div>
+          <div><h4>Carteira multiempresa</h4><p>Todos os CNPJs num painel só, em lote, com status por cliente. Reclassifique a base inteira sem sair da tela.</p></div>
+        </div>
+        <div class="wl-benefit">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
+          <div><h4>Retaguarda técnica TriboTax</h4><p>Os casos difíceis — medicamentos por princípio ativo, condicionais, regimes específicos — você escalona para a equipe TriboTax.</p></div>
+        </div>
+        <div class="wl-benefit">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div>
+          <div><h4>Base legal sempre atualizada</h4><p>A TriboTax mantém Anexos e cClassTrib em dia para todos os parceiros — sua carteira nunca fica desalinhada com a LC 214.</p></div>
+        </div>
+        <a class="wl-cta" href="#cta">Quero ser parceiro →</a>
+      </div>
+
+      <!-- mockup do painel da carteira -->
+      <div class="wl-mock">
+        <div class="wl-mbar">
+          <span class="d" style="background:#ff5f57"></span><span class="d" style="background:#febc2e"></span><span class="d" style="background:#28c840"></span>
+          <span class="u">reclassifica.suacontabilidade.com.br</span>
+        </div>
+        <div class="wl-mtop">
+          <div class="wl-brand"><span class="logo">SC</span> Sua Contabilidade</div>
+          <span class="wl-powered">powered by <b>TriboTax</b></span>
+        </div>
+        <div class="wl-mkpi">
+          <div><div class="n">84</div><div class="l">Clientes ativos</div></div>
+          <div><div class="n">312</div><div class="l">Reclassificações</div></div>
+          <div><div class="n">9</div><div class="l">Na fila de revisão</div></div>
+        </div>
+        <div class="wl-row"><div><div class="cli">Indústria Alfa Ltda</div><div class="sk">2.140 SKUs</div></div><span class="wl-st ok">Concluído</span></div>
+        <div class="wl-row"><div><div class="cli">Comércio Beta ME</div><div class="sk">540 SKUs</div></div><span class="wl-st rev">Em revisão</span></div>
+        <div class="wl-row"><div><div class="cli">Distribuidora Gama S.A.</div><div class="sk">8.900 SKUs</div></div><span class="wl-st proc">Processando</span></div>
+        <div class="wl-row"><div><div class="cli">Serviços Delta</div><div class="sk">120 SKUs</div></div><span class="wl-st ok">Concluído</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BLOCO 7 · CTA FINAL (sem preço) ===== -->
+  <section class="section cta-sec" id="cta">
+    <div class="cta-final">
+      <span class="sec-eyebrow">Próximo passo</span>
+      <h2>Pronto para reclassificar seu catálogo antes da virada?</h2>
+      <p class="csub">Agende uma apresentação. Mostramos o motor completo aplicado ao <b style="color:#cfae6b">seu</b> catálogo, com revisão técnica e trilha auditável — e você sai com um diagnóstico inicial do impacto.</p>
+
+      <form class="lead-form" id="leadForm">
+        <div class="full">
+          <label for="lf-nome">Nome</label>
+          <input id="lf-nome" type="text" required placeholder="Seu nome">
+        </div>
+        <div>
+          <label for="lf-email">E-mail corporativo</label>
+          <input id="lf-email" type="email" required placeholder="voce@empresa.com.br">
+        </div>
+        <div>
+          <label for="lf-empresa">Empresa</label>
+          <input id="lf-empresa" type="text" required placeholder="Razão social">
+        </div>
+        <div class="full">
+          <label for="lf-skus">Tamanho do catálogo (opcional)</label>
+          <select id="lf-skus">
+            <option value="">Selecione…</option>
+            <option>Até 500 SKUs</option>
+            <option>500 – 5.000 SKUs</option>
+            <option>5.000 – 50.000 SKUs</option>
+            <option>Mais de 50.000 SKUs</option>
+            <option>Sou contabilidade (vários clientes)</option>
+          </select>
+        </div>
+        <button class="lead-submit" type="submit">Agendar apresentação →</button>
+      </form>
+
+      <p class="reassure">Sem compromisso · apresentação personalizada · retorno em até 1 dia útil</p>
+      <p class="alt-contact">Prefere falar direto? <a href="mailto:taxtribo@gmail.com?subject=Reclassificação%20Fiscal%20IBS/CBS">taxtribo@gmail.com</a></p>
+
+      <div class="cta-success" id="ctaSuccess">
+        <div class="ck">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <h3>Recebemos seu contato!</h3>
+        <p>Em breve retornamos para agendar sua apresentação e o diagnóstico inicial. Obrigado pelo interesse.</p>
+      </div>
+    </div>
+  </section>
+
+  <div style="height:80px"></div>
+
+  <script>
+    /* ===== Exemplo prático — comparação antes × depois ===== */
+    (function(){
+      var P={
+        arroz:{
+          name:'Arroz tipo 1 · 5kg', ncm:'1006.30.21', cc:'200003', cst:'200',
+          antes:[
+            ['ICMS','Isento / reduzido (varia por UF)'],
+            ['PIS/COFINS','Alíquota zero (lista positiva)'],
+            ['Resultado','Desoneração, porém variável e complexa']
+          ],
+          depois:[
+            ['IBS + CBS','Alíquota ZERO', true],
+            ['Base legal','Anexo I · Art. 125'],
+            ['Abrangência','Uniforme nacional']
+          ],
+          efT:'Desoneração nacional garantida',
+          efP:'O arroz entra na Cesta Básica Nacional: IBS e CBS a zero, igual em todo o país — sem depender de benefício estadual. Acaba a variação por UF e a guerra fiscal sobre o item.',
+          risco:'Risco: classificado como tributação integral (000001) por engano, paga ~26,5% de IBS/CBS indevidamente — cerca de R$ 26,50 a cada R$ 100 vendidos.'
+        },
+        medicamento:{
+          name:'Abacavir 300mg · antirretroviral', ncm:'3004.90.69', cc:'200009', cst:'200',
+          antes:[
+            ['PIS/COFINS','Monofásico (alíquotas específicas)'],
+            ['ICMS','ST + reduções (convênios)'],
+            ['Resultado','Carga concentrada e complexa por elo']
+          ],
+          depois:[
+            ['IBS + CBS','Alíquota ZERO', true],
+            ['Base legal','Anexo XIV · Art. 146'],
+            ['Condição','Confirmar princípio ativo']
+          ],
+          efT:'Zero — mas a classificação exige cuidado',
+          efP:'O princípio ativo consta do Anexo XIV → IBS e CBS a zero. Porém vários medicamentos dividem o mesmo NCM: a alíquota zero depende de confirmar o princípio ativo, não apenas o código.',
+          risco:'Risco: classificar só pelo NCM, sem confirmar o princípio ativo, gera zero indevido (autuação) — ou imposto pago a mais num medicamento que já seria isento.'
+        },
+        cadeira:{
+          name:'Cadeira de escritório', ncm:'9401.30.00', cc:'000001', cst:'000',
+          antes:[
+            ['ICMS','~18% (interestadual varia)'],
+            ['PIS/COFINS','9,25% (não-cumulativo)'],
+            ['Crédito','Restrito → resíduo no custo']
+          ],
+          depois:[
+            ['IBS + CBS','~26,5% (ref. estimada)'],
+            ['Classificação','Tributação integral'],
+            ['Crédito','Amplo · não-cumulatividade plena', true]
+          ],
+          efT:'Alíquota nominal maior, imposto efetivo mais limpo',
+          efP:'A alíquota cheia parece subir, mas o IBS/CBS é creditável em toda a cadeia (inclusive serviços e energia). Para vendas a contribuinte, é neutro; o que some é o resíduo cumulativo embutido hoje no preço.',
+          risco:'Risco de gestão: não aproveitar todos os créditos amplos da Reforma significa pagar mais imposto efetivo do que o necessário.'
+        }
+      };
+      function rows(list){
+        return list.map(function(r){
+          return '<div class="crow"><span class="k">'+r[0]+'</span><span class="v'+(r[2]?' hl':'')+'">'+r[1]+'</span></div>';
+        }).join('');
+      }
+      function show(key){
+        var d=P[key];
+        document.getElementById('exName').textContent=d.name;
+        document.getElementById('exName2').textContent=d.name;
+        document.getElementById('exNcm').textContent=d.ncm;
+        document.getElementById('exCc').textContent=d.cc;
+        document.getElementById('exCst').textContent=d.cst;
+        document.getElementById('exAntes').innerHTML=rows(d.antes);
+        document.getElementById('exDepois').innerHTML=rows(d.depois);
+        document.getElementById('efT').textContent=d.efT;
+        document.getElementById('efP').textContent=d.efP;
+        document.getElementById('efRisco').textContent=d.risco;
+      }
+      var tabs=document.getElementById('exTabs');
+      tabs.addEventListener('click',function(e){
+        var b=e.target.closest('.ex-tab'); if(!b) return;
+        [].forEach.call(tabs.children,function(c){c.classList.remove('active');});
+        b.classList.add('active'); show(b.getAttribute('data-p'));
+      });
+      show('arroz');
+    })();
+  </script>
+
+  <script>
+    (function(){
+      var now = new Date();
+      var year = now.getFullYear();
+      var target = new Date(2027, 0, 1);           // 1º/1/2027
+      var days = Math.max(0, Math.ceil((target - now) / 86400000));
+      document.getElementById('uc-days').textContent = days.toLocaleString('pt-BR');
+      // meses de 2026: preenche conforme o mês atual
+      var cont = document.getElementById('uc-months');
+      var curMonth = (year === 2026) ? now.getMonth() : (year > 2026 ? 12 : -1); // 0..11
+      for (var m=0;m<12;m++){
+        var d=document.createElement('div');
+        d.className='mdot' + (m<curMonth?' done':(m===curMonth?' now':''));
+        cont.appendChild(d);
+      }
+      if (year !== 2026){ document.getElementById('uc-nowlabel').textContent = (year>2026?'fase encerrada':'em breve'); }
+    })();
+  </script>
+
+  <script>
+    /* CTA — captura de lead → n8n → Bitrix24 */
+    (function(){
+      var form=document.getElementById('leadForm');
+      if(!form) return;
+      form.addEventListener('submit',function(e){
+        e.preventDefault();
+        var btn=form.querySelector('.lead-submit');
+        btn.disabled=true; btn.textContent='Enviando…';
+        var p=new URLSearchParams(location.search);
+        var payload={
+          nome:document.getElementById('lf-nome').value.trim(),
+          email:document.getElementById('lf-email').value.trim(),
+          empresa:document.getElementById('lf-empresa').value.trim(),
+          skus:document.getElementById('lf-skus').value,
+          servico:'Reclassificador Fiscal IBS/CBS',
+          origem:location.pathname,
+          utm_source:p.get('utm_source')||'',
+          utm_medium:p.get('utm_medium')||'',
+          utm_campaign:p.get('utm_campaign')||'',
+          utm_content:p.get('utm_content')||'',
+          utm_term:p.get('utm_term')||''
+        };
+        fetch('https://n8n.gabrielgouvea.com.br/webhook/f484ff6a-2bf3-440b-b23c-dcfe76eaf968',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(payload)
+        }).catch(function(){});
+        form.style.display='none';
+        document.querySelector('.reassure').style.display='none';
+        document.querySelector('.alt-contact').style.display='none';
+        document.getElementById('ctaSuccess').classList.add('show');
+      });
+    })();
+  </script>
+</body>
+</html>
