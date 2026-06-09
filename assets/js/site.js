@@ -9,7 +9,6 @@ const NAV_LINKS = [
   { href: '/metodo', label: 'Método' },
   { label: 'Serviços', children: [
     { href: '/passivo-tributario', label: 'Passivo Tributário' },
-    { href: '/equiparacao-hospitalar', label: 'Equiparação Hospitalar' },
     { href: '/reforma-tributaria', label: 'Reforma Tributária' },
     { href: '/monitor-tributario/', label: 'Monitor Tributário' },
     { href: '/reclassificador-fiscal/', label: 'Reclassificador Fiscal' },
