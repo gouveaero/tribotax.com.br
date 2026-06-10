@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Calculadora Ex Tarifário · TriboTax</title>
+<meta name="robots" content="noindex, nofollow" />
+<meta name="description" content="Ferramenta interna TriboTax: estimativa de economia tributária na importação com Ex Tarifário." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="stylesheet" href="assets/css/tokens.css" />
+<style>
+  /* ─── Cabeçalho da ferramenta ─────────────────────────── */
+  .calc-head { padding: clamp(40px, 5.5vw, 80px) 0 clamp(28px, 3vw, 44px); }
+  .calc-head h1 {
+    font-family: var(--f-display); font-weight: 500;
+    font-size: clamp(40px, 5.4vw, 80px); line-height: 1.0;
+    letter-spacing: -0.02em; margin: 18px 0 0; color: var(--forest-900);
+  }
+  .calc-head h1 em { font-style: italic; color: var(--copper-500); }
+  .calc-head .lede { margin-top: 22px; max-width: 60ch; }
+  .head-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
+  .head-actions .btn { font-size: 13px; padding: 12px 18px; }
+  .btn svg.ic { width: 15px; height: 15px; }
+  .btn svg.ic path, .btn svg.ic line, .btn svg.ic polyline, .btn svg.ic rect { stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ─── Layout principal ────────────────────────────────── */
+  .calc-grid {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: clamp(24px, 3vw, 48px); align-items: start;
+    padding-bottom: var(--sp-10);
+  }
+  @media (max-width: 980px) { .calc-grid { grid-template-columns: 1fr; gap: 28px; } }
+
+  /* ─── Painel de inputs ────────────────────────────────── */
+  .panel { border: 1px solid var(--clay-200); background: var(--clay-50); border-radius: var(--radius-m); }
+  .panel.inputs { padding: clamp(22px, 2.6vw, 36px); }
+
+  .section-label {
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--copper-500);
+    margin: 0 0 18px; display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+  .field-block + .field-block { margin-top: 30px; }
+
+  .field { margin-bottom: 16px; }
+  .field > label {
+    display: block; font-family: var(--f-mono); font-size: 10px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--fg-muted); margin-bottom: 7px;
+  }
+  .in-wrap { position: relative; display: flex; align-items: center; }
+  .in-wrap input {
+    width: 100%; padding: 12px 16px;
+    border: 1px solid var(--clay-200); background: var(--clay-50);
+    font-family: var(--f-body); font-size: 15px; color: var(--ink-900);
+    border-radius: 2px; box-sizing: border-box;
+    transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .in-wrap input:focus {
+    outline: none; border-color: var(--forest-600); background: #fff;
+    box-shadow: 0 0 0 3px rgba(50,86,71,0.08);
+  }
+  .in-wrap.has-pre input { padding-left: 44px; }
+  .in-wrap.has-suf input { padding-right: 52px; }
+  .in-wrap .affix {
+    position: absolute; font-family: var(--f-mono); font-size: 12px;
+    color: var(--ink-300); pointer-events: none; letter-spacing: 0.02em;
+  }
+  .in-wrap .affix.pre { left: 15px; }
+  .in-wrap .affix.suf { right: 15px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 480px) { .field-row { grid-template-columns: 1fr; gap: 0; } }
+  .field .hint { margin-top: 6px; font-size: 11.5px; color: var(--fg-faint); line-height: 1.5; }
+
+  /* derived inline note (Valor CIF) */
+  .derived {
+    margin-top: 14px; display: flex; align-items: baseline; justify-content: space-between;
+    gap: 12px; padding: 12px 14px; background: var(--clay-100);
+    border: 1px solid var(--clay-200); border-radius: 2px;
+  }
+  .derived .k { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-muted); }
+  .derived .v { font-family: var(--f-display); font-size: 20px; color: var(--forest-900); font-weight: 500; }
+
+  /* ─── <details> recolhíveis ───────────────────────────── */
+  details.adv { margin-top: 30px; border-top: 1px solid var(--rule); }
+  details.adv > summary {
+    list-style: none; cursor: pointer; padding: 18px 0 4px;
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--copper-500);
+  }
+  details.adv > summary::-webkit-details-marker { display: none; }
+  details.adv > summary .chev { width: 11px; height: 11px; transition: transform .25s ease; opacity: .7; margin-left: auto; }
+  details.adv[open] > summary .chev { transform: rotate(180deg); }
+  details.adv > summary .chev path { stroke: currentColor; stroke-width: 1.5; fill: none; stroke-linecap: round; }
+  details.adv .adv-body { padding-top: 18px; }
+
+  /* II highlight pair */
+  .ii-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 480px) { .ii-pair { grid-template-columns: 1fr; gap: 0; } }
+  .ii-pair .field > label .tag { color: var(--copper-500); }
+
+  /* ─── Painel de resultado (escuro) ────────────────────── */
+  .results {
+    background: var(--forest-900); color: var(--fg-on-deep);
+    border-radius: var(--radius-m); padding: clamp(26px, 3vw, 44px);
+    position: sticky; top: 92px;
+  }
+  @media (max-width: 980px) { .results { position: static; } }
+  .results .res-eyebrow {
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--copper-300);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .results .res-eyebrow::before { content: ''; width: 18px; height: 1px; background: currentColor; }
+
+  .hero-num {
+    font-family: var(--f-display); font-weight: 500; line-height: 0.96;
+    font-size: clamp(46px, 6.4vw, 78px); letter-spacing: -0.02em;
+    color: var(--copper-300); margin: 14px 0 0; word-break: break-word;
+  }
+  .hero-sub { margin-top: 14px; font-size: 14px; color: var(--fg-on-deep-muted); max-width: 48ch; line-height: 1.5; }
+  .hero-sub b { color: var(--fg-on-deep); font-weight: 600; }
+
+  /* Comparação de custos */
+  .compare {
+    margin-top: 34px; display: grid; grid-template-columns: 1fr auto 1fr;
+    gap: 16px; align-items: center;
+    border-top: 1px solid var(--rule-deep); border-bottom: 1px solid var(--rule-deep);
+    padding: 26px 0;
+  }
+  @media (max-width: 420px) { .compare { grid-template-columns: 1fr; gap: 18px; } .compare .arrow-mid { transform: rotate(90deg); justify-self: center; } }
+  .compare .c-lbl { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-on-deep-muted); }
+  .compare .c-val { font-family: var(--f-display); font-size: clamp(22px, 2.6vw, 30px); line-height: 1.05; margin-top: 8px; color: var(--fg-on-deep); }
+  .compare .c-val.ex { color: #fff; }
+  .compare .arrow-mid { color: var(--copper-400); }
+  .compare .arrow-mid svg { width: 26px; height: 14px; }
+  .compare .arrow-mid svg path { stroke: currentColor; stroke-width: 1.4; fill: none; }
+
+  /* Ledger economia */
+  .ledger { margin-top: 26px; }
+  .ledger .row {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 14px; padding: 11px 0; font-size: 14.5px;
+  }
+  .ledger .row + .row { border-top: 1px solid var(--rule-deep); }
+  .ledger .row .lab { color: var(--fg-on-deep-muted); }
+  .ledger .row .num { font-family: var(--f-mono); font-size: 14px; color: var(--fg-on-deep); white-space: nowrap; }
+  .ledger .row.total .lab { color: var(--fg-on-deep); font-weight: 600; }
+  .ledger .row.total { border-top: 1px solid var(--copper-400); margin-top: 4px; padding-top: 16px; }
+  .ledger .row.total .num { font-family: var(--f-display); font-size: 24px; color: var(--copper-300); }
+  .ledger .row .num.minus { color: var(--copper-200); }
+
+  /* Detalhamento dos tributos */
+  details.breakdown { margin-top: 26px; border-top: 1px solid var(--rule-deep); }
+  details.breakdown > summary {
+    list-style: none; cursor: pointer; padding: 16px 0 0;
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--copper-300);
+    display: flex; align-items: center; gap: 10px;
+  }
+  details.breakdown > summary::-webkit-details-marker { display: none; }
+  details.breakdown > summary .chev { width: 11px; height: 11px; margin-left: auto; transition: transform .25s ease; opacity: .8; }
+  details.breakdown[open] > summary .chev { transform: rotate(180deg); }
+  details.breakdown > summary .chev path { stroke: currentColor; stroke-width: 1.5; fill: none; stroke-linecap: round; }
+  table.tax {
+    width: 100%; border-collapse: collapse; margin-top: 16px;
+    font-size: 13px;
+  }
+  table.tax th, table.tax td { text-align: right; padding: 9px 6px; }
+  table.tax th:first-child, table.tax td:first-child { text-align: left; }
+  table.tax thead th {
+    font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--fg-on-deep-muted); font-weight: 400;
+    border-bottom: 1px solid var(--rule-deep); padding-bottom: 11px;
+  }
+  table.tax tbody td { font-family: var(--f-mono); color: var(--fg-on-deep); border-bottom: 1px solid var(--rule-deep); }
+  table.tax tbody td:first-child { font-family: var(--f-body); color: var(--fg-on-deep-muted); }
+  table.tax tbody tr.sum td { color: #fff; font-weight: 500; }
+  table.tax tbody tr.sum td:first-child { color: var(--fg-on-deep); }
+  table.tax td.save { color: var(--copper-300); }
+
+  /* Disclaimer */
+  .disclaimer {
+    margin-top: 28px; font-family: var(--f-mono); font-size: 11px; line-height: 1.6;
+    letter-spacing: 0.02em; color: var(--fg-on-deep-muted);
+    padding: 16px 18px; border: 1px solid var(--rule-deep); border-radius: 2px;
+  }
+  .disclaimer b { color: var(--fg-on-deep); }
+
+  /* ─── Folha de impressão (oculta na tela) ─────────────── */
+  #print-sheet { display: none; }
+
+  @media print {
+    @page { size: A4 portrait; margin: 16mm 14mm; }
+    body { background: #fff !important; }
+    body::before { display: none !important; }
+    header#tt-nav, footer#tt-footer, .calc-head, .calc-grid, .head-actions { display: none !important; }
+    #print-sheet { display: block; color: #14251D; font-family: var(--f-body); }
+    .ps-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; border-bottom: 1.5px solid #14251D; padding-bottom: 14px; }
+    .ps-brand { display: flex; align-items: center; gap: 12px; }
+    .ps-brand svg { width: 38px; height: 38px; }
+    .ps-brand .wm { font-family: var(--f-display); font-size: 26px; font-weight: 500; color: #14251D; }
+    .ps-brand .wm em { font-style: italic; }
+    .ps-meta { text-align: right; font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #55544E; line-height: 1.7; }
+    .ps-title { font-family: var(--f-display); font-size: 30px; font-weight: 500; margin: 22px 0 2px; color: #14251D; }
+    .ps-title em { font-style: italic; color: #8F3A2E; }
+    .ps-ident { font-family: var(--f-mono); font-size: 11px; color: #2A2A26; margin-top: 6px; }
+    .ps-ident span { color: #55544E; }
+
+    .ps-section-label { font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: #8F3A2E; margin: 26px 0 10px; }
+    .ps-premissas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 24px; font-size: 12px; }
+    .ps-premissas .pp { border-bottom: 1px solid #E3D7C2; padding-bottom: 6px; }
+    .ps-premissas .pp .k { font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: #55544E; display: block; }
+    .ps-premissas .pp .v { font-size: 14px; color: #14251D; }
+
+    .ps-headline { margin: 26px 0; border: 1.5px solid #14251D; padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .ps-headline .hl-lbl { font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: #55544E; }
+    .ps-headline .hl-num { font-family: var(--f-display); font-size: 40px; font-weight: 500; color: #8F3A2E; line-height: 1; }
+
+    table.ps-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    table.ps-table th, table.ps-table td { text-align: right; padding: 8px 6px; }
+    table.ps-table th:first-child, table.ps-table td:first-child { text-align: left; }
+    table.ps-table thead th { font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: #55544E; border-bottom: 1px solid #14251D; }
+    table.ps-table tbody td { font-family: var(--f-mono); border-bottom: 1px solid #E3D7C2; color: #14251D; }
+    table.ps-table tbody td:first-child { font-family: var(--f-body); color: #2A2A26; }
+    table.ps-table tr.sum td { font-weight: 700; }
+    table.ps-table td.save { color: #8F3A2E; }
+
+    .ps-ledger { margin-top: 22px; max-width: 360px; margin-left: auto; }
+    .ps-ledger .row { display: flex; justify-content: space-between; padding: 7px 0; font-size: 13px; border-bottom: 1px solid #E3D7C2; }
+    .ps-ledger .row.total { border-top: 1.5px solid #8F3A2E; border-bottom: none; margin-top: 4px; padding-top: 12px; }
+    .ps-ledger .row.total .lab { font-weight: 700; }
+    .ps-ledger .row.total .num { font-family: var(--f-display); font-size: 22px; color: #8F3A2E; font-weight: 500; }
+    .ps-ledger .row .num { font-family: var(--f-mono); }
+
+    .ps-disclaimer { margin-top: 30px; font-size: 9.5px; line-height: 1.6; color: #55544E; border-top: 1px solid #E3D7C2; padding-top: 12px; font-family: var(--f-mono); }
+    .ps-disclaimer b { color: #14251D; }
+  }
+</style>
+</head>
+<body>
+<header id="tt-nav"></header>
+
+<main class="container">
+
+  <div class="calc-head">
+    <span class="eyebrow">Ferramenta interna · Cálculo hipotético</span>
+    <h1>Economia com <em>Ex Tarifário</em></h1>
+    <p class="lede">Estime, na frente do cliente, quanto uma importação economiza em tributos ao operar sob um Ex Tarifário. Ajuste os parâmetros conforme o produto e o resultado se atualiza na hora.</p>
+    <div class="head-actions">
+      <button type="button" class="btn btn-primary" id="btn-print">
+        <svg class="ic" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Gerar PDF / Imprimir
+      </button>
+      <button type="button" class="btn btn-ghost" id="btn-reset">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><polyline points="3 3 3 8 8 8"/></svg>
+        Restaurar valores da planilha
+      </button>
+    </div>
+  </div>
+
+  <div class="calc-grid">
+
+    <!-- ───── INPUTS ───── -->
+    <section class="panel inputs" aria-label="Parâmetros do cálculo">
+
+      <div class="field-block">
+        <div class="section-label">Premissas da importação</div>
+
+        <div class="field">
+          <label for="vAduaneiro">Valor aduaneiro</label>
+          <div class="in-wrap has-pre">
+            <span class="affix pre">US$</span>
+            <input id="vAduaneiro" inputmode="decimal" value="200.000" autocomplete="off" />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="cambio">Câmbio (R$/US$)</label>
+            <div class="in-wrap has-pre">
+              <span class="affix pre">R$</span>
+              <input id="cambio" inputmode="decimal" value="4,02" autocomplete="off" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="dias">Canal amarelo</label>
+            <div class="in-wrap has-suf">
+              <input id="dias" inputmode="numeric" value="5" autocomplete="off" />
+              <span class="affix suf">dias</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="despDia">Despesa alfandegária por dia</label>
+          <div class="in-wrap has-pre">
+            <span class="affix pre">R$</span>
+            <input id="despDia" inputmode="decimal" value="2.000" autocomplete="off" />
+          </div>
+        </div>
+
+        <div class="derived">
+          <span class="k">Valor aduaneiro CIF</span>
+          <span class="v" id="r-cif">R$ 0,00</span>
+        </div>
+      </div>
+
+      <details class="adv" open>
+        <summary>
+          Parâmetros tributários
+          <svg class="chev" viewBox="0 0 12 8"><path d="M1 1.5L6 6L11 1.5"/></svg>
+        </summary>
+        <div class="adv-body">
+          <div class="ii-pair">
+            <div class="field">
+              <label for="iiAtual">II <span class="tag">— cenário atual</span></label>
+              <div class="in-wrap has-suf">
+                <input id="iiAtual" inputmode="decimal" value="14" autocomplete="off" />
+                <span class="affix suf">%</span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="iiEx">II <span class="tag">— Ex Tarifário</span></label>
+              <div class="in-wrap has-suf">
+                <input id="iiEx" inputmode="decimal" value="2" autocomplete="off" />
+                <span class="affix suf">%</span>
+              </div>
+            </div>
+          </div>
+          <p class="hint" style="margin-top:2px;margin-bottom:22px">No Ex Tarifário, apenas o Imposto de Importação muda. A economia nos demais tributos vem do efeito cascata sobre as bases de cálculo.</p>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="ipi">IPI</label>
+              <div class="in-wrap has-suf"><input id="ipi" inputmode="decimal" value="15" autocomplete="off" /><span class="affix suf">%</span></div>
+            </div>
+            <div class="field">
+              <label for="icms">ICMS importação</label>
+              <div class="in-wrap has-suf"><input id="icms" inputmode="decimal" value="18" autocomplete="off" /><span class="affix suf">%</span></div>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="pis">PIS</label>
+              <div class="in-wrap has-suf"><input id="pis" inputmode="decimal" value="1,65" autocomplete="off" /><span class="affix suf">%</span></div>
+            </div>
+            <div class="field">
+              <label for="cofins">COFINS</label>
+              <div class="in-wrap has-suf"><input id="cofins" inputmode="decimal" value="7,6" autocomplete="off" /><span class="affix suf">%</span></div>
+            </div>
+          </div>
+          <div class="field" style="margin-bottom:0">
+            <label for="honorarios">Honorários advocatícios <span style="color:var(--fg-faint)">(sobre a economia)</span></label>
+            <div class="in-wrap has-suf"><input id="honorarios" inputmode="decimal" value="20" autocomplete="off" /><span class="affix suf">%</span></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="adv">
+        <summary>
+          Identificação para o PDF
+          <svg class="chev" viewBox="0 0 12 8"><path d="M1 1.5L6 6L11 1.5"/></svg>
+        </summary>
+        <div class="adv-body">
+          <div class="field">
+            <label for="cliente">Cliente</label>
+            <div class="in-wrap"><input id="cliente" type="text" placeholder="Nome da empresa" autocomplete="off" /></div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="produto">Produto / mercadoria</label>
+              <div class="in-wrap"><input id="produto" type="text" placeholder="Ex.: linha de envase" autocomplete="off" /></div>
+            </div>
+            <div class="field">
+              <label for="ncm">NCM</label>
+              <div class="in-wrap"><input id="ncm" type="text" placeholder="0000.00.00" autocomplete="off" /></div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+    </section>
+
+    <!-- ───── RESULTADO ───── -->
+    <aside class="results on-deep" aria-label="Resultado do cálculo">
+      <span class="res-eyebrow">Economia tributária estimada</span>
+      <div class="hero-num" id="r-economia">R$ 0,00</div>
+      <p class="hero-sub">Diferença de carga tributária entre importar com a alíquota cheia e com o Ex Tarifário. Economia efetiva ao cliente, já descontados os honorários: <b id="r-efetiva-inline">R$ 0,00</b>.</p>
+
+      <div class="compare">
+        <div>
+          <div class="c-lbl">Custo atual</div>
+          <div class="c-val" id="r-custo-atual">R$ 0,00</div>
+        </div>
+        <div class="arrow-mid" aria-hidden="true">
+          <svg viewBox="0 0 30 14"><path d="M1 7 H26 M21 2 L27 7 L21 12"/></svg>
+        </div>
+        <div>
+          <div class="c-lbl">Com Ex Tarifário</div>
+          <div class="c-val ex" id="r-custo-ex">R$ 0,00</div>
+        </div>
+      </div>
+
+      <div class="ledger">
+        <div class="row">
+          <span class="lab">Economia tributária bruta</span>
+          <span class="num" id="r-bruta">R$ 0,00</span>
+        </div>
+        <div class="row">
+          <span class="lab">Honorários advocatícios <span id="r-hon-pct" style="opacity:.7">(20%)</span></span>
+          <span class="num minus" id="r-honorarios">− R$ 0,00</span>
+        </div>
+        <div class="row total">
+          <span class="lab">Economia efetiva</span>
+          <span class="num" id="r-efetiva">R$ 0,00</span>
+        </div>
+      </div>
+
+      <details class="breakdown">
+        <summary>
+          Ver detalhamento dos tributos
+          <svg class="chev" viewBox="0 0 12 8"><path d="M1 1.5L6 6L11 1.5"/></svg>
+        </summary>
+        <table class="tax">
+          <thead>
+            <tr><th>Tributo</th><th>Cenário atual</th><th>Ex Tarifário</th><th>Economia</th></tr>
+          </thead>
+          <tbody id="tax-body"><!-- preenchido via JS --></tbody>
+        </table>
+      </details>
+
+      <div class="disclaimer">
+        <b>Estimativa hipotética.</b> Os valores são uma projeção baseada exclusivamente nos parâmetros informados acima e não constituem promessa ou garantia de resultado. A concessão do Ex Tarifário depende de pleito e deferimento pela autoridade competente. Tributos, alíquotas e bases podem variar conforme NCM, regime e legislação vigente.
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<!-- ───── FOLHA DE IMPRESSÃO ───── -->
+<div id="print-sheet">
+  <div class="ps-top">
+    <div class="ps-brand">
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <circle cx="100" cy="100" r="100" fill="#14251D"/>
+        <circle cx="100" cy="100" r="88" fill="none" stroke="#8F3A2E" stroke-width="1.6"/>
+        <g fill="none" stroke="#C07D6E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z"/>
+          <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(120 100 100)"/>
+          <path d="M100 28 C 66 60, 66 110, 100 142 C 134 110, 134 60, 100 28 Z" transform="rotate(240 100 100)"/>
+        </g>
+        <circle cx="100" cy="100" r="5.5" fill="#8F3A2E"/>
+      </svg>
+      <span class="wm">Tribo<em>Tax</em></span>
+    </div>
+    <div class="ps-meta">
+      Advocacia Tributária<br>
+      Estudo de economia · Ex Tarifário<br>
+      <span id="ps-date"></span>
+    </div>
+  </div>
+
+  <h2 class="ps-title">Estimativa de economia com <em>Ex Tarifário</em></h2>
+  <div class="ps-ident" id="ps-ident"><!-- cliente/produto/ncm --></div>
+
+  <div class="ps-section-label">Premissas consideradas</div>
+  <div class="ps-premissas" id="ps-premissas"></div>
+
+  <div class="ps-headline">
+    <span class="hl-lbl">Economia tributária estimada</span>
+    <span class="hl-num" id="ps-economia">R$ 0,00</span>
+  </div>
+
+  <div class="ps-section-label">Comparativo de carga tributária</div>
+  <table class="ps-table">
+    <thead><tr><th>Tributo</th><th>Cenário atual</th><th>Com Ex Tarifário</th><th>Economia</th></tr></thead>
+    <tbody id="ps-tax-body"></tbody>
+  </table>
+
+  <div class="ps-ledger">
+    <div class="row"><span class="lab">Economia tributária bruta</span><span class="num" id="ps-bruta"></span></div>
+    <div class="row"><span class="lab">Honorários <span id="ps-hon-pct"></span></span><span class="num" id="ps-honorarios"></span></div>
+    <div class="row total"><span class="lab">Economia efetiva</span><span class="num" id="ps-efetiva"></span></div>
+  </div>
+
+  <div class="ps-disclaimer">
+    <b>Estimativa hipotética.</b> Projeção baseada exclusivamente nos parâmetros informados; não constitui promessa ou garantia de resultado. A concessão do Ex Tarifário depende de pleito e deferimento pela autoridade competente. Tributos, alíquotas e bases podem variar conforme NCM, regime e legislação vigente. · TriboTax · Advocacia Tributária
+  </div>
+</div>
+
+<footer id="tt-footer"></footer>
+
+<script src="assets/js/site.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  // Constantes de gross-up "por dentro" (idênticas à planilha-fonte)
+  var GROSSUP_ICMS = 0.82;
+  var GROSSUP_PISCOFINS = 0.9025;
+
+  // Defaults (espelham a planilha CALCULO EX TARIFÁRIO.xlsx)
+  var DEFAULTS = {
+    vAduaneiro: '200.000', cambio: '4,02', despDia: '2.000', dias: '5',
+    iiAtual: '14', iiEx: '2', ipi: '15', icms: '18', pis: '1,65',
+    cofins: '7,6', honorarios: '20'
+  };
+
+  var BRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+  var PCT = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  var brl = function (n) { return BRL.format(isFinite(n) ? n : 0); };
+
+  // Parser pt-BR estrito: ponto = separador de milhar, vírgula = decimal.
+  function parseNum(str) {
+    if (str == null) return 0;
+    str = String(str).trim().replace(/[^\d.,-]/g, '');
+    if (!str) return 0;
+    str = str.replace(/\./g, '').replace(/,/, '.'); // remove milhares, vírgula vira ponto decimal
+    var v = parseFloat(str);
+    return isFinite(v) ? v : 0;
+  }
+
+  // Formata um número no padrão pt-BR de milhar (sem moeda), até 2 casas.
+  function fmtGroup(n) {
+    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(n);
+  }
+
+  function $(id) { return document.getElementById(id); }
+  var IDS = ['vAduaneiro', 'cambio', 'despDia', 'dias', 'iiAtual', 'iiEx', 'ipi', 'icms', 'pis', 'cofins', 'honorarios'];
+
+  // Cadeia de cálculo para um cenário (reproduz a planilha célula a célula)
+  function scenario(A, D, aliqII, aliqIPI, aliqICMS, aliqPIS, aliqCOFINS) {
+    var B = A * aliqII;                                            // II
+    var C = (A + B) * aliqIPI;                                     // IPI
+    var F = (A + (((A + B + C) / GROSSUP_ICMS) * aliqICMS)) / GROSSUP_PISCOFINS; // BC PIS/COFINS
+    var G = F * aliqPIS;                                           // PIS
+    var H = F * aliqCOFINS;                                        // COFINS
+    var E = ((A + B + C + D + G + H) / GROSSUP_ICMS) * aliqICMS;   // ICMS
+    var I = B + C + E + G + H;                                     // Carga tributária
+    return { II: B, IPI: C, desp: D, ICMS: E, PIS: G, COFINS: H, carga: I, custo: A + I };
+  }
+
+  function compute() {
+    var usd = parseNum($('vAduaneiro').value);
+    var cambio = parseNum($('cambio').value);
+    var despDia = parseNum($('despDia').value);
+    var dias = parseNum($('dias').value);
+    var honPct = parseNum($('honorarios').value) / 100;
+
+    var A = usd * cambio;        // Valor aduaneiro CIF
+    var D = despDia * dias;      // Despesa alfandegária total
+
+    var rates = {
+      ipi: parseNum($('ipi').value) / 100,
+      icms: parseNum($('icms').value) / 100,
+      pis: parseNum($('pis').value) / 100,
+      cofins: parseNum($('cofins').value) / 100
+    };
+    var atual = scenario(A, D, parseNum($('iiAtual').value) / 100, rates.ipi, rates.icms, rates.pis, rates.cofins);
+    var ex = scenario(A, D, parseNum($('iiEx').value) / 100, rates.ipi, rates.icms, rates.pis, rates.cofins);
+
+    var bruta = atual.custo - ex.custo;
+    var hon = bruta * honPct;
+    var efetiva = bruta - hon;
+
+    return { A: A, D: D, atual: atual, ex: ex, bruta: bruta, hon: hon, honPct: honPct, efetiva: efetiva, cif: A };
+  }
+
+  var TAX_ROWS = [
+    { key: 'II', label: 'Imposto de Importação' },
+    { key: 'IPI', label: 'IPI' },
+    { key: 'ICMS', label: 'ICMS importação' },
+    { key: 'PIS', label: 'PIS importação' },
+    { key: 'COFINS', label: 'COFINS importação' },
+    { key: 'desp', label: 'Despesas alfandegárias' }
+  ];
+
+  function buildTaxRows(r, cellTag) {
+    var html = '';
+    TAX_ROWS.forEach(function (row) {
+      var a = r.atual[row.key], e = r.ex[row.key], s = a - e;
+      html += '<tr><td>' + row.label + '</td><td>' + brl(a) + '</td><td>' + brl(e) + '</td>'
+        + '<td class="save">' + (s > 0.005 ? brl(s) : '—') + '</td></tr>';
+    });
+    html += '<tr class="sum"><td>Carga tributária total</td><td>' + brl(r.atual.carga) + '</td><td>' + brl(r.ex.carga) + '</td><td class="save">' + brl(r.atual.carga - r.ex.carga) + '</td></tr>';
+    html += '<tr class="sum"><td>Custo total da mercadoria</td><td>' + brl(r.atual.custo) + '</td><td>' + brl(r.ex.custo) + '</td><td class="save">' + brl(r.bruta) + '</td></tr>';
+    return html;
+  }
+
+  function fmtInt(n) { return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(n); }
+
+  function renderPrint(r) {
+    var cliente = $('cliente').value.trim();
+    var produto = $('produto').value.trim();
+    var ncm = $('ncm').value.trim();
+    var idParts = [];
+    if (cliente) idParts.push('<b>' + escapeHtml(cliente) + '</b>');
+    if (produto) idParts.push('<span>Produto:</span> ' + escapeHtml(produto));
+    if (ncm) idParts.push('<span>NCM:</span> ' + escapeHtml(ncm));
+    $('ps-ident').innerHTML = idParts.join(' &nbsp;·&nbsp; ');
+
+    var usd = parseNum($('vAduaneiro').value), cambio = parseNum($('cambio').value);
+    var prem = [
+      ['Valor aduaneiro', 'US$ ' + fmtInt(usd)],
+      ['Câmbio', brl(cambio) + ' / US$'],
+      ['Valor aduaneiro CIF', brl(r.cif)],
+      ['Despesa alfandegária', brl(r.D) + ' (' + $('dias').value + ' dias)'],
+      ['II atual → Ex', $('iiAtual').value + '% → ' + $('iiEx').value + '%'],
+      ['IPI / ICMS / PIS / COFINS', $('ipi').value + '% / ' + $('icms').value + '% / ' + $('pis').value + '% / ' + $('cofins').value + '%']
+    ];
+    $('ps-premissas').innerHTML = prem.map(function (p) {
+      return '<div class="pp"><span class="k">' + p[0] + '</span><span class="v">' + p[1] + '</span></div>';
+    }).join('');
+
+    $('ps-economia').textContent = brl(r.bruta);
+    $('ps-tax-body').innerHTML = buildTaxRows(r);
+    $('ps-bruta').textContent = brl(r.bruta);
+    $('ps-hon-pct').textContent = '(' + PCT.format(r.honPct * 100) + '%)';
+    $('ps-honorarios').textContent = '− ' + brl(r.hon);
+    $('ps-efetiva').textContent = brl(r.efetiva);
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function render() {
+    var r = compute();
+    $('r-cif').textContent = brl(r.cif);
+    $('r-economia').textContent = brl(r.bruta);
+    $('r-custo-atual').textContent = brl(r.atual.custo);
+    $('r-custo-ex').textContent = brl(r.ex.custo);
+    $('r-bruta').textContent = brl(r.bruta);
+    $('r-honorarios').textContent = '− ' + brl(r.hon);
+    $('r-hon-pct').textContent = '(' + PCT.format(r.honPct * 100) + '%)';
+    $('r-efetiva').textContent = brl(r.efetiva);
+    $('r-efetiva-inline').textContent = brl(r.efetiva);
+    $('tax-body').innerHTML = buildTaxRows(r);
+    renderPrint(r);
+  }
+
+  // Wiring
+  IDS.forEach(function (id) {
+    var el = $(id);
+    if (el) el.addEventListener('input', render);
+  });
+  // Reagrupa milhares nos campos de valor ao sair do campo (reforça o padrão pt-BR).
+  ['vAduaneiro', 'despDia'].forEach(function (id) {
+    var el = $(id);
+    if (el) el.addEventListener('blur', function () {
+      if (el.value.trim() !== '') { el.value = fmtGroup(parseNum(el.value)); render(); }
+    });
+  });
+  ['cliente', 'produto', 'ncm'].forEach(function (id) {
+    var el = $(id);
+    if (el) el.addEventListener('input', function () { renderPrint(compute()); });
+  });
+
+  $('btn-reset').addEventListener('click', function () {
+    Object.keys(DEFAULTS).forEach(function (id) { if ($(id)) $(id).value = DEFAULTS[id]; });
+    render();
+  });
+
+  $('btn-print').addEventListener('click', function () {
+    var d = new Date();
+    $('ps-date').textContent = d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+    renderPrint(compute());
+    window.print();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
