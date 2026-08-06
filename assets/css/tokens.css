@@ -355,6 +355,24 @@ body > header { z-index: 50; }
 .footer a { color: var(--fg-on-deep); }
 .footer .small { color: var(--fg-on-deep-muted); }
 
+/* Barra legal: identificação da pessoa jurídica + copyright */
+.footer-legal {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+.footer-legal-id {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.footer-legal-id .small { line-height: 1.6; }
+@media (max-width: 720px) {
+  .footer-legal { align-items: flex-start; }
+}
+
 /* ——— Marginália técnica (estilo nota-de-rodapé editorial) ——— */
 .margin-note {
   font-family: var(--f-mono);

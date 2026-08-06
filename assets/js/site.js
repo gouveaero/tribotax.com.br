@@ -128,7 +128,12 @@ function renderFooter() {
             </div>
           </div>
         </div>
-        <div class="rule" style="margin-top: 72px; padding-top: 24px; display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap">
+        <div class="rule footer-legal" style="margin-top: 72px; padding-top: 24px">
+          <div class="footer-legal-id">
+            <span class="small mono">TRIBOTAX INTELIGÊNCIA TRIBUTÁRIA E TECNOLOGIA LTDA</span>
+            <span class="small mono">CNPJ 68.391.925/0001-44</span>
+            <span class="small mono">Rua Paraíba, 550 · 8º andar, sala 800 · Savassi · <span style="white-space:nowrap">Belo Horizonte/MG</span> · <span style="white-space:nowrap">CEP 30.130-141</span></span>
+          </div>
           <span class="small mono">© 2026 TRIBOTAX · ADVOCACIA TRIBUTÁRIA</span>
         </div>
       </div>
