@@ -1,0 +1,836 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Exclusão do Simples Nacional · TriboTax</title>
+<meta name="description" content="Termo de Exclusão do Simples Nacional: prazo de 90 dias, ciência pelo DTE-SN e a janela de opção que se encerra em 30 de setembro de 2026. Diagnóstico gratuito da estratégia de regularização." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="stylesheet" href="assets/css/tokens.css" />
+<style>
+
+/* ── Hero ─────────────────────────────────────────────────── */
+.hero {
+  padding: clamp(56px,8vw,120px) 0 clamp(64px,8vw,112px);
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 50% 70% at 100% 0%, rgba(143,58,46,0.12), transparent 65%);
+  pointer-events: none;
+}
+.hero h1 { max-width: 15ch; }
+.hero .lede { max-width: 62ch; margin-top: var(--sp-6); }
+
+/* Diptico dos dois prazos. Não é vitrine de métricas: cada bloco é uma
+   obrigação legal com data e fundamento próprios. */
+.prazos {
+  margin-top: var(--sp-8);
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--rule);
+}
+@media (max-width:760px) { .prazos { grid-template-columns: 1fr; } }
+.prazo {
+  padding: var(--sp-6) var(--sp-6) var(--sp-6) 0;
+  border-right: 1px solid var(--rule);
+}
+.prazo:last-child { border-right: none; padding-left: var(--sp-6); }
+@media (max-width:760px) {
+  .prazo { border-right: none; border-bottom: 1px solid var(--rule); padding: var(--sp-5) 0; }
+  .prazo:last-child { border-bottom: none; padding-left: 0; }
+}
+.prazo-label {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--ink-500); margin-bottom: 14px;
+}
+.prazo-data {
+  font-family: var(--f-display); font-size: clamp(30px,3.4vw,42px);
+  line-height: 1.05; color: var(--forest-900); margin-bottom: 10px;
+}
+.prazo-data em { font-style: italic; color: var(--copper-500); }
+.prazo p { font-size: 14px; line-height: 1.6; color: var(--ink-700); margin: 0 0 10px; max-width: 40ch; }
+.prazo .base {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-300);
+}
+.contagem {
+  margin-top: var(--sp-6);
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--copper-600);
+  display: flex; align-items: center; gap: 10px;
+}
+.contagem::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--copper-500); flex-shrink: 0;
+}
+
+/* ── Trust strip ──────────────────────────────────────────── */
+.trust-strip {
+  background: var(--clay-200);
+  padding: var(--sp-5) 0;
+  border-top: 1px solid var(--clay-300);
+  border-bottom: 1px solid var(--clay-300);
+}
+.trust-inner {
+  display: flex; align-items: center; justify-content: center;
+  gap: var(--sp-7); flex-wrap: wrap;
+}
+.trust-item {
+  display: flex; align-items: center; gap: var(--sp-3);
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-700);
+}
+.trust-item svg { flex-shrink: 0; }
+
+/* ── Linha do tempo ───────────────────────────────────────── */
+.linha { background: var(--clay-100); }
+.tl { margin-top: var(--sp-8); display: flex; flex-direction: column; }
+.tl-item {
+  display: grid; grid-template-columns: 132px 28px 1fr;
+  gap: 0; align-items: start;
+}
+@media (max-width:720px) { .tl-item { grid-template-columns: 92px 24px 1fr; } }
+.tl-quando {
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink-500);
+  padding: 2px var(--sp-4) 0 0; text-align: right; line-height: 1.5;
+}
+.tl-eixo { position: relative; display: flex; flex-direction: column; align-items: center; }
+.tl-ponto {
+  width: 9px; height: 9px; border-radius: 50%; margin-top: 5px;
+  background: var(--clay-400); flex-shrink: 0;
+  transition: transform .5s var(--ease-out-expo), background .5s ease;
+}
+.tl-linha { width: 1px; flex: 1; background: var(--clay-300); min-height: 40px; }
+.tl-item:last-child .tl-linha { display: none; }
+.tl-corpo { padding: 0 0 var(--sp-6) var(--sp-5); }
+.tl-corpo h4 {
+  font-family: var(--f-display); font-size: clamp(21px,2vw,27px);
+  font-weight: 500; line-height: 1.15; margin: 0 0 8px; color: var(--forest-900);
+}
+.tl-corpo p { font-size: 15px; line-height: 1.6; color: var(--ink-700); margin: 0; max-width: 58ch; }
+.tl-corpo .fonte {
+  display: block; margin-top: 8px;
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-300);
+}
+/* O marco vivo: o único ponto em cobre é a data que ainda depende de ação. */
+.tl-item.agora .tl-ponto { background: var(--copper-500); }
+.tl-item.agora.in .tl-ponto { transform: scale(1.6); }
+.tl-item.agora .tl-quando { color: var(--copper-600); }
+.tl-item.agora .tl-corpo h4 { color: var(--copper-700); }
+.tl-item.vencido .tl-quando,
+.tl-item.vencido .tl-corpo h4,
+.tl-item.vencido .tl-corpo p { opacity: .62; }
+
+/* ── Seção escura: ciência tácita ─────────────────────────── */
+.ciencia {
+  background: var(--forest-900); color: var(--fg-on-deep);
+  position: relative; overflow: hidden;
+}
+.ciencia::before {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 55% 60% at 88% 18%, rgba(143,58,46,0.2), transparent 60%),
+    radial-gradient(ellipse 40% 50% at 0% 92%, rgba(35,64,50,0.32), transparent 60%);
+  pointer-events: none;
+}
+.ciencia .container { position: relative; z-index: 2; }
+.ciencia h2 { max-width: 18ch; }
+.ciencia .lede { max-width: 60ch; }
+.cit {
+  margin-top: var(--sp-7);
+  padding: var(--sp-6) var(--sp-7);
+  border-left: 1px solid var(--copper-500);
+  background: rgba(231,222,201,0.04);
+  border-radius: 0 var(--radius-m) var(--radius-m) 0;
+}
+.cit p {
+  font-family: var(--f-display); font-size: clamp(20px,2.2vw,29px);
+  font-style: italic; line-height: 1.3; color: var(--fg-on-deep);
+  margin: 0 0 14px; max-width: 46ch;
+}
+.cit .autor {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--copper-300);
+}
+.bifurca {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--sp-5); margin-top: var(--sp-7);
+}
+@media (max-width:720px) { .bifurca { grid-template-columns: 1fr; } }
+.bif {
+  padding: var(--sp-6); border: 1px solid var(--rule-deep); border-radius: var(--radius-m);
+}
+.bif .cond {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--copper-300); margin-bottom: 12px;
+}
+.bif h4 {
+  font-family: var(--f-display); font-size: clamp(20px,1.9vw,26px);
+  font-weight: 500; margin: 0 0 10px; color: var(--fg-on-deep);
+}
+.bif p { font-size: 14px; line-height: 1.65; color: var(--fg-on-deep-muted); margin: 0; }
+
+/* ── Contraste RFB × PGFN ─────────────────────────────────── */
+.escopo {
+  margin-top: var(--sp-6);
+  padding: var(--sp-5) var(--sp-6);
+  background: var(--clay-100); border: 1px solid var(--clay-200);
+  border-radius: var(--radius-m);
+}
+.escopo .ref {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--forest-700); margin-bottom: 10px;
+}
+.escopo p { font-size: 14px; line-height: 1.65; color: var(--ink-700); margin: 0; max-width: 70ch; }
+.escopo p strong { color: var(--forest-900); }
+
+.tab-wrap { overflow-x: auto; margin-top: var(--sp-6); }
+.tab { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 640px; }
+.tab th {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; text-align: left; padding: 13px 16px;
+  background: var(--forest-900); color: var(--clay-50); vertical-align: top;
+}
+.tab th:first-child { background: var(--forest-800); width: 26%; }
+.tab td {
+  padding: 15px 16px; border-bottom: 1px solid var(--clay-200);
+  color: var(--ink-700); vertical-align: top; line-height: 1.55;
+}
+.tab tr:last-child td { border-bottom: none; }
+.tab td:first-child {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink-500);
+}
+.tab .lado-pgfn { background: rgba(143,58,46,0.05); }
+.tab .destaque { font-family: var(--f-display); font-size: 25px; font-style: italic; color: var(--copper-500); line-height: 1.1; }
+.tab .nulo { color: var(--ink-300); }
+.tab .fund { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--ink-300); text-transform: uppercase; }
+
+.ressalva {
+  margin-top: var(--sp-6); padding-top: var(--sp-5);
+  border-top: 1px solid var(--rule);
+  display: grid; grid-template-columns: auto 1fr; gap: var(--sp-5);
+  align-items: start;
+}
+@media (max-width:640px) { .ressalva { grid-template-columns: 1fr; gap: var(--sp-4); } }
+.ressalva .marca {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--copper-600); white-space: nowrap; padding-top: 3px;
+}
+.ressalva p { font-size: 14px; line-height: 1.7; color: var(--ink-700); margin: 0; max-width: 68ch; }
+.ressalva p strong { color: var(--forest-900); }
+
+/* ── Os três eixos do diagnóstico ─────────────────────────── */
+.eixos { background: var(--clay-100); }
+.eixos-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--clay-300); margin-top: var(--sp-8);
+  border: 1px solid var(--clay-300);
+}
+@media (max-width:860px) { .eixos-grid { grid-template-columns: 1fr; } }
+.eixo { background: var(--clay-50); padding: var(--sp-6) var(--sp-6) var(--sp-7); }
+.eixo .marca {
+  font-family: var(--f-display); font-style: italic; font-size: 52px;
+  line-height: 1; color: var(--forest-800); opacity: .3; margin-bottom: var(--sp-4);
+}
+.eixo h4 {
+  font-family: var(--f-display); font-size: clamp(21px,1.9vw,27px);
+  line-height: 1.12; margin: 0 0 12px; color: var(--forest-900);
+}
+.eixo p { font-size: 14px; line-height: 1.65; color: var(--ink-700); margin: 0 0 12px; }
+.eixo .base {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink-300);
+}
+.sinergia {
+  margin-top: var(--sp-7);
+  background: var(--forest-900); color: var(--fg-on-deep);
+  border-radius: var(--radius-m); padding: var(--sp-7);
+  position: relative; overflow: hidden;
+}
+.sinergia::before {
+  content: ""; position: absolute; top: -40px; right: -40px;
+  width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(143,58,46,0.28), transparent 65%);
+}
+.sinergia .marca {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--copper-300); margin-bottom: 16px;
+  position: relative; z-index: 1;
+}
+.sinergia p {
+  font-size: clamp(15px,1.2vw,18px); line-height: 1.65;
+  color: var(--fg-on-deep-muted); max-width: 70ch; margin: 0;
+  position: relative; z-index: 1;
+}
+.sinergia p strong { color: var(--fg-on-deep); }
+
+/* ── Como funciona ────────────────────────────────────────── */
+.passos { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--sp-6); margin-top: var(--sp-7); }
+@media (max-width:860px) { .passos { grid-template-columns: 1fr; gap: var(--sp-5); } }
+.passo { border-top: 1px solid var(--forest-900); padding-top: var(--sp-4); }
+.passo .n {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--copper-600); margin-bottom: 10px;
+}
+.passo h5 { font-family: var(--f-display); font-size: 22px; margin: 0 0 8px; color: var(--forest-900); font-weight: 500; }
+.passo p { font-size: 14px; line-height: 1.6; color: var(--ink-700); margin: 0; }
+
+/* ── Captura ──────────────────────────────────────────────── */
+.cta-section {
+  background: var(--copper-500); color: var(--ink-900);
+  position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.08 0 0 0 0 0.05 0 0 0 0.22 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.5; mix-blend-mode: multiply; pointer-events: none;
+}
+.cta-section .container { position: relative; z-index: 2; }
+.cta-layout { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-9); align-items: start; }
+@media (max-width:900px) { .cta-layout { grid-template-columns: 1fr; gap: var(--sp-7); } }
+.cta-section h2 {
+  font-family: var(--f-display); font-size: clamp(34px,3.8vw,58px);
+  line-height: 1.05; font-weight: 500; margin: 0 0 16px; letter-spacing: -0.015em;
+}
+.cta-section h2 em { color: var(--copper-700); font-style: italic; }
+.cta-lede { font-size: 17px; line-height: 1.6; color: var(--ink-900); max-width: 50ch; margin: 0 0 var(--sp-6); }
+.cta-lista { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 11px; }
+.cta-lista li { padding-left: 20px; position: relative; font-size: 14px; color: var(--ink-900); line-height: 1.55; }
+.cta-lista li::before { content: ""; position: absolute; left: 0; top: 10px; width: 10px; height: 1px; background: var(--forest-900); }
+
+.form-wrap {
+  background: rgba(246,241,232,0.96);
+  border-radius: var(--radius-m); padding: var(--sp-6);
+  border: 1px solid rgba(42,18,8,0.1);
+}
+.form-titulo { font-family: var(--f-display); font-size: 23px; font-style: italic; color: var(--ink-900); margin: 0 0 4px; }
+.form-sub { font-size: 13px; line-height: 1.5; color: rgba(42,18,8,0.6); margin: 0 0 var(--sp-5); }
+.lead-form { display: flex; flex-direction: column; gap: var(--sp-3); }
+.campo { display: flex; flex-direction: column; gap: 5px; }
+.campo label {
+  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: rgba(42,18,8,0.55);
+}
+.form-input, .form-select {
+  width: 100%; padding: 13px 16px;
+  font-family: var(--f-body); font-size: 15px; color: var(--ink-900);
+  background: #fff; border: 1px solid rgba(42,18,8,0.2);
+  border-radius: var(--radius-s);
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.form-select {
+  appearance: none; cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1.5L6 6L11 1.5' stroke='%232A2A26' stroke-width='1.4' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat: no-repeat; background-position: right 16px center;
+  padding-right: 42px;
+}
+.form-input:focus, .form-select:focus {
+  outline: none; border-color: var(--ink-900);
+  box-shadow: 0 0 0 3px rgba(26,14,8,0.06);
+}
+.form-input::placeholder { color: rgba(42,18,8,0.4); }
+.form-input:user-invalid, .form-select:user-invalid { border-color: var(--copper-600); }
+.dupla { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+@media (max-width:520px) { .dupla { grid-template-columns: 1fr; } }
+.lead-btn {
+  background: var(--forest-900); color: var(--copper-300);
+  justify-content: center; width: 100%; padding: 15px 20px;
+  font-family: var(--f-body); font-size: 15px; margin-top: var(--sp-3); cursor: pointer;
+  display: inline-flex; align-items: center; gap: 12px;
+  border: none; border-radius: var(--radius-s);
+  transition: background .25s ease;
+}
+.lead-btn:hover:not(:disabled) { background: var(--forest-800); }
+.lead-btn:disabled { opacity: .72; cursor: progress; }
+.lead-btn .arrow { width: 16px; height: 10px; }
+.lead-btn .arrow path { stroke: currentColor; fill: none; stroke-width: 1.4; }
+.form-erro { font-size: 13px; color: var(--copper-700); text-align: center; margin: 6px 0 0; line-height: 1.5; }
+.form-erro a { color: inherit; text-decoration: underline; }
+.form-nota {
+  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(42,18,8,0.45); text-align: center; margin: 10px 0 0; line-height: 1.7;
+}
+
+/* ── Aviso educativo ──────────────────────────────────────── */
+.aviso { background: var(--clay-100); border-top: 1px solid var(--clay-200); }
+.aviso .container { padding-top: var(--sp-6); padding-bottom: var(--sp-6); }
+.aviso p {
+  font-size: 13px; line-height: 1.7; color: var(--ink-500);
+  max-width: 82ch; margin: 0 auto; text-align: center;
+}
+.aviso p strong { color: var(--ink-700); }
+
+/* ── Sticky mobile ────────────────────────────────────────── */
+.sticky-cta-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--forest-900); padding: 16px 20px;
+  z-index: 50; display: none;
+  border-top: 2px solid rgba(143,58,46,0.5);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+}
+.sticky-cta-bar a {
+  color: var(--copper-300); font-size: 15px; font-weight: 500;
+  text-decoration: none; display: flex; align-items: center;
+  gap: 10px; width: 100%; justify-content: center;
+}
+@media (max-width: 860px) {
+  .hero { padding: 32px 0 44px; }
+  .hero h1 { font-size: clamp(36px,8.6vw,50px); }
+  .sticky-cta-bar { display: block !important; }
+  .sticky-cta-bar.form-in-view { display: none !important; }
+  body { padding-bottom: 72px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tl-item.agora.in .tl-ponto { transform: none; }
+}
+
+</style>
+<!-- Meta Pixel + CAPI (ver .tracking.json) -->
+<script src="assets/js/track.js?v=1"></script>
+</head>
+<body data-tt-viewcontent="LP Simples Nacional — Janela de Setembro">
+<header id="tt-nav"></header>
+
+<!-- ── HERO ──────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-bg-symbol">§</div>
+  <div class="container">
+    <span class="eyebrow">Simples Nacional · Termo de Exclusão · LC 123/2006, art. 17, V</span>
+    <h1 class="h-display h-1">Exclusão do Simples: o que ainda dá para fazer até <em>30 de setembro</em>.</h1>
+    <p class="lede">Em março de 2026 a Receita Federal disponibilizou 1.102.924 Termos de Exclusão no Domicílio Tributário Eletrônico, referentes a cerca de R$ 12,9 bilhões em débitos. O prazo de 90 dias para regularizar já se encerrou para boa parte deles. Duas coisas, porém, ainda dependem do dia 30 de setembro.</p>
+
+    <div class="prazos">
+      <div class="prazo">
+        <div class="prazo-label">01 · Janela de opção</div>
+        <div class="prazo-data">1º a <em>30 de setembro</em> de 2026</div>
+        <p>Período para solicitar a opção pelo Simples Nacional com efeitos a partir de 1º de janeiro de 2027. A Reforma deslocou esse prazo de janeiro para setembro.</p>
+        <div class="base">LC 214/2025</div>
+      </div>
+      <div class="prazo">
+        <div class="prazo-label">02 · Transação na dívida ativa</div>
+        <div class="prazo-data">Até <em>30 de setembro</em>, 19h</div>
+        <p>Encerramento da adesão ao Edital PGDAU 6/2026, que trata da negociação de débitos já inscritos em dívida ativa da União.</p>
+        <div class="base">Edital PGDAU 6/2026 · Lei 13.988/2020</div>
+      </div>
+    </div>
+
+    <p class="contagem" id="contagem" aria-live="polite"></p>
+
+    <div class="hero-cta" style="margin-top:var(--sp-7); display:flex; gap:12px; flex-wrap:wrap;">
+      <a href="#captura" class="btn btn-primary">
+        Solicitar diagnóstico gratuito
+        <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+      </a>
+      <a href="#contraste" class="btn btn-ghost">Entender o mecanismo</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRUST ─────────────────────────────────────────────── -->
+<div class="trust-strip">
+  <div class="container trust-inner">
+    <div class="trust-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5l5.5 2.5v4c0 3-2.3 5.5-5.5 6.5C4.8 13.5 2.5 11 2.5 8V4L8 1.5z"/></svg>
+      Análise documental
+    </div>
+    <div class="trust-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.4V8l2.4 1.6"/></svg>
+      Retorno em 48 horas
+    </div>
+    <div class="trust-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 13.5h11M4.5 13.5V7M8 13.5V7M11.5 13.5V7M2 5.5L8 2.5l6 3H2z"/></svg>
+      Fundamentado em norma vigente
+    </div>
+    <div class="trust-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg>
+      Sem compromisso inicial
+    </div>
+  </div>
+</div>
+
+<!-- ── LINHA DO TEMPO ────────────────────────────────────── -->
+<section class="linha">
+  <div class="container">
+    <span class="eyebrow reveal">Como o calendário chegou até aqui</span>
+    <h2 class="h-display h-2 reveal" data-delay="60" style="max-width:17ch">Um prazo que corre <em>sozinho</em>.</h2>
+
+    <div class="tl">
+      <div class="tl-item vencido reveal">
+        <div class="tl-quando">20 a 23<br>mar 2026</div>
+        <div class="tl-eixo"><div class="tl-ponto"></div><div class="tl-linha"></div></div>
+        <div class="tl-corpo">
+          <h4>Os Termos de Exclusão vão para o DTE-SN</h4>
+          <p>1.102.924 contribuintes notificados, sendo 404.368 MEI e 698.556 microempresas e empresas de pequeno porte, num total aproximado de R$ 12,9 bilhões.</p>
+          <span class="fonte">Receita Federal · notícia de março de 2026</span>
+        </div>
+      </div>
+
+      <div class="tl-item vencido reveal" data-delay="80">
+        <div class="tl-quando">45º dia<br>após</div>
+        <div class="tl-eixo"><div class="tl-ponto"></div><div class="tl-linha"></div></div>
+        <div class="tl-corpo">
+          <h4>A ciência acontece, com ou sem leitura</h4>
+          <p>Quem consulta o Domicílio Tributário Eletrônico dentro de 45 dias toma ciência na data da consulta. Quem não consulta toma ciência de forma presumida no quadragésimo quinto dia, pelo simples decurso do prazo.</p>
+          <span class="fonte">LC 123/2006, art. 16 · Resolução CGSN 140/2018, art. 122</span>
+        </div>
+      </div>
+
+      <div class="tl-item vencido reveal" data-delay="160">
+        <div class="tl-quando">90 dias<br>da ciência</div>
+        <div class="tl-eixo"><div class="tl-ponto"></div><div class="tl-linha"></div></div>
+        <div class="tl-corpo">
+          <h4>Encerra-se o prazo de regularização</h4>
+          <p>Regularizar a totalidade dos débitos dentro desses 90 dias torna a exclusão automaticamente sem efeito, sem necessidade de qualquer outro procedimento. Pagamento integral, compensação e também o parcelamento contam como regularização.</p>
+          <span class="fonte">LC 123/2006, art. 31, §2º, red. da LC 216/2025</span>
+        </div>
+      </div>
+
+      <div class="tl-item agora reveal" data-delay="240">
+        <div class="tl-quando">1º a 30<br>set 2026</div>
+        <div class="tl-eixo"><div class="tl-ponto"></div><div class="tl-linha"></div></div>
+        <div class="tl-corpo">
+          <h4>A janela de opção para 2027</h4>
+          <p>Único período do ano para solicitar a opção pelo regime com efeitos a partir de 1º de janeiro de 2027. É também o último mês de adesão ao Edital PGDAU 6/2026, para débitos já inscritos em dívida ativa.</p>
+          <span class="fonte">LC 214/2025 · Edital PGDAU 6/2026, art. 1º</span>
+        </div>
+      </div>
+
+      <div class="tl-item reveal" data-delay="320">
+        <div class="tl-quando">1º jan<br>2027</div>
+        <div class="tl-eixo"><div class="tl-ponto"></div><div class="tl-linha"></div></div>
+        <div class="tl-corpo">
+          <h4>A exclusão passa a produzir efeitos</h4>
+          <p>Até 31 de dezembro de 2026 a empresa segue optante e deve apurar como tal. A partir de janeiro, passa a Lucro Presumido ou Real, com carga e obrigações acessórias distintas ao longo de todo o ano-calendário.</p>
+          <span class="fonte">LC 123/2006, art. 31, IV</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CIÊNCIA TÁCITA ────────────────────────────────────── -->
+<section class="ciencia on-deep">
+  <div class="container">
+    <span class="eyebrow reveal">O detalhe que quase ninguém verifica</span>
+    <h2 class="h-display h-2 reveal" data-delay="60">A notificação pode já ter sido <em>entregue</em> sem ninguém ter lido.</h2>
+    <p class="lede reveal" data-delay="120">A adesão ao Domicílio Tributário Eletrônico do Simples Nacional é obrigatória e automática para todo optante, e não existe a opção de receber a comunicação por outro meio. A ciência feita ali é considerada pessoal para todos os efeitos legais.</p>
+
+    <div class="cit reveal" data-delay="180">
+      <p>A não realização de consulta periódica ao DTE-SN poderá acarretar a exclusão do contribuinte do Simples Nacional.</p>
+      <div class="autor">Receita Federal · Perguntas e Respostas · Exclusão 2026</div>
+    </div>
+
+    <div class="bifurca">
+      <div class="bif reveal" data-delay="220">
+        <div class="cond">Consultou em até 45 dias</div>
+        <h4>Ciência na data da consulta</h4>
+        <p>O prazo de 90 dias para regularizar começa a correr no dia em que o Termo foi efetivamente aberto no sistema.</p>
+      </div>
+      <div class="bif reveal" data-delay="280">
+        <div class="cond">Não consultou</div>
+        <h4>Ciência presumida no 45º dia</h4>
+        <p>O prazo começa a correr sozinho, pelo decurso, independentemente de leitura. É o cenário em que a empresa descobre a exclusão depois de o prazo ter passado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTRASTE ─────────────────────────────────────────── -->
+<section id="contraste">
+  <div class="container">
+    <span class="eyebrow reveal">O mesmo débito, dois endereços</span>
+    <h2 class="h-display h-2 reveal" data-delay="60" style="max-width:19ch">Onde a dívida está muda <em>o que a lei permite</em> negociar.</h2>
+
+    <div class="escopo reveal" data-delay="120">
+      <div class="ref">Escopo desta comparação</div>
+      <p>O quadro abaixo trata de <strong>débitos de tributos do Simples Nacional</strong>. A Receita Federal realiza transação com desconto por meio dos Editais 9 e 10 de 2026, mas ambos <strong>vedam expressamente</strong> a inclusão de tributos do regime unificado, ressalvadas as multas por descumprimento de obrigação acessória. É essa vedação, e não a ausência do instituto, que produz a assimetria.</p>
+    </div>
+
+    <div class="tab-wrap reveal" data-delay="160">
+      <table class="tab">
+        <thead>
+          <tr>
+            <th scope="col">Tributo do Simples Nacional</th>
+            <th scope="col">Débito na Receita Federal</th>
+            <th scope="col" class="lado-pgfn">Inscrito em dívida ativa (PGFN)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Transação com desconto</td>
+            <td><span class="nulo">Vedada</span><br><span class="fund">Editais RFB 9 e 10/2026</span></td>
+            <td class="lado-pgfn">Prevista<br><span class="fund">Edital PGDAU 6/2026</span></td>
+          </tr>
+          <tr>
+            <td>Redução possível</td>
+            <td><span class="nulo">Não há</span></td>
+            <td class="lado-pgfn"><span class="destaque">até 70%</span><br>sobre o valor total da inscrição, para ME e EPP</td>
+          </tr>
+          <tr>
+            <td>Prazo de pagamento</td>
+            <td>até 60 meses<br><span class="fund">Lei 10.522/2002, art. 10 · LC 123/2006, art. 21, §15</span></td>
+            <td class="lado-pgfn"><span class="destaque">até 145 meses</span><br>para ME e EPP<br><span class="fund">Lei 13.988/2020, art. 11, §3º</span></td>
+          </tr>
+          <tr>
+            <td>Instrumento</td>
+            <td>Parcelamento ordinário ou parcelamento do Simples</td>
+            <td class="lado-pgfn">Transação por adesão, conforme capacidade de pagamento</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ressalva reveal" data-delay="200">
+      <div class="marca">Precisão necessária</div>
+      <p>O desconto <strong>nunca alcança o valor principal do tributo</strong>. O art. 11, §2º, I da Lei 13.988/2020 veda expressamente a transação que reduza o montante principal: a redução incide sobre juros, multas e encargos legais, e o percentual máximo é medido <strong>sobre o valor total de cada inscrição</strong>. Os limites de 70% e 145 meses são tetos legais para microempresas e empresas de pequeno porte, não valores aplicáveis a todo caso — cada proposta depende da capacidade de pagamento apurada e da modalidade cabível.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── EIXOS DO DIAGNÓSTICO ──────────────────────────────── -->
+<section class="eixos">
+  <div class="container">
+    <span class="eyebrow reveal">O que o diagnóstico examina</span>
+    <h2 class="h-display h-2 reveal" data-delay="60" style="max-width:20ch">Antes de assinar qualquer parcelamento, três perguntas.</h2>
+
+    <div class="eixos-grid">
+      <div class="eixo reveal" data-delay="100">
+        <div class="marca">i</div>
+        <h4>O que precisa ser parcelado</h4>
+        <p>Levantamento do passivo no e-CAC, separando o que está na Receita Federal do que já foi inscrito em dívida ativa. Regularizar dentro do prazo cancela o Termo de Exclusão, e o parcelamento também conta como regularização.</p>
+        <div class="base">LC 123/2006, art. 31, §2º</div>
+      </div>
+      <div class="eixo reveal" data-delay="160">
+        <div class="marca">ii</div>
+        <h4>O que pode ser negociado</h4>
+        <p>Verificação de enquadramento nas modalidades do edital vigente e da capacidade de pagamento apurada, que é o que define a faixa de redução cabível e o número de prestações.</p>
+        <div class="base">Lei 13.988/2020 · Portaria PGFN 6.757/2022</div>
+      </div>
+      <div class="eixo reveal" data-delay="220">
+        <div class="marca">iii</div>
+        <h4>O que pode já estar extinto</h4>
+        <p>Exame de prescrição e decadência. Confessar ou parcelar um débito interrompe a prescrição em curso e reinicia a contagem, o que torna a ordem das decisões relevante.</p>
+        <div class="base">CTN, arts. 156, V, 173 e 174 · Súmula 314 STJ</div>
+      </div>
+    </div>
+
+    <div class="sinergia reveal" data-delay="260">
+      <div class="marca">Por que os três juntos</div>
+      <p>Tratados isoladamente, os instrumentos perdem efeito combinado. <strong>Um saldo prescrito identificado reduz a base da dívida</strong>, e uma dívida menor diante da mesma capacidade de pagamento pode melhorar a classificação usada na negociação. Analisar prescrição depois de já ter confessado o débito inteiro é a ordem que costuma custar mais caro.</p>
+    </div>
+
+    <div class="passos">
+      <div class="passo reveal" data-delay="60">
+        <div class="n">Passo 01</div>
+        <h5>Contato e procuração</h5>
+        <p>Conversa inicial para entender o caso e, havendo interesse, procuração eletrônica para acesso ao e-CAC.</p>
+      </div>
+      <div class="passo reveal" data-delay="120">
+        <div class="n">Passo 02</div>
+        <h5>Levantamento completo</h5>
+        <p>Mapeamento de todos os débitos, sua natureza, onde estão e em que fase se encontram.</p>
+      </div>
+      <div class="passo reveal" data-delay="180">
+        <div class="n">Passo 03</div>
+        <h5>Relatório de viabilidade</h5>
+        <p>Documento com os caminhos possíveis, seus fundamentos e seus riscos, para decisão do cliente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CAPTURA ───────────────────────────────────────────── -->
+<section id="captura" class="cta-section">
+  <div class="container">
+    <div class="cta-layout">
+      <div>
+        <h2>Comece pelo <em>diagnóstico</em>, não pela assinatura.</h2>
+        <p class="cta-lede">Nossa equipe levanta a situação dos débitos e devolve um relatório com os caminhos possíveis, seus fundamentos e seus riscos. A partir daí a decisão é sua.</p>
+        <ul class="cta-lista">
+          <li>Levantamento do passivo federal, com separação entre Receita Federal e dívida ativa</li>
+          <li>Verificação de enquadramento nas modalidades do edital vigente</li>
+          <li>Exame de prescrição e decadência antes de qualquer confissão de débito</li>
+          <li>Retorno em até 48 horas úteis, sem compromisso inicial</li>
+        </ul>
+      </div>
+
+      <div class="form-wrap">
+        <p class="form-titulo">Diagnóstico gratuito</p>
+        <p class="form-sub">Retorno em até 48 horas úteis. Os dados abaixo servem apenas para direcionar a análise.</p>
+        <form class="lead-form" id="formSimples" novalidate>
+          <div class="campo">
+            <label for="s-nome">Nome completo</label>
+            <input class="form-input" type="text" id="s-nome" name="nome" placeholder="Como devemos te chamar" autocomplete="name" required>
+          </div>
+          <div class="dupla">
+            <div class="campo">
+              <label for="s-whats">WhatsApp</label>
+              <input class="form-input" type="tel" id="s-whats" name="whatsapp" placeholder="Com DDD" autocomplete="tel" required>
+            </div>
+            <div class="campo">
+              <label for="s-email">E-mail</label>
+              <input class="form-input" type="email" id="s-email" name="email" placeholder="nome@empresa.com.br" autocomplete="email" required>
+            </div>
+          </div>
+          <div class="dupla">
+            <div class="campo">
+              <label for="s-empresa">Empresa</label>
+              <input class="form-input" type="text" id="s-empresa" name="empresa" placeholder="Razão social" autocomplete="organization" required>
+            </div>
+            <div class="campo">
+              <label for="s-cnpj">CNPJ <span style="text-transform:none;letter-spacing:0">(opcional)</span></label>
+              <input class="form-input" type="text" id="s-cnpj" name="cnpj" placeholder="00.000.000/0001-00" inputmode="numeric">
+            </div>
+          </div>
+          <div class="campo">
+            <label for="s-regime">A empresa é optante do Simples Nacional?</label>
+            <select class="form-select" id="s-regime" name="regime" required>
+              <option value="" disabled selected>Selecione</option>
+              <option>Sim</option>
+              <option>Não</option>
+              <option>Não sei informar</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="s-termo">Já houve Termo de Exclusão ou cobrança federal?</label>
+            <select class="form-select" id="s-termo" name="termo" required>
+              <option value="" disabled selected>Selecione</option>
+              <option>Sim, recebemos o Termo</option>
+              <option>Houve cobrança, mas não o Termo</option>
+              <option>Não</option>
+              <option>Não sei informar</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="s-faixa">Faixa aproximada dos débitos federais</label>
+            <select class="form-select" id="s-faixa" name="faixa" required>
+              <option value="" disabled selected>Selecione</option>
+              <option>Até R$ 50 mil</option>
+              <option>De R$ 50 mil a R$ 200 mil</option>
+              <option>De R$ 200 mil a R$ 1 milhão</option>
+              <option>Acima de R$ 1 milhão</option>
+              <option>Não sei informar</option>
+            </select>
+          </div>
+          <button type="submit" class="lead-btn">
+            Solicitar diagnóstico
+            <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+          </button>
+        </form>
+        <p class="form-nota">Sem compromisso · Dados tratados conforme a<br><a href="/politica-de-privacidade" style="color:inherit">política de privacidade</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── AVISO ─────────────────────────────────────────────── -->
+<section class="aviso">
+  <div class="container">
+    <p><strong>Conteúdo informativo.</strong> Esta página descreve o funcionamento de normas tributárias vigentes e não constitui aconselhamento jurídico, nem promessa de resultado. Prazos, percentuais e modalidades citados são os limites previstos em lei e nos editais mencionados, e sua aplicação depende da análise de cada caso concreto. <strong>Cada caso é um caso.</strong> TriboTax Consultoria Tributária.</p>
+  </div>
+</section>
+
+<div class="sticky-cta-bar" id="sticky-bar">
+  <a href="#captura">Solicitar diagnóstico gratuito
+    <svg aria-hidden="true" width="16" height="10" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+  </a>
+</div>
+
+<footer id="tt-footer"></footer>
+<script src="assets/js/site.js?v=2"></script>
+<script>
+/* ── Contagem até o encerramento do dia 30/09/2026 ─────────── */
+(function () {
+  var alvo = new Date('2026-09-30T19:00:00-03:00').getTime();
+  var el = document.getElementById('contagem');
+  if (!el) return;
+  var dias = Math.ceil((alvo - Date.now()) / 86400000);
+  if (dias > 1)       el.textContent = 'Faltam ' + dias + ' dias para 30 de setembro';
+  else if (dias === 1) el.textContent = 'Falta 1 dia para 30 de setembro';
+  else if (dias === 0) el.textContent = 'Último dia: 30 de setembro';
+  else                 el.style.display = 'none';
+})();
+
+/* ── Envio do formulário ───────────────────────────────────── */
+document.getElementById('formSimples').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  var f = e.target;
+  if (!f.checkValidity()) { f.reportValidity(); return; }
+
+  var btn = f.querySelector('button[type="submit"]');
+  var original = btn.innerHTML;
+  var val = function (n) { return f.elements[n] ? f.elements[n].value.trim() : ''; };
+  var p = new URLSearchParams(location.search);
+
+  var nome = val('nome'), wpp = val('whatsapp'), empresa = val('empresa');
+  var servico = 'Simples Nacional — Janela de Setembro';
+
+  // Um único event_id por conversão: vai para o n8n (CAPI) e para /obrigado
+  // (Pixel). Ids diferentes fariam a Meta contar o mesmo lead duas vezes.
+  var eid = window.ttNewEventId ? window.ttNewEventId() : '';
+  var sinais = window.ttSignals ? window.ttSignals() : {};
+
+  btn.disabled = true;
+  btn.textContent = 'Enviando…';
+
+  try {
+    // Sem checar o status, um 500 do n8n cairia fora do catch: o lead
+    // redirecionaria para /obrigado, o Pixel contaria a conversão e o
+    // contato se perderia em silêncio.
+    var resp = await fetch('https://n8n.gabrielgouvea.com.br/webhook/f484ff6a-2bf3-440b-b23c-dcfe76eaf968', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nome: nome, whatsapp: wpp, email: val('email'), empresa: empresa,
+        cnpj: val('cnpj'),
+        regime: val('regime'), termo: val('termo'), faixa: val('faixa'),
+        servico: servico,
+        canal_aquisicao: 'Meta Ads — Simples Setembro',
+        origem: location.pathname,
+        event_id: eid, event_name: 'Lead',
+        fbp: sinais.fbp || '', fbc: sinais.fbc || '',
+        event_source_url: sinais.event_source_url || location.href,
+        client_user_agent: sinais.client_user_agent || navigator.userAgent,
+        utm_source: p.get('utm_source') || '',
+        utm_medium: p.get('utm_medium') || '',
+        utm_campaign: p.get('utm_campaign') || '',
+        utm_content: p.get('utm_content') || '',
+        utm_term: p.get('utm_term') || ''
+      })
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    location.href = '/obrigado?' + new URLSearchParams({
+      nome: nome, wpp: wpp, empresa: empresa, servico: servico, eid: eid
+    }).toString();
+  } catch (_) {
+    btn.disabled = false;
+    btn.innerHTML = original;
+    var erro = f.parentNode.querySelector('.form-erro');
+    if (!erro) {
+      erro = document.createElement('p');
+      erro.className = 'form-erro';
+      f.parentNode.insertBefore(erro, f.nextSibling);
+    }
+    erro.innerHTML = 'Não conseguimos enviar agora. <a href="https://wa.me/554799975701" target="_blank" rel="noopener">Fale pelo WhatsApp →</a>';
+  }
+});
+
+/* ── Barra fixa some quando o formulário entra em tela ─────── */
+(function () {
+  var alvo = document.getElementById('captura');
+  var barra = document.getElementById('sticky-bar');
+  if (!alvo || !barra || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (entries) {
+    barra.classList.toggle('form-in-view', entries[0].isIntersecting);
+  }, { threshold: 0.12 }).observe(alvo);
+})();
+</script>
+</body>
+</html>

@@ -406,6 +406,8 @@
     .hero .foot{margin-top:18px}
   }
 </style>
+<!-- Meta Pixel + CAPI (ver .tracking.json) -->
+<script src="../assets/js/track.js?v=1"></script>
 </head>
 <body>
   <nav class="site-nav">
@@ -996,6 +998,10 @@
         var btn=form.querySelector('.lead-submit');
         btn.disabled=true; btn.textContent='Enviando…';
         var p=new URLSearchParams(location.search);
+        // Sem troca de URL no sucesso: Lead dispara inline, com o mesmo
+        // event_id que vai para o n8n (CAPI), para a Meta deduplicar.
+        var eid = window.ttNewEventId ? window.ttNewEventId() : '';
+        var sinais = window.ttSignals ? window.ttSignals() : {};
         var payload={
           nome:document.getElementById('lf-nome').value.trim(),
           email:document.getElementById('lf-email').value.trim(),
@@ -1003,6 +1009,12 @@
           skus:document.getElementById('lf-skus').value,
           servico:'Reclassificador Fiscal IBS/CBS',
           origem:location.pathname,
+          event_id:eid,
+          event_name:'Lead',
+          fbp:sinais.fbp||'',
+          fbc:sinais.fbc||'',
+          event_source_url:sinais.event_source_url||location.href,
+          client_user_agent:sinais.client_user_agent||navigator.userAgent,
           utm_source:p.get('utm_source')||'',
           utm_medium:p.get('utm_medium')||'',
           utm_campaign:p.get('utm_campaign')||'',
@@ -1014,6 +1026,9 @@
           headers:{'Content-Type':'application/json'},
           body:JSON.stringify(payload)
         }).catch(function(){});
+        if(window.ttTrack){
+          window.ttTrack('Lead',{content_name:'Reclassificador Fiscal IBS/CBS',content_category:'lead_site'},eid);
+        }
         form.style.display='none';
         document.querySelector('.reassure').style.display='none';
         document.querySelector('.alt-contact').style.display='none';

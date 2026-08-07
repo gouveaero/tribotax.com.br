@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { href: '/manifesto', label: 'Manifesto' },
   { href: '/metodo', label: 'Método' },
   { label: 'Serviços', children: [
+    { href: '/simples-nacional', label: 'Simples Nacional' },
     { href: '/passivo-tributario', label: 'Passivo Tributário' },
     { href: '/reforma-tributaria', label: 'Reforma Tributária' },
     { href: '/monitor-tributario/', label: 'Monitor Tributário' },
