@@ -47,11 +47,7 @@
   pointer-events: none;
 }
 .hero .container { position: relative; z-index: 1; }
-.hero-grid {
-  display: grid; gap: clamp(32px,4.5vw,72px); align-items: center;
-  grid-template-columns: minmax(0,1.12fr) minmax(0,0.88fr);
-}
-@media (max-width: 920px) { .hero-grid { grid-template-columns: 1fr; gap: 28px; } }
+.hero-texto { max-width: 720px; }
 .hero h1 {
   font-family: var(--f-display); font-weight: 500;
   font-size: clamp(38px,4.6vw,64px); line-height: 1.04; letter-spacing: -0.015em;
@@ -456,11 +452,10 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
 <!-- ── HERO ──────────────────────────────────────────────── -->
 <section class="hero">
   <div class="container">
-    <div class="hero-grid">
-      <div>
+    <div class="hero-texto">
         <span class="eyebrow">Débitos do Simples Nacional · Exclusão 2026</span>
         <h1>Duas portas ainda abertas. As duas fecham em <em>30&nbsp;de&nbsp;setembro</em>.</h1>
-        <p class="lede">Foram <strong>1.102.924 Termos de Exclusão</strong> em março. Se a sua empresa recebeu um, o que resta de 2026 cabe numa data — e assinar parcelamento no impulso do prazo costuma ser o caminho mais caro. Antes disso, um diagnóstico.</p>
+        <p class="lede">Foram <strong>1.102.924 Termos de Exclusão</strong> em março. Se a sua empresa recebeu um, o que resta de 2026 cabe numa data. Assinar parcelamento no impulso do prazo costuma ser o caminho mais caro. Antes disso, um diagnóstico.</p>
         <div class="hero-cta">
           <button type="button" class="btn-diag js-abre-diag">
             Quero o diagnóstico gratuito
@@ -473,21 +468,12 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
           <span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 13.5h11M4.5 13.5V7M8 13.5V7M11.5 13.5V7M2 5.5L8 2.5l6 3H2z"/></svg>Norma vigente citada</span>
           <span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5l5.5 2.5v4c0 3-2.3 5.5-5.5 6.5C4.8 13.5 2.5 11 2.5 8V4L8 1.5z"/></svg>Análise documental</span>
         </div>
-      </div>
-
-      <div class="retrato">
-        <img src="assets/img/alex-amadeu.jpg" alt="Alex Amadeu, advogado tributarista e fundador da TriboTax" width="740" height="985" fetchpriority="high" />
-        <div class="legenda">
-          <div class="nome">Alex Amadeu</div>
-          <div class="cargo">Advogado tributarista · OAB/MG · fundador da TriboTax</div>
-        </div>
-      </div>
     </div>
 
     <div class="portas" role="list">
       <div class="porta" role="listitem">
         <div class="data">Porta 01 · 1º a 30/09</div>
-        <p><strong>Janela de opção pelo Simples</strong> com efeitos a partir de janeiro de 2027 — deslocada de janeiro para setembro pela Reforma. <span class="fund">LC 214/2025</span></p>
+        <p><strong>Janela de opção pelo Simples</strong> com efeitos a partir de janeiro de 2027. A Reforma deslocou esse prazo de janeiro para setembro. <span class="fund">LC 214/2025</span></p>
       </div>
       <div class="porta" role="listitem">
         <div class="data">Porta 02 · Até 30/09, 19h</div>
@@ -529,7 +515,7 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
       <div class="fato reveal" data-delay="80">
         <div class="n">Março de 2026</div>
         <h3>O Termo já foi entregue</h3>
-        <p>1.102.924 Termos de Exclusão no DTE-SN, somando cerca de R$ 12,9 bilhões. A ciência é presumida no 45º dia mesmo sem consulta — e vale como notificação pessoal.</p>
+        <p>1.102.924 Termos de Exclusão no DTE-SN, somando cerca de R$ 12,9 bilhões. A ciência é presumida no 45º dia mesmo sem consulta, e vale como notificação pessoal.</p>
         <div class="base">LC 123/2006, art. 16 · Res. CGSN 140/2018</div>
       </div>
       <div class="fato reveal" data-delay="160">
@@ -555,7 +541,7 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
     <h2 class="h-display h-2 reveal" data-delay="60" style="max-width:19ch">Onde a dívida está muda <em>o que a lei permite</em> negociar.</h2>
 
     <div class="escopo reveal" data-delay="120">
-      <p>O quadro trata de <strong>débitos de tributos do Simples Nacional</strong>. Os editais de transação da própria Receita (9 e 10/2026) <strong>vedam expressamente</strong> a inclusão de tributos do regime — é essa vedação que produz a assimetria abaixo.</p>
+      <p>O quadro trata de <strong>débitos de tributos do Simples Nacional</strong>. Os editais de transação da própria Receita (9 e 10/2026) <strong>vedam expressamente</strong> a inclusão de tributos do regime. É essa vedação que produz a assimetria abaixo.</p>
     </div>
 
     <div class="tab-wrap reveal" data-delay="160">
@@ -596,7 +582,7 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
       <div class="cc">
         <div class="onde">Débito na Receita Federal</div>
         <ul>
-          <li><span class="k">Desconto</span><span class="v nulo">Vedado — Editais RFB 9 e 10/2026</span></li>
+          <li><span class="k">Desconto</span><span class="v nulo">Vedado (Editais RFB 9 e 10/2026)</span></li>
           <li><span class="k">Prazo</span><span class="v">até 60 meses</span></li>
           <li><span class="k">Instrumento</span><span class="v">Parcelamento ordinário ou do Simples</span></li>
         </ul>
@@ -606,12 +592,12 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
         <ul>
           <li><span class="k">Desconto</span><span class="v"><span class="destaque">até 70%</span>sobre o valor total da inscrição (ME/EPP)</span></li>
           <li><span class="k">Prazo</span><span class="v"><span class="destaque">até 145 meses</span>para ME e EPP</span></li>
-          <li><span class="k">Instrumento</span><span class="v">Transação por adesão — Edital PGDAU 6/2026</span></li>
+          <li><span class="k">Instrumento</span><span class="v">Transação por adesão (Edital PGDAU 6/2026)</span></li>
         </ul>
       </div>
     </div>
 
-    <p class="ressalva reveal" data-delay="200">O desconto <strong>nunca alcança o valor principal</strong> (Lei 13.988/2020, art. 11, §2º, I): a redução incide sobre juros, multas e encargos, e o teto é medido sobre o valor total de cada inscrição. 70% e 145 meses são limites legais para ME e EPP — cada proposta depende da capacidade de pagamento apurada.</p>
+    <p class="ressalva reveal" data-delay="200">O desconto <strong>nunca alcança o valor principal</strong> (Lei 13.988/2020, art. 11, §2º, I): a redução incide sobre juros, multas e encargos, e o teto é medido sobre o valor total de cada inscrição. 70% e 145 meses são limites legais para ME e EPP. Cada proposta depende da capacidade de pagamento apurada.</p>
 
     <div class="pos-tabela reveal" data-delay="240">
       <button type="button" class="btn-diag js-abre-diag">
@@ -629,7 +615,7 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
     <div class="ciencia-grid">
       <div>
         <h2 class="reveal">A notificação pode já ter sido <em>entregue</em> sem ninguém ter lido.</h2>
-        <p class="txt reveal" data-delay="80">A adesão ao Domicílio Tributário Eletrônico do Simples é obrigatória e automática — não existe aviso por e-mail ou correio. Se ninguém consultou o sistema, a ciência aconteceu sozinha, no 45º dia. Saber em que data o seu prazo começou a correr é o primeiro item do diagnóstico.</p>
+        <p class="txt reveal" data-delay="80">A adesão ao Domicílio Tributário Eletrônico do Simples é obrigatória e automática. Não existe aviso por e-mail ou correio. Se ninguém consultou o sistema, a ciência aconteceu sozinha, no 45º dia. Saber em que data o seu prazo começou a correr é o primeiro item do diagnóstico.</p>
       </div>
       <div class="cit reveal" data-delay="140">
         <p>A não realização de consulta periódica ao DTE-SN poderá acarretar a exclusão do contribuinte do Simples Nacional.</p>
@@ -649,19 +635,19 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
       <div class="eixo reveal" data-delay="100">
         <div class="n">i · Parcelar</div>
         <h3>O que precisa ser parcelado</h3>
-        <p>Levantamento do passivo no e-CAC, separando o que está na Receita do que já foi inscrito em dívida ativa — porque cada parte tem instrumento e prazo próprios.</p>
+        <p>Levantamento do passivo no e-CAC, separando o que está na Receita do que já foi inscrito em dívida ativa, porque cada parte tem instrumento e prazo próprios.</p>
         <div class="base">LC 123/2006, art. 31, §2º</div>
       </div>
       <div class="eixo reveal" data-delay="160">
         <div class="n">ii · Negociar</div>
         <h3>O que pode ser negociado</h3>
-        <p>Enquadramento nas modalidades do edital vigente e capacidade de pagamento apurada — o que define a faixa de redução cabível e o número de prestações.</p>
+        <p>Enquadramento nas modalidades do edital vigente e capacidade de pagamento apurada, que é o que define a faixa de redução cabível e o número de prestações.</p>
         <div class="base">Lei 13.988/2020 · Portaria PGFN 6.757/2022</div>
       </div>
       <div class="eixo reveal" data-delay="220">
         <div class="n">iii · Prescrição</div>
         <h3>O que pode já estar extinto</h3>
-        <p>Exame de prescrição e decadência. Confessar ou parcelar interrompe a prescrição e reinicia a contagem — a ordem das decisões importa.</p>
+        <p>Exame de prescrição e decadência. Confessar ou parcelar interrompe a prescrição e reinicia a contagem. A ordem das decisões importa.</p>
         <div class="base">CTN, arts. 156, V, 173 e 174 · Súmula 314 STJ</div>
       </div>
     </div>
@@ -683,7 +669,7 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
         <span class="eyebrow reveal">Quem assina a análise</span>
         <h2 class="reveal" data-delay="60">Diagnóstico com nome, registro e <em>endereço</em>.</h2>
         <p class="bio reveal" data-delay="120"><strong>Alex Amadeu</strong> é advogado tributarista (OAB/MG) e fundador da TriboTax, consultoria com sede na Savassi, em Belo Horizonte. Atua em recuperação de créditos, defesa em processos administrativos e arquitetura fiscal de grupos empresariais e famílias empresárias.</p>
-        <p class="bio reveal" data-delay="160">A TriboTax nasceu para trocar a frieza da consultoria tradicional por um modelo de comunidade técnica. É por isso que o primeiro passo aqui nunca é uma proposta — é um <strong>diagnóstico por escrito</strong>, com fundamentos e riscos, que fica com você.</p>
+        <p class="bio reveal" data-delay="160">A TriboTax nasceu para trocar a frieza da consultoria tradicional por um modelo de comunidade técnica. É por isso que o primeiro passo aqui nunca é uma proposta: é um <strong>diagnóstico por escrito</strong>, com fundamentos e riscos, que fica com você.</p>
         <div class="quem-cit reveal" data-delay="200">
           <p>Eu não fundei um escritório. Fundei uma tribo.</p>
           <div class="autor">Alex Amadeu · Carta aberta da TriboTax</div>
@@ -721,7 +707,7 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
 <!-- ── CONFORMIDADE ──────────────────────────────────────── -->
 <section class="conform">
   <div class="container">
-    <p>Página educativa, em conformidade com o Provimento 205/2021 da OAB: nada aqui promete resultado. Os percentuais e prazos citados são os tetos previstos em lei e nos editais — e é justamente porque cada caso tem os seus que o primeiro passo é um diagnóstico.</p>
+    <p>Página educativa, em conformidade com o Provimento 205/2021 da OAB: nada aqui promete resultado. Os percentuais e prazos citados são os tetos previstos em lei e nos editais. E é justamente porque cada caso tem os seus que o primeiro passo é um diagnóstico.</p>
   </div>
 </section>
 

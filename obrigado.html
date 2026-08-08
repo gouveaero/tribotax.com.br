@@ -171,7 +171,7 @@
       </div>
 
       <h1 class="ty-h1" id="ty-heading">Falta <em>um passo</em><span id="ty-nome"></span>.</h1>
-      <p class="ty-sub" id="ty-msg">Seu pedido foi registrado. Para dar sequência agora, envie a mensagem que já deixamos pronta no WhatsApp da equipe — é por lá que o diagnóstico começa.</p>
+      <p class="ty-sub" id="ty-msg">Seu pedido foi registrado. Para dar sequência agora, envie a mensagem que já deixamos pronta no WhatsApp da equipe. É por lá que o diagnóstico começa.</p>
 
       <div class="ty-cta-wrap">
         <a class="wa-btn" id="wa-link" href="https://wa.me/554799975701" target="_blank" rel="noopener">
@@ -222,7 +222,7 @@
   document.getElementById('wa-link').href = waHref;
 
   // Abertura automática: só para quem chegou do formulário (tem nome/eid),
-  // com contagem visível e cancelamento — o Lead do Pixel dispara no load
+  // com contagem visível e cancelamento; o Lead do Pixel dispara no load
   // e os 5s garantem a chamada antes da troca de app.
   if (!nome && !p.get('eid')) return;
   const aviso = document.getElementById('ty-auto');
