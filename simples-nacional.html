@@ -417,6 +417,50 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
 }
 .form-nota a { color: inherit; }
 
+/* ── Hero em duas colunas: argumento + formulário inline ──── */
+.hero-grid { display: grid; grid-template-columns: minmax(0,1.05fr) minmax(0,0.95fr); gap: clamp(28px,4.5vw,64px); align-items: start; }
+@media (max-width: 920px) { .hero-grid { grid-template-columns: 1fr; gap: 26px; } }
+
+/* Continuidade anúncio → página: o rosto de quem assina, já no hero */
+.assina { margin-top: var(--sp-5); display: flex; align-items: center; gap: 12px; }
+.assina img {
+  width: 46px; height: 46px; border-radius: 50%; object-fit: cover; object-position: 50% 16%;
+  border: 1px solid var(--clay-300); display: block;
+}
+.assina .quem-linha { font-size: 13.5px; line-height: 1.45; color: var(--ink-700); }
+.assina .quem-linha strong { color: var(--forest-900); font-weight: 500; }
+.assina .quem-linha .reg { font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-500); display: block; margin-top: 3px; }
+
+.form-card {
+  background: #FDFBF7; border: 1px solid var(--clay-200); border-radius: var(--radius-m);
+  box-shadow: 0 24px 60px -28px rgba(20,37,29,0.3);
+  padding: 24px 24px 20px; max-width: 440px;
+}
+@media (max-width: 920px) { .form-card { max-width: none; } }
+.form-card .modal-faixa { margin-right: 0; }
+.form-card .form-titulo { font-family: var(--f-display); font-size: 25px; font-weight: 500; line-height: 1.12; color: var(--ink-900); margin: 0 0 5px; }
+.form-card .form-titulo em { font-style: italic; color: var(--copper-500); }
+.form-card .form-sub { font-size: 13px; line-height: 1.55; color: var(--ink-500); margin: 0 0 var(--sp-4); }
+
+/* ── FAQ: as objeções respondidas antes do pedido ─────────── */
+.faq { background: var(--clay-50); }
+.faq-lista { margin-top: var(--sp-6); border-top: 1px solid var(--clay-300); max-width: 780px; }
+.faq-item { border-bottom: 1px solid var(--clay-300); }
+.faq-item summary {
+  cursor: pointer; list-style: none;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 18px;
+  padding: 18px 0;
+  font-family: var(--f-display); font-size: clamp(18px,1.8vw,22px); font-weight: 500;
+  color: var(--forest-900);
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: "+"; font-family: var(--f-mono); font-size: 17px; color: var(--copper-600);
+  flex-shrink: 0; transition: transform .25s ease;
+}
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item p { margin: 0 0 18px; font-size: 14.5px; line-height: 1.65; color: var(--ink-700); max-width: 66ch; }
+
 /* ── Ajustes mobile ───────────────────────────────────────── */
 @media (max-width: 920px) {
   .hero { padding: 26px 0 40px; }
@@ -452,22 +496,63 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
 <!-- ── HERO ──────────────────────────────────────────────── -->
 <section class="hero">
   <div class="container">
-    <div class="hero-texto">
+    <div class="hero-grid">
+      <div class="hero-texto">
         <span class="eyebrow">Débitos do Simples Nacional · Exclusão 2026</span>
         <h1>Duas portas ainda abertas. As duas fecham em <em>30&nbsp;de&nbsp;setembro</em>.</h1>
-        <p class="lede">Foram <strong>1.102.924 Termos de Exclusão</strong> em março. Se a sua empresa recebeu um, o que resta de 2026 cabe numa data. Assinar parcelamento no impulso do prazo costuma ser o caminho mais caro. Antes disso, um diagnóstico.</p>
-        <div class="hero-cta">
-          <button type="button" class="btn-diag js-abre-diag">
-            Quero o diagnóstico gratuito
-            <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
-          </button>
-          <span class="cta-micro">Leva 2 minutos · retorno em até 48h úteis · <span class="contagem-slot">até 30/09</span></span>
-        </div>
+        <p class="lede">Foram <strong>1.102.924 Termos de Exclusão</strong> em março. Para quem recebeu um, o que resta de 2026 cabe numa data. Assinar parcelamento no impulso do prazo costuma ser o caminho mais caro. Antes disso, um diagnóstico.</p>
         <div class="hero-conf" aria-label="Garantias do diagnóstico">
           <span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg>Sem compromisso</span>
           <span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 13.5h11M4.5 13.5V7M8 13.5V7M11.5 13.5V7M2 5.5L8 2.5l6 3H2z"/></svg>Norma vigente citada</span>
           <span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5l5.5 2.5v4c0 3-2.3 5.5-5.5 6.5C4.8 13.5 2.5 11 2.5 8V4L8 1.5z"/></svg>Análise documental</span>
         </div>
+        <div class="assina">
+          <img src="assets/img/alex-amadeu-2.jpg" alt="Alex Amadeu" width="46" height="46" />
+          <div class="quem-linha">
+            Análise assinada por <strong>Alex Amadeu</strong>
+            <span class="reg">Advogado tributarista · OAB/MG · Savassi, Belo Horizonte</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card reveal" data-delay="80">
+        <div class="modal-faixa">
+          <span class="rotulo">Diagnóstico gratuito</span>
+          <span class="valor contagem-slot">Até 30/09</span>
+        </div>
+        <p class="form-titulo">Receba a <em>análise</em> do seu caso.</p>
+        <p class="form-sub">Leva 2 minutos. A equipe do Alex retorna em até 48 horas úteis com os próximos passos.</p>
+        <form class="lead-form" id="formDiagHero" novalidate>
+          <div class="campo">
+            <label for="h-nome">Nome</label>
+            <input class="form-input" type="text" id="h-nome" name="nome" placeholder="Como devemos te chamar" autocomplete="name" required>
+          </div>
+          <div class="campo">
+            <label for="h-whats">WhatsApp</label>
+            <div class="fone-linha">
+              <span class="ddi" aria-hidden="true">+55</span>
+              <input class="form-input" type="tel" id="h-whats" name="whatsapp" placeholder="(DDD) 90000-0000" autocomplete="tel-national" inputmode="tel" required>
+            </div>
+          </div>
+          <div class="campo">
+            <label for="h-faixa">Faixa aproximada dos débitos federais</label>
+            <select class="form-select" id="h-faixa" name="faixa" required>
+              <option value="" disabled selected>Selecione</option>
+              <option>Até R$ 50 mil</option>
+              <option>De R$ 50 mil a R$ 200 mil</option>
+              <option>De R$ 200 mil a R$ 1 milhão</option>
+              <option>Acima de R$ 1 milhão</option>
+              <option>Não sei informar</option>
+            </select>
+          </div>
+          <input type="hidden" name="regime" value="Simples Nacional (LP)">
+          <button type="submit" class="lead-btn">
+            Quero o diagnóstico gratuito
+            <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+          </button>
+        </form>
+        <p class="form-nota">Sem compromisso · Ao enviar, você autoriza o contato da equipe sobre esta análise · Dados tratados conforme a <a href="/politica-de-privacidade" target="_blank" rel="noopener">política de privacidade</a></p>
+      </div>
     </div>
 
     <div class="portas" role="list">
@@ -684,6 +769,44 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
   </div>
 </section>
 
+<!-- ── FAQ ───────────────────────────────────────────────── -->
+<section class="faq tight">
+  <div class="container">
+    <span class="eyebrow reveal">Perguntas diretas, respostas diretas</span>
+    <h2 class="h-display h-2 reveal" data-delay="60" style="max-width:18ch">O que costuma travar o <em>primeiro passo</em>.</h2>
+    <div class="faq-lista reveal" data-delay="120">
+      <details class="faq-item">
+        <summary>O que exatamente eu recebo no diagnóstico?</summary>
+        <p>Um relatório por escrito: em que fase está cada débito (Receita ou dívida ativa), qual instrumento a lei prevê para cada parte, quais prazos correm e o que pode já estar prescrito. Com fundamentos e riscos, para a decisão ser sua.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Quanto custa?</summary>
+        <p>O diagnóstico é gratuito e sem compromisso. Se depois houver caso para atuação, a proposta vem à parte, com escopo e honorários claros. Você decide se segue.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Preciso dar acesso ao e-CAC?</summary>
+        <p>Para o levantamento completo, sim: uma procuração eletrônica restrita à consulta, revogável a qualquer momento pelo próprio e-CAC. Sem ela, a análise fica limitada aos documentos enviados.</p>
+      </details>
+      <details class="faq-item">
+        <summary>A empresa não recebeu Termo de Exclusão. Faz sentido pedir?</summary>
+        <p>Faz. O diagnóstico examina a situação dos débitos independentemente de Termo, e as janelas de setembro (opção pelo Simples e transação da dívida ativa) valem para qualquer empresa que se enquadre nas condições dos editais e da lei.</p>
+      </details>
+      <details class="faq-item">
+        <summary>E se já existe um parcelamento assinado?</summary>
+        <p>Ainda assim vale analisar. O parcelamento interrompe a prescrição, mas o exame das fases e do edital vigente pode indicar caminhos para o restante do passivo. O relatório mostra o que a lei permite em cada situação, sem prometer resultado.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Vocês atendem empresas de qualquer lugar do país?</summary>
+        <p>O atendimento é digital, com sede em Belo Horizonte (Savassi). Levantamento, relatório e retorno acontecem por WhatsApp e e-mail, com documentos pelo e-CAC.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Em quanto tempo chega o retorno?</summary>
+        <p>O primeiro contato acontece em até 48 horas úteis. O prazo do relatório depende do volume de débitos e é combinado nesse primeiro contato, sempre de olho nas datas de setembro.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
 <!-- ── CAPTURA FINAL ─────────────────────────────────────── -->
 <section id="captura" class="cta-section">
   <div class="container">
@@ -763,7 +886,7 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
         <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
       </button>
     </form>
-    <p class="form-nota">Sem compromisso · Dados tratados conforme a <a href="/politica-de-privacidade" target="_blank" rel="noopener">política de privacidade</a></p>
+    <p class="form-nota">Sem compromisso · Ao enviar, você autoriza o contato da equipe sobre esta análise · Dados tratados conforme a <a href="/politica-de-privacidade" target="_blank" rel="noopener">política de privacidade</a></p>
   </div>
 </div>
 
@@ -779,18 +902,25 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
   else if (dias === 0) txt = 'Último dia';
   else                 txt = null;
   document.querySelectorAll('.contagem-slot').forEach(function (el) {
-    el.textContent = txt ? (txt + ' · 30/09') : 'Encerrado em 30/09';
+    el.textContent = txt ? (txt + ' · 30/09') : 'Janela de 30/09 encerrada';
   });
+  // Depois de 30/09 a página continua no ar para a cauda da campanha:
+  // a urgência sai de cena e a oferta vira a análise em si.
+  if (!txt) {
+    var chip = document.querySelector('.lp-top .chip');
+    if (chip) chip.textContent = 'Análise de regularização · atendimento aberto';
+  }
 })();
 
 /* ── Popup: abrir, fechar, pré-preencher ───────────────────── */
 (function () {
   var modal = document.getElementById('modal-diag');
   var form = document.getElementById('formDiag');
+  var formHero = document.getElementById('formDiagHero');
   var CHAVE = 'tt_diag_rascunho';
   var ultimoFoco = null;
 
-  function prefill() {
+  function dadosSalvos() {
     var dados = {};
     try { dados = JSON.parse(localStorage.getItem(CHAVE) || '{}'); } catch (_) {}
     var p = new URLSearchParams(location.search);
@@ -799,15 +929,23 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
       if (p.get(n)) dados[n] = p.get(n);
     });
     if (p.get('wpp')) dados.whatsapp = p.get('wpp');
+    return dados;
+  }
+
+  function preenche(f) {
+    if (!f) return;
+    var dados = dadosSalvos();
     Object.keys(dados).forEach(function (n) {
-      var el = form.elements[n];
+      var el = f.elements[n];
       if (el && !el.value && dados[n]) el.value = dados[n];
     });
   }
 
+  preenche(formHero);
+
   function abre() {
     ultimoFoco = document.activeElement;
-    prefill();
+    preenche(form);
     modal.hidden = false;
     document.body.classList.add('modal-aberto');
     document.body.style.overflow = 'hidden';
@@ -833,95 +971,106 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
     if (e.key === 'Escape' && !modal.hidden) fecha();
   });
 
-  // Rascunho: o que a pessoa digita fica salvo para a próxima abertura
-  form.addEventListener('input', function () {
-    var d = {
-      nome: form.elements.nome.value,
-      whatsapp: form.elements.whatsapp.value,
-      email: form.elements.email.value,
-      faixa: form.elements.faixa.value
-    };
-    try { localStorage.setItem(CHAVE, JSON.stringify(d)); } catch (_) {}
+  // Rascunho compartilhado: o que a pessoa digita num formulário
+  // reaparece no outro (hero e popup gravam nas mesmas chaves)
+  [form, formHero].forEach(function (f) {
+    if (!f) return;
+    f.addEventListener('input', function () {
+      var d = {};
+      try { d = JSON.parse(localStorage.getItem(CHAVE) || '{}'); } catch (_) {}
+      ['nome', 'whatsapp', 'email', 'faixa'].forEach(function (n) {
+        if (f.elements[n] && f.elements[n].value) d[n] = f.elements[n].value;
+      });
+      try { localStorage.setItem(CHAVE, JSON.stringify(d)); } catch (_) {}
+    });
   });
 })();
 
-/* ── Barra fixa cede quando o CTA do hero está em tela ─────── */
+/* ── Barra fixa cede quando o formulário do hero está em tela ── */
 (function () {
   var barra = document.getElementById('sticky-bar');
-  var alvo = document.querySelector('.hero .btn-diag');
+  var alvo = document.querySelector('.hero .lead-btn');
   if (!barra || !alvo || !('IntersectionObserver' in window)) return;
   new IntersectionObserver(function (entries) {
     barra.classList.toggle('cta-em-tela', entries[0].isIntersecting);
   }, { threshold: 0.4 }).observe(alvo);
 })();
 
-/* ── Envio ─────────────────────────────────────────────────── */
-document.getElementById('formDiag').addEventListener('submit', async function (e) {
-  e.preventDefault();
-  var f = e.target;
-  if (!f.checkValidity()) { f.reportValidity(); return; }
+/* ── Envio (formulário do hero e do popup, mesmo destino) ──── */
+(function () {
+  async function envia(e) {
+    e.preventDefault();
+    var f = e.target;
+    if (!f.checkValidity()) { f.reportValidity(); return; }
 
-  var btn = f.querySelector('button[type="submit"]');
-  var original = btn.innerHTML;
-  var val = function (n) { return f.elements[n] ? f.elements[n].value.trim() : ''; };
-  var p = new URLSearchParams(location.search);
+    var btn = f.querySelector('button[type="submit"]');
+    var original = btn.innerHTML;
+    // O formulário do hero não tem e-mail: val() devolve '' para campo ausente
+    var val = function (n) { return f.elements[n] ? f.elements[n].value.trim() : ''; };
+    var p = new URLSearchParams(location.search);
 
-  var nome = val('nome');
-  // DDI fixo do formulário: o campo recebe só o número nacional
-  var wpp = val('whatsapp');
-  if (wpp && wpp.indexOf('+') !== 0) wpp = '+55 ' + wpp;
-  var servico = 'Simples Nacional — Janela de Setembro';
+    var nome = val('nome');
+    // DDI fixo do formulário: o campo recebe só o número nacional
+    var wpp = val('whatsapp');
+    if (wpp && wpp.indexOf('+') !== 0) wpp = '+55 ' + wpp;
+    var servico = 'Simples Nacional — Janela de Setembro';
 
-  // Um único event_id por conversão: vai para o n8n (CAPI) e para /obrigado
-  // (Pixel). Ids diferentes fariam a Meta contar o mesmo lead duas vezes.
-  var eid = window.ttNewEventId ? window.ttNewEventId() : '';
-  var sinais = window.ttSignals ? window.ttSignals() : {};
+    // Um único event_id por conversão: vai para o n8n (CAPI) e para /obrigado
+    // (Pixel). Ids diferentes fariam a Meta contar o mesmo lead duas vezes.
+    var eid = window.ttNewEventId ? window.ttNewEventId() : '';
+    var sinais = window.ttSignals ? window.ttSignals() : {};
 
-  btn.disabled = true;
-  btn.textContent = 'Enviando…';
+    btn.disabled = true;
+    btn.textContent = 'Enviando…';
 
-  try {
-    // Sem checar o status, um 500 do n8n cairia fora do catch: o lead
-    // redirecionaria para /obrigado, o Pixel contaria a conversão e o
-    // contato se perderia em silêncio.
-    var resp = await fetch('https://n8n.gabrielgouvea.com.br/webhook/f484ff6a-2bf3-440b-b23c-dcfe76eaf968', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        nome: nome, whatsapp: wpp, email: val('email'), empresa: '',
-        cnpj: '',
-        regime: val('regime'), termo: '', faixa: val('faixa'),
-        servico: servico,
-        canal_aquisicao: 'Meta Ads — Simples Setembro',
-        origem: location.pathname,
-        event_id: eid, event_name: 'Lead',
-        fbp: sinais.fbp || '', fbc: sinais.fbc || '',
-        event_source_url: sinais.event_source_url || location.href,
-        client_user_agent: sinais.client_user_agent || navigator.userAgent,
-        utm_source: p.get('utm_source') || '',
-        utm_medium: p.get('utm_medium') || '',
-        utm_campaign: p.get('utm_campaign') || '',
-        utm_content: p.get('utm_content') || '',
-        utm_term: p.get('utm_term') || ''
-      })
-    });
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    try { localStorage.removeItem('tt_diag_rascunho'); } catch (_) {}
-    location.href = '/obrigado?' + new URLSearchParams({
-      nome: nome, wpp: wpp, servico: servico, eid: eid
-    }).toString();
-  } catch (_) {
-    btn.disabled = false;
-    btn.innerHTML = original;
-    var erro = f.parentNode.querySelector('.form-erro');
-    if (!erro) {
-      erro = document.createElement('p');
-      erro.className = 'form-erro';
-      f.parentNode.insertBefore(erro, f.nextSibling);
+    try {
+      // Sem checar o status, um 500 do n8n cairia fora do catch: o lead
+      // redirecionaria para /obrigado, o Pixel contaria a conversão e o
+      // contato se perderia em silêncio.
+      var resp = await fetch('https://n8n.gabrielgouvea.com.br/webhook/f484ff6a-2bf3-440b-b23c-dcfe76eaf968', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nome: nome, whatsapp: wpp, email: val('email'), empresa: '',
+          cnpj: '',
+          regime: val('regime'), termo: '', faixa: val('faixa'),
+          servico: servico,
+          canal_aquisicao: 'Meta Ads — Simples Setembro',
+          origem: location.pathname,
+          event_id: eid, event_name: 'Lead',
+          fbp: sinais.fbp || '', fbc: sinais.fbc || '',
+          event_source_url: sinais.event_source_url || location.href,
+          client_user_agent: sinais.client_user_agent || navigator.userAgent,
+          utm_source: p.get('utm_source') || '',
+          utm_medium: p.get('utm_medium') || '',
+          utm_campaign: p.get('utm_campaign') || '',
+          utm_content: p.get('utm_content') || '',
+          utm_term: p.get('utm_term') || ''
+        })
+      });
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      try { localStorage.removeItem('tt_diag_rascunho'); } catch (_) {}
+      location.href = '/obrigado?' + new URLSearchParams({
+        nome: nome, wpp: wpp, servico: servico, eid: eid
+      }).toString();
+    } catch (_) {
+      btn.disabled = false;
+      btn.innerHTML = original;
+      var erro = f.parentNode.querySelector('.form-erro');
+      if (!erro) {
+        erro = document.createElement('p');
+        erro.className = 'form-erro';
+        f.parentNode.insertBefore(erro, f.nextSibling);
+      }
+      erro.innerHTML = 'Não conseguimos enviar agora. <a href="https://wa.me/5547999975701" target="_blank" rel="noopener">Fale pelo WhatsApp →</a>';
     }
-    erro.innerHTML = 'Não conseguimos enviar agora. <a href="https://wa.me/554799975701" target="_blank" rel="noopener">Fale pelo WhatsApp →</a>';
   }
-});
+
+  ['formDiag', 'formDiagHero'].forEach(function (id) {
+    var f = document.getElementById(id);
+    if (f) f.addEventListener('submit', envia);
+  });
+})();
 </script>
 </body>
 </html>
