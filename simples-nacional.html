@@ -13,14 +13,9 @@
 <link rel="stylesheet" href="assets/css/tokens.css" />
 <style>
 
-/* ── Página de captura: sem navegação, um único destino ───── */
+/* ── Página de captura: sem menu no topo; um único destino ── */
 
-/* Reveal local (a página não carrega o site.js para não montar menu) */
-.reveal { opacity: 0; transform: translateY(14px); transition: opacity .7s var(--ease-out-expo, cubic-bezier(0.16,1,0.3,1)), transform .7s var(--ease-out-expo, cubic-bezier(0.16,1,0.3,1)); }
-.reveal.in { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
-
-/* ── Topo mínimo: marca + prazo. Nenhum link de saída. ────── */
+/* ── Topo mínimo: marca + prazo ───────────────────────────── */
 .lp-top { border-bottom: 1px solid var(--clay-200); background: var(--clay-50); }
 .lp-top .inner {
   display: flex; align-items: center; justify-content: space-between;
@@ -41,10 +36,10 @@
 .lp-top .chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--copper-500); }
 @media (max-width: 560px) { .lp-top .chip span.longo { display: none; } }
 
-/* ── Hero de captura: argumento à esquerda, formulário à direita ── */
+/* ── Hero: argumento + rosto ──────────────────────────────── */
 .hero {
   position: relative; overflow: hidden;
-  padding: clamp(40px,6vw,84px) 0 clamp(48px,6vw,88px);
+  padding: clamp(40px,6vw,84px) 0 clamp(44px,5.5vw,76px);
 }
 .hero::before {
   content: ""; position: absolute; inset: 0;
@@ -52,23 +47,11 @@
   pointer-events: none;
 }
 .hero .container { position: relative; z-index: 1; }
-/* Três blocos: argumento / formulário / fatos de apoio.
-   No desktop o formulário ocupa a coluna direita inteira; no mobile ele
-   sobe para logo depois do argumento — captura antes da leitura. */
 .hero-grid {
-  display: grid; gap: clamp(32px,4.5vw,72px); align-items: start;
-  grid-template-columns: minmax(0,1.05fr) minmax(0,0.95fr);
-  grid-template-areas: "texto form" "apoio form";
+  display: grid; gap: clamp(32px,4.5vw,72px); align-items: center;
+  grid-template-columns: minmax(0,1.12fr) minmax(0,0.88fr);
 }
-.hero-texto { grid-area: texto; }
-.hero-apoio { grid-area: apoio; align-self: start; }
-.hero-grid .form-card { grid-area: form; }
-@media (max-width: 920px) {
-  .hero-grid {
-    grid-template-columns: 1fr; gap: 26px;
-    grid-template-areas: "texto" "form" "apoio";
-  }
-}
+@media (max-width: 920px) { .hero-grid { grid-template-columns: 1fr; gap: 28px; } }
 .hero h1 {
   font-family: var(--f-display); font-weight: 500;
   font-size: clamp(38px,4.6vw,64px); line-height: 1.04; letter-spacing: -0.015em;
@@ -77,24 +60,26 @@
 }
 .hero h1 em { font-style: italic; color: var(--copper-500); }
 .hero .lede { max-width: 52ch; margin-top: var(--sp-5); font-size: clamp(16px,1.35vw,18px); }
+.hero .lede strong { color: var(--forest-900); }
 
-/* Os dois prazos, agora como linhas de fato — não seções */
-.portas { margin-top: var(--sp-6); border-top: 1px solid var(--rule); }
-.porta {
-  display: grid; grid-template-columns: 118px 1fr; gap: var(--sp-5);
-  padding: 14px 0; border-bottom: 1px solid var(--rule); align-items: baseline;
+.hero-cta { margin-top: var(--sp-6); display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.btn-diag {
+  background: var(--copper-500); color: #FDF6EC;
+  font-family: var(--f-body); font-size: 16.5px; font-weight: 500;
+  padding: 17px 30px; border: none; border-radius: var(--radius-s); cursor: pointer;
+  display: inline-flex; align-items: center; gap: 12px; text-decoration: none;
+  transition: background .25s ease, transform .3s var(--ease-out-quart, ease), box-shadow .3s ease;
 }
-.porta .data {
-  font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--copper-600); line-height: 1.5;
+.btn-diag:hover { background: var(--copper-600); transform: translateY(-2px); box-shadow: 0 10px 26px -10px rgba(94,31,26,0.55); }
+.btn-diag:active { transform: translateY(0); }
+.btn-diag .arrow { width: 16px; height: 10px; }
+.btn-diag .arrow path { stroke: currentColor; fill: none; stroke-width: 1.4; }
+.cta-micro {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-500);
 }
-.porta p { margin: 0; font-size: 14.5px; line-height: 1.55; color: var(--ink-700); }
-.porta p strong { color: var(--forest-900); font-weight: 500; }
-@media (max-width: 560px) { .porta { grid-template-columns: 1fr; gap: 4px; } }
 
-.hero-conf {
-  margin-top: var(--sp-5); display: flex; flex-wrap: wrap; gap: 8px 26px;
-}
+.hero-conf { margin-top: var(--sp-5); display: flex; flex-wrap: wrap; gap: 8px 26px; }
 .hero-conf span {
   font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em;
   text-transform: uppercase; color: var(--ink-500);
@@ -102,86 +87,42 @@
 }
 .hero-conf svg { flex-shrink: 0; color: var(--forest-700); }
 
-/* Formulário — o objeto central da página */
-.form-card {
-  background: #FDFBF7;
-  border: 1px solid var(--clay-200);
-  border-radius: var(--radius-m);
-  box-shadow: 0 18px 44px -18px rgba(20,37,29,0.22), 0 2px 8px rgba(20,37,29,0.05);
-  padding: clamp(22px,2.4vw,32px);
-  position: relative;
+/* Retrato: o rosto é o primeiro ativo de confiança da página */
+.retrato {
+  position: relative; border-radius: var(--radius-m); overflow: hidden;
+  box-shadow: 0 22px 54px -22px rgba(20,37,29,0.35);
+  background: var(--clay-200);
 }
-@media (min-width: 921px) {
-  .form-card { animation: card-in .9s var(--ease-out-expo, cubic-bezier(0.16,1,0.3,1)) both; }
-  @keyframes card-in { from { opacity: 0; transform: translateY(18px); } }
+.retrato img { display: block; width: 100%; height: auto; }
+.retrato .legenda {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 40px 20px 16px;
+  background: linear-gradient(to top, rgba(18,18,16,0.82), rgba(18,18,16,0.4) 60%, transparent);
+  color: #F3EDDF;
 }
-@media (prefers-reduced-motion: reduce) { .form-card { animation: none; } }
-.form-card .faixa-prazo {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  margin: 0 0 var(--sp-5); padding-bottom: var(--sp-4);
-  border-bottom: 1px solid var(--clay-200);
-}
-.form-card .faixa-prazo .rotulo {
-  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.16em;
-  text-transform: uppercase; color: var(--ink-500);
-}
-.form-card .faixa-prazo .valor {
-  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--copper-600); text-align: right;
-}
-.form-titulo { font-family: var(--f-display); font-size: clamp(24px,2vw,29px); font-weight: 500; line-height: 1.1; color: var(--ink-900); margin: 0 0 6px; }
-.form-titulo em { font-style: italic; color: var(--copper-500); }
-.form-sub { font-size: 13.5px; line-height: 1.55; color: var(--ink-500); margin: 0 0 var(--sp-5); }
-
-.lead-form { display: flex; flex-direction: column; gap: var(--sp-3); }
-.campo { display: flex; flex-direction: column; gap: 5px; }
-.campo label {
+.retrato .legenda .nome { font-family: var(--f-display); font-size: 21px; font-weight: 500; line-height: 1.1; }
+.retrato .legenda .cargo {
   font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.16em;
-  text-transform: uppercase; color: var(--ink-500);
+  text-transform: uppercase; color: #D8CBB2; margin-top: 4px;
 }
-.form-input, .form-select {
-  width: 100%; padding: 12px 15px;
-  font-family: var(--f-body); font-size: 15px; color: var(--ink-900);
-  background: #fff; border: 1px solid rgba(42,18,8,0.22);
-  border-radius: var(--radius-s);
-  transition: border-color .2s ease, box-shadow .2s ease;
+@media (max-width: 920px) {
+  .retrato { max-width: 420px; }
+  .retrato img { aspect-ratio: 4/3.4; object-fit: cover; object-position: 50% 18%; }
 }
-.form-select {
-  appearance: none; cursor: pointer;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1.5L6 6L11 1.5' stroke='%232A2A26' stroke-width='1.4' fill='none' stroke-linecap='round'/></svg>");
-  background-repeat: no-repeat; background-position: right 15px center;
-  padding-right: 40px;
+
+/* Os dois prazos como linhas de fato */
+.portas { margin-top: var(--sp-7); border-top: 1px solid var(--rule); display: grid; grid-template-columns: 1fr 1fr; }
+@media (max-width: 760px) { .portas { grid-template-columns: 1fr; } }
+.porta { padding: 16px 24px 16px 0; border-bottom: 1px solid var(--rule); }
+.porta + .porta { padding: 16px 0 16px 24px; border-left: 1px solid var(--rule); }
+@media (max-width: 760px) { .porta + .porta { padding-left: 0; border-left: none; } }
+.porta .data {
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--copper-600); margin-bottom: 6px;
 }
-.form-input:focus, .form-select:focus {
-  outline: none; border-color: var(--forest-700);
-  box-shadow: 0 0 0 3px rgba(35,64,50,0.10);
-}
-.form-input::placeholder { color: rgba(42,42,38,0.45); }
-.form-input:user-invalid, .form-select:user-invalid { border-color: var(--copper-600); }
-.dupla { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
-@media (max-width: 520px) { .dupla { grid-template-columns: 1fr; } }
-.lead-btn {
-  background: var(--copper-500); color: #FDF6EC;
-  justify-content: center; width: 100%; padding: 16px 20px;
-  font-family: var(--f-body); font-size: 15.5px; font-weight: 500;
-  margin-top: var(--sp-3); cursor: pointer;
-  display: inline-flex; align-items: center; gap: 12px;
-  border: none; border-radius: var(--radius-s);
-  transition: background .25s ease, transform .3s var(--ease-out-quart, ease), box-shadow .3s ease;
-}
-.lead-btn:hover:not(:disabled) { background: var(--copper-600); transform: translateY(-2px); box-shadow: 0 8px 22px -8px rgba(94,31,26,0.5); }
-.lead-btn:active:not(:disabled) { transform: translateY(0); }
-.lead-btn:disabled { opacity: .72; cursor: progress; }
-.lead-btn .arrow { width: 16px; height: 10px; }
-.lead-btn .arrow path { stroke: currentColor; fill: none; stroke-width: 1.4; }
-.form-erro { font-size: 13px; color: var(--copper-700); text-align: center; margin: 6px 0 0; line-height: 1.5; }
-.form-erro a { color: inherit; text-decoration: underline; }
-.form-nota {
-  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--ink-500); text-align: center;
-  margin: 12px 0 0; line-height: 1.8;
-}
-.form-nota a { color: inherit; }
+.porta p { margin: 0; font-size: 14.5px; line-height: 1.55; color: var(--ink-700); max-width: 52ch; }
+.porta p strong { color: var(--forest-900); font-weight: 500; }
+.porta .fund { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-300); }
 
 /* ── Faixa de confiança ───────────────────────────────────── */
 .trust-strip {
@@ -196,7 +137,7 @@
 }
 .trust-item svg { flex-shrink: 0; }
 
-/* ── O que já aconteceu: três fatos, uma linha ────────────── */
+/* ── Três fatos ───────────────────────────────────────────── */
 .fatos { background: var(--clay-100); }
 .fatos-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--sp-6); margin-top: var(--sp-7); }
 @media (max-width: 860px) { .fatos-grid { grid-template-columns: 1fr; gap: var(--sp-5); } }
@@ -206,10 +147,9 @@
   text-transform: uppercase; color: var(--copper-600); margin-bottom: 10px;
 }
 .fato h3 { font-family: var(--f-display); font-size: clamp(21px,1.9vw,26px); font-weight: 500; line-height: 1.12; margin: 0 0 8px; color: var(--forest-900); }
+.fato h3 em { font-style: italic; color: var(--copper-500); }
 .fato p { font-size: 14px; line-height: 1.6; color: var(--ink-700); margin: 0 0 8px; }
 .fato .base { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-300); }
-.fato.vivo .n { color: var(--copper-600); }
-.fato.vivo h3 em { font-style: italic; color: var(--copper-500); }
 
 /* ── Contraste RFB × PGFN ─────────────────────────────────── */
 .escopo {
@@ -233,8 +173,8 @@
 .tab .destaque { font-family: var(--f-display); font-size: 25px; font-style: italic; color: var(--copper-500); line-height: 1.1; }
 .tab .nulo { color: var(--ink-300); }
 .tab .fund { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--ink-300); text-transform: uppercase; }
-/* Contraste empilhado para telas pequenas: tabela rolável esconde o
-   argumento central da página — no mobile os dois lados viram cartões. */
+
+/* Contraste empilhado no mobile: a tabela rolável esconde o argumento */
 .contraste-cards { display: none; margin-top: var(--sp-6); gap: var(--sp-4); }
 .cc { border: 1px solid var(--clay-200); border-radius: var(--radius-m); padding: var(--sp-5); background: #FDFBF7; }
 .cc.pgfn { background: rgba(143,58,46,0.06); border-color: rgba(143,58,46,0.28); }
@@ -254,20 +194,11 @@
 .cc li .v.nulo { color: var(--ink-300); }
 .cc li .v .destaque { font-family: var(--f-display); font-size: 21px; font-style: italic; color: var(--copper-500); line-height: 1.05; display: block; }
 
-.ressalva {
-  margin-top: var(--sp-5); font-size: 13px; line-height: 1.7; color: var(--ink-500);
-  max-width: 78ch;
-}
+.ressalva { margin-top: var(--sp-5); font-size: 13px; line-height: 1.7; color: var(--ink-500); max-width: 78ch; }
 .ressalva strong { color: var(--ink-700); }
 .pos-tabela { margin-top: var(--sp-6); display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.pos-tabela .btn-primary { background: var(--copper-500); }
-.pos-tabela .btn-primary:hover { background: var(--copper-600); }
-.pos-tabela .nota {
-  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--ink-500);
-}
 
-/* ── Ciência presumida: o fato que não espera ─────────────── */
+/* ── Ciência presumida ────────────────────────────────────── */
 .ciencia { background: var(--forest-900); color: var(--fg-on-deep); position: relative; overflow: hidden; }
 .ciencia::before {
   content: ""; position: absolute; inset: 0;
@@ -305,6 +236,31 @@
 .sinergia p { font-size: clamp(15px,1.2vw,17px); line-height: 1.65; color: var(--ink-700); max-width: 72ch; margin: 0; }
 .sinergia p strong { color: var(--forest-900); }
 
+/* ── Quem assina a análise ────────────────────────────────── */
+.quem { background: var(--clay-100); }
+.quem-grid {
+  display: grid; grid-template-columns: minmax(0,0.82fr) minmax(0,1.18fr);
+  gap: clamp(28px,4.5vw,72px); align-items: center;
+}
+@media (max-width: 880px) { .quem-grid { grid-template-columns: 1fr; gap: 28px; } }
+.quem .retrato { max-width: none; }
+@media (max-width: 880px) { .quem .retrato { max-width: 420px; } }
+.quem h2 { font-family: var(--f-display); font-size: clamp(32px,3.6vw,52px); font-weight: 500; line-height: 1.05; letter-spacing: -0.015em; color: var(--forest-900); margin: 0 0 16px; max-width: 16ch; }
+.quem h2 em { font-style: italic; color: var(--copper-500); }
+.quem .bio { font-size: 15.5px; line-height: 1.7; color: var(--ink-700); max-width: 56ch; margin: 0 0 14px; }
+.quem .bio strong { color: var(--forest-900); }
+.quem-fatos { display: flex; flex-wrap: wrap; gap: 8px 26px; margin: var(--sp-5) 0; }
+.quem-fatos span {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-500);
+}
+.quem-cit {
+  margin: var(--sp-5) 0 var(--sp-6);
+  padding: 14px 0 14px 22px; border-left: 1px solid var(--copper-500);
+}
+.quem-cit p { font-family: var(--f-display); font-size: clamp(20px,2vw,26px); font-style: italic; line-height: 1.25; color: var(--forest-900); margin: 0 0 6px; max-width: 30ch; }
+.quem-cit .autor { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-500); }
+
 /* ── Captura final ────────────────────────────────────────── */
 .cta-section { background: var(--copper-500); color: var(--ink-900); position: relative; overflow: hidden; }
 .cta-section::before {
@@ -312,36 +268,33 @@
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.08 0 0 0 0 0.05 0 0 0 0.22 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   opacity: 0.5; mix-blend-mode: multiply; pointer-events: none;
 }
-.cta-section .container { position: relative; z-index: 1; }
-.cta-layout { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px,4.5vw,72px); align-items: start; }
-@media (max-width: 900px) { .cta-layout { grid-template-columns: 1fr; gap: var(--sp-7); } }
-.cta-section h2 { font-family: var(--f-display); font-size: clamp(34px,3.8vw,56px); line-height: 1.05; font-weight: 500; margin: 0 0 16px; letter-spacing: -0.015em; }
+.cta-section .container { position: relative; z-index: 1; text-align: center; }
+.cta-section h2 {
+  font-family: var(--f-display); font-size: clamp(34px,4vw,58px);
+  line-height: 1.05; font-weight: 500; margin: 0 auto 16px; letter-spacing: -0.015em; max-width: 18ch;
+}
 .cta-section h2 em { color: var(--copper-700); font-style: italic; }
-.cta-lede { font-size: 16.5px; line-height: 1.6; color: var(--ink-900); max-width: 50ch; margin: 0 0 var(--sp-6); }
-.cta-lista { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 11px; }
-.cta-lista li { padding-left: 20px; position: relative; font-size: 14.5px; color: var(--ink-900); line-height: 1.55; }
-.cta-lista li::before { content: ""; position: absolute; left: 0; top: 10px; width: 10px; height: 1px; background: var(--forest-900); }
-.cta-passos { margin-top: var(--sp-6); padding-top: var(--sp-5); border-top: 1px solid rgba(42,18,8,0.25); display: grid; grid-template-columns: repeat(3,1fr); gap: var(--sp-5); }
-@media (max-width: 560px) { .cta-passos { grid-template-columns: 1fr; } }
+.cta-lede { font-size: 16.5px; line-height: 1.6; color: var(--ink-900); max-width: 54ch; margin: 0 auto var(--sp-6); }
+.cta-section .btn-diag { background: var(--forest-900); color: var(--copper-300); font-size: 17px; padding: 18px 34px; }
+.cta-section .btn-diag:hover { background: var(--forest-800); box-shadow: 0 10px 26px -10px rgba(20,37,29,0.6); }
+.cta-section .cta-micro { color: rgba(42,18,8,0.65); margin-top: 12px; display: block; }
+.cta-passos {
+  margin: var(--sp-7) auto 0; padding-top: var(--sp-5);
+  border-top: 1px solid rgba(42,18,8,0.25);
+  display: grid; grid-template-columns: repeat(3,1fr); gap: var(--sp-5);
+  max-width: 880px; text-align: left;
+}
+@media (max-width: 640px) { .cta-passos { grid-template-columns: 1fr; } }
 .cta-passo .n { font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(42,18,8,0.65); margin-bottom: 6px; }
 .cta-passo p { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--ink-900); }
-.cta-section .form-card { box-shadow: 0 22px 54px -20px rgba(42,18,8,0.45); border-color: rgba(42,18,8,0.12); }
 
-/* ── Aviso + rodapé mínimo ────────────────────────────────── */
-.aviso { background: var(--clay-100); border-top: 1px solid var(--clay-200); }
-.aviso .container { padding-top: var(--sp-6); padding-bottom: var(--sp-6); }
-.aviso p { font-size: 13px; line-height: 1.7; color: var(--ink-500); max-width: 82ch; margin: 0 auto; text-align: center; }
-.aviso p strong { color: var(--ink-700); }
-.lp-footer { background: var(--clay-100); border-top: 1px solid var(--clay-200); }
-.lp-footer .inner {
-  display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
-  padding-top: 22px; padding-bottom: 26px;
+/* ── Nota de conformidade, serena ─────────────────────────── */
+.conform { background: var(--clay-100); border-top: 1px solid var(--clay-200); }
+.conform .container { padding-top: var(--sp-5); padding-bottom: var(--sp-5); }
+.conform p {
+  font-size: 12.5px; line-height: 1.7; color: var(--ink-500);
+  max-width: 78ch; margin: 0 auto; text-align: center;
 }
-.lp-footer .marca { font-family: var(--f-display); font-size: 18px; font-weight: 600; color: var(--forest-900); }
-.lp-footer .marca em { font-style: italic; font-weight: 500; }
-.lp-footer .links { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-500); }
-.lp-footer .links a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--clay-300); padding-bottom: 1px; }
-.lp-footer .links a:hover { color: var(--ink-700); }
 
 /* ── Barra fixa mobile ────────────────────────────────────── */
 .sticky-cta-bar {
@@ -351,25 +304,130 @@
   border-top: 2px solid rgba(143,58,46,0.5);
   box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
 }
-.sticky-cta-bar a {
-  color: var(--copper-300); font-size: 15px; font-weight: 500;
-  text-decoration: none; display: flex; align-items: center;
-  gap: 10px; width: 100%; justify-content: center;
+.sticky-cta-bar button {
+  background: none; border: none; cursor: pointer;
+  color: var(--copper-300); font-family: var(--f-body); font-size: 15px; font-weight: 500;
+  display: flex; align-items: center; gap: 10px; width: 100%; justify-content: center;
 }
 @media (max-width: 920px) {
   .sticky-cta-bar { display: block; }
-  .sticky-cta-bar.form-in-view { display: none; }
-  body { padding-bottom: 66px; }
+  body { padding-bottom: 64px; }
 }
+/* Some quando o popup está aberto ou quando o CTA do hero já está em tela
+   (dois botões iguais no mesmo viewport só disputam atenção). */
+body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; }
 
-/* ── Mobile-first: o tráfego chega de Reels/Stories ───────── */
+/* ── Popup do diagnóstico ─────────────────────────────────── */
+.modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.modal[hidden] { display: none; }
+.modal-veu {
+  position: absolute; inset: 0;
+  background: rgba(18,24,20,0.6);
+  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+}
+.modal-card {
+  position: relative; width: 100%; max-width: 430px;
+  background: #FDFBF7; border-radius: var(--radius-m);
+  box-shadow: 0 30px 80px -20px rgba(0,0,0,0.5);
+  padding: 26px 26px 22px;
+  animation: modal-in .45s var(--ease-out-expo, cubic-bezier(0.16,1,0.3,1)) both;
+  max-height: calc(100dvh - 40px); overflow-y: auto;
+}
+@keyframes modal-in { from { opacity: 0; transform: translateY(22px) scale(.985); } }
+@media (prefers-reduced-motion: reduce) { .modal-card { animation: none; } }
+@media (max-width: 560px) {
+  .modal { padding: 0; align-items: flex-end; }
+  .modal-card { max-width: none; border-radius: var(--radius-m) var(--radius-m) 0 0; padding: 22px 20px calc(18px + env(safe-area-inset-bottom)); max-height: 92dvh; }
+  @keyframes modal-in { from { opacity: 0; transform: translateY(40px); } }
+}
+.modal-x {
+  position: absolute; top: 12px; right: 12px;
+  width: 34px; height: 34px; border: none; border-radius: 50%;
+  background: var(--clay-100); color: var(--ink-700); cursor: pointer;
+  font-size: 17px; line-height: 1; display: flex; align-items: center; justify-content: center;
+  transition: background .2s ease;
+}
+.modal-x:hover { background: var(--clay-200); }
+.modal-faixa {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin: 0 26px var(--sp-4) 0; padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--clay-200);
+}
+.modal-faixa .rotulo, .modal-faixa .valor {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.modal-faixa .rotulo { color: var(--ink-500); }
+.modal-faixa .valor { color: var(--copper-600); text-align: right; }
+.modal-titulo { font-family: var(--f-display); font-size: 26px; font-weight: 500; line-height: 1.1; color: var(--ink-900); margin: 0 0 6px; }
+.modal-titulo em { font-style: italic; color: var(--copper-500); }
+.modal-sub { font-size: 13.5px; line-height: 1.55; color: var(--ink-500); margin: 0 0 var(--sp-5); }
+
+.lead-form { display: flex; flex-direction: column; gap: var(--sp-3); }
+.campo { display: flex; flex-direction: column; gap: 5px; }
+.campo label {
+  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--ink-500);
+}
+.form-input, .form-select {
+  width: 100%; padding: 12px 15px;
+  font-family: var(--f-body); font-size: 16px; color: var(--ink-900);
+  background: #fff; border: 1px solid rgba(42,18,8,0.22);
+  border-radius: var(--radius-s);
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.form-select {
+  appearance: none; cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1.5L6 6L11 1.5' stroke='%232A2A26' stroke-width='1.4' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat: no-repeat; background-position: right 15px center;
+  padding-right: 40px;
+}
+.form-input:focus, .form-select:focus {
+  outline: none; border-color: var(--forest-700);
+  box-shadow: 0 0 0 3px rgba(35,64,50,0.10);
+}
+.form-input::placeholder { color: rgba(42,42,38,0.45); }
+.form-input:user-invalid, .form-select:user-invalid { border-color: var(--copper-600); }
+
+/* WhatsApp com DDI fixo */
+.fone-linha { display: flex; }
+.fone-linha .ddi {
+  display: flex; align-items: center; padding: 0 13px;
+  background: var(--clay-100); border: 1px solid rgba(42,18,8,0.22); border-right: none;
+  border-radius: var(--radius-s) 0 0 var(--radius-s);
+  font-family: var(--f-mono); font-size: 13.5px; color: var(--ink-700);
+}
+.fone-linha .form-input { border-radius: 0 var(--radius-s) var(--radius-s) 0; }
+
+.lead-btn {
+  background: var(--copper-500); color: #FDF6EC;
+  justify-content: center; width: 100%; padding: 16px 20px;
+  font-family: var(--f-body); font-size: 15.5px; font-weight: 500;
+  margin-top: var(--sp-3); cursor: pointer;
+  display: inline-flex; align-items: center; gap: 12px;
+  border: none; border-radius: var(--radius-s);
+  transition: background .25s ease;
+}
+.lead-btn:hover:not(:disabled) { background: var(--copper-600); }
+.lead-btn:disabled { opacity: .72; cursor: progress; }
+.lead-btn .arrow { width: 16px; height: 10px; }
+.lead-btn .arrow path { stroke: currentColor; fill: none; stroke-width: 1.4; }
+.form-erro { font-size: 13px; color: var(--copper-700); text-align: center; margin: 6px 0 0; line-height: 1.5; }
+.form-erro a { color: inherit; text-decoration: underline; }
+.form-nota {
+  font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink-500); text-align: center;
+  margin: 10px 0 0; line-height: 1.8;
+}
+.form-nota a { color: inherit; }
+
+/* ── Ajustes mobile ───────────────────────────────────────── */
 @media (max-width: 920px) {
-  .form-input, .form-select { font-size: 16px; } /* <16px dispara zoom no iOS */
   .hero { padding: 26px 0 40px; }
   .hero h1 { font-size: clamp(33px,8.8vw,44px); }
   .hero .lede { font-size: 15.5px; margin-top: 14px; }
-  .hero-conf { margin-top: 16px; gap: 8px 18px; }
-  .form-card { padding: 20px 18px; }
+  .btn-diag { width: 100%; justify-content: center; }
+  .hero-conf { margin-top: 14px; gap: 8px 18px; }
   .trust-strip { padding: 12px 0; }
   .trust-inner { gap: 10px 22px; }
   section { padding: clamp(40px, 8vw, 64px) 0; }
@@ -395,68 +453,45 @@
   </div>
 </header>
 
-<!-- ── HERO DE CAPTURA ───────────────────────────────────── -->
+<!-- ── HERO ──────────────────────────────────────────────── -->
 <section class="hero">
   <div class="container">
     <div class="hero-grid">
-      <div class="hero-texto">
+      <div>
         <span class="eyebrow">Débitos do Simples Nacional · Exclusão 2026</span>
         <h1>Duas portas ainda abertas. As duas fecham em <em>30&nbsp;de&nbsp;setembro</em>.</h1>
-        <p class="lede">Para as empresas notificadas pelos 1.102.924 Termos de Exclusão de março, o que resta do calendário de 2026 cabe em uma data. Antes de assinar qualquer parcelamento no impulso do prazo, vale um diagnóstico do passivo.</p>
-        <div class="hero-conf" aria-label="Garantias do diagnóstico">
-          <span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.4V8l2.4 1.6"/></svg>Retorno em 48h úteis</span>
-          <span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg>Sem compromisso</span>
-          <span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 13.5h11M4.5 13.5V7M8 13.5V7M11.5 13.5V7M2 5.5L8 2.5l6 3H2z"/></svg>Norma vigente citada</span>
-        </div>
-      </div>
-
-      <div class="hero-apoio">
-        <div class="portas" role="list">
-          <div class="porta" role="listitem">
-            <div class="data">01 · 1º a 30/09</div>
-            <p><strong>Janela de opção pelo Simples</strong> com efeitos a partir de janeiro de 2027 — deslocada de janeiro para setembro pela Reforma. <span style="font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-300)">LC 214/2025</span></p>
-          </div>
-          <div class="porta" role="listitem">
-            <div class="data">02 · Até 30/09, 19h</div>
-            <p><strong>Adesão ao Edital PGDAU 6/2026</strong>, a transação da dívida ativa para débitos já inscritos na PGFN. <span style="font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-300)">Lei 13.988/2020</span></p>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-card">
-        <div class="faixa-prazo">
-          <span class="rotulo">Diagnóstico gratuito</span>
-          <span class="valor" id="contagem" aria-live="polite">Até 30/09</span>
-        </div>
-        <p class="form-titulo">Descubra o que <em>ainda dá</em> para fazer.</p>
-        <p class="form-sub">Levantamos a situação dos débitos e devolvemos os caminhos possíveis — o que parcelar, o que negociar, o que pode estar prescrito.</p>
-        <form class="lead-form" novalidate>
-          <div class="campo">
-            <label for="s-nome">Nome</label>
-            <input class="form-input" type="text" id="s-nome" name="nome" placeholder="Como devemos te chamar" autocomplete="name" required>
-          </div>
-          <div class="campo">
-            <label for="s-whats">WhatsApp</label>
-            <input class="form-input" type="tel" id="s-whats" name="whatsapp" placeholder="(DDD) 90000-0000" autocomplete="tel" inputmode="tel" required>
-          </div>
-          <div class="campo">
-            <label for="s-faixa">Faixa aproximada dos débitos federais</label>
-            <select class="form-select" id="s-faixa" name="faixa" required>
-              <option value="" disabled selected>Selecione</option>
-              <option>Até R$ 50 mil</option>
-              <option>De R$ 50 mil a R$ 200 mil</option>
-              <option>De R$ 200 mil a R$ 1 milhão</option>
-              <option>Acima de R$ 1 milhão</option>
-              <option>Não sei informar</option>
-            </select>
-          </div>
-          <input type="hidden" name="regime" value="Simples Nacional (LP)">
-          <button type="submit" class="lead-btn">
+        <p class="lede">Foram <strong>1.102.924 Termos de Exclusão</strong> em março. Se a sua empresa recebeu um, o que resta de 2026 cabe numa data — e assinar parcelamento no impulso do prazo costuma ser o caminho mais caro. Antes disso, um diagnóstico.</p>
+        <div class="hero-cta">
+          <button type="button" class="btn-diag js-abre-diag">
             Quero o diagnóstico gratuito
             <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
           </button>
-        </form>
-        <p class="form-nota">Sem compromisso · Dados tratados conforme a <a href="/politica-de-privacidade">política de privacidade</a></p>
+          <span class="cta-micro">Leva 2 minutos · retorno em até 48h úteis · <span class="contagem-slot">até 30/09</span></span>
+        </div>
+        <div class="hero-conf" aria-label="Garantias do diagnóstico">
+          <span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg>Sem compromisso</span>
+          <span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 13.5h11M4.5 13.5V7M8 13.5V7M11.5 13.5V7M2 5.5L8 2.5l6 3H2z"/></svg>Norma vigente citada</span>
+          <span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5l5.5 2.5v4c0 3-2.3 5.5-5.5 6.5C4.8 13.5 2.5 11 2.5 8V4L8 1.5z"/></svg>Análise documental</span>
+        </div>
+      </div>
+
+      <div class="retrato">
+        <img src="assets/img/alex-amadeu.jpg" alt="Alex Amadeu, advogado tributarista e fundador da TriboTax" width="740" height="985" fetchpriority="high" />
+        <div class="legenda">
+          <div class="nome">Alex Amadeu</div>
+          <div class="cargo">Advogado tributarista · OAB/MG · fundador da TriboTax</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="portas" role="list">
+      <div class="porta" role="listitem">
+        <div class="data">Porta 01 · 1º a 30/09</div>
+        <p><strong>Janela de opção pelo Simples</strong> com efeitos a partir de janeiro de 2027 — deslocada de janeiro para setembro pela Reforma. <span class="fund">LC 214/2025</span></p>
+      </div>
+      <div class="porta" role="listitem">
+        <div class="data">Porta 02 · Até 30/09, 19h</div>
+        <p><strong>Adesão ao Edital PGDAU 6/2026</strong>, a transação da dívida ativa para débitos já inscritos na PGFN. <span class="fund">Lei 13.988/2020</span></p>
       </div>
     </div>
   </div>
@@ -494,19 +529,19 @@
       <div class="fato reveal" data-delay="80">
         <div class="n">Março de 2026</div>
         <h3>O Termo já foi entregue</h3>
-        <p>1.102.924 Termos de Exclusão disponibilizados no DTE-SN, somando cerca de R$ 12,9 bilhões. A ciência é presumida no 45º dia mesmo sem consulta — e vale como notificação pessoal.</p>
+        <p>1.102.924 Termos de Exclusão no DTE-SN, somando cerca de R$ 12,9 bilhões. A ciência é presumida no 45º dia mesmo sem consulta — e vale como notificação pessoal.</p>
         <div class="base">LC 123/2006, art. 16 · Res. CGSN 140/2018</div>
       </div>
       <div class="fato reveal" data-delay="160">
         <div class="n">90 dias da ciência</div>
         <h3>O prazo de regularizar correu</h3>
-        <p>Regularizar dentro dos 90 dias cancelava o Termo automaticamente — pagamento, compensação ou parcelamento. Para a maior parte das empresas notificadas em março, esse prazo já se encerrou.</p>
+        <p>Regularizar dentro dos 90 dias cancelava o Termo automaticamente. Para a maior parte das empresas notificadas em março, esse prazo já se encerrou.</p>
         <div class="base">LC 123/2006, art. 31, §2º · LC 216/2025</div>
       </div>
-      <div class="fato vivo reveal" data-delay="240">
+      <div class="fato reveal" data-delay="240">
         <div class="n">O que ainda está aberto</div>
         <h3>Setembro decide <em>2027</em></h3>
-        <p>A empresa segue optante até 31/12/2026. A janela de opção para voltar em 2027 e a adesão ao Edital PGDAU 6/2026 se encerram juntas, em 30 de setembro.</p>
+        <p>A empresa segue optante até 31/12/2026. A janela de opção para 2027 e a adesão ao Edital PGDAU 6/2026 se encerram juntas, em 30 de setembro.</p>
         <div class="base">LC 214/2025 · Edital PGDAU 6/2026</div>
       </div>
     </div>
@@ -557,7 +592,7 @@
       </table>
     </div>
 
-    <div class="contraste-cards reveal" data-delay="160" aria-hidden="false">
+    <div class="contraste-cards reveal" data-delay="160">
       <div class="cc">
         <div class="onde">Débito na Receita Federal</div>
         <ul>
@@ -576,14 +611,14 @@
       </div>
     </div>
 
-    <p class="ressalva reveal" data-delay="200">O desconto <strong>nunca alcança o valor principal</strong> (Lei 13.988/2020, art. 11, §2º, I): a redução incide sobre juros, multas e encargos, e o teto é medido sobre o valor total de cada inscrição. 70% e 145 meses são limites legais para ME e EPP — cada proposta depende da capacidade de pagamento apurada. <strong>Cada caso é um caso.</strong></p>
+    <p class="ressalva reveal" data-delay="200">O desconto <strong>nunca alcança o valor principal</strong> (Lei 13.988/2020, art. 11, §2º, I): a redução incide sobre juros, multas e encargos, e o teto é medido sobre o valor total de cada inscrição. 70% e 145 meses são limites legais para ME e EPP — cada proposta depende da capacidade de pagamento apurada.</p>
 
     <div class="pos-tabela reveal" data-delay="240">
-      <a href="#captura" class="btn btn-primary">
+      <button type="button" class="btn-diag js-abre-diag">
         Ver o caminho do meu débito
         <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
-      </a>
-      <span class="nota">Diagnóstico gratuito · retorno em 48h úteis</span>
+      </button>
+      <span class="cta-micro">Diagnóstico gratuito · retorno em 48h úteis</span>
     </div>
   </div>
 </section>
@@ -637,105 +672,117 @@
   </div>
 </section>
 
-<!-- ── CAPTURA FINAL ─────────────────────────────────────── -->
-<section id="captura" class="cta-section">
+<!-- ── QUEM ASSINA ───────────────────────────────────────── -->
+<section class="quem tight">
   <div class="container">
-    <div class="cta-layout">
-      <div>
-        <h2>Comece pelo <em>diagnóstico</em>, não pela assinatura.</h2>
-        <p class="cta-lede">Nossa equipe levanta a situação dos débitos e devolve um relatório com os caminhos possíveis, seus fundamentos e seus riscos. A partir daí, a decisão é sua.</p>
-        <ul class="cta-lista">
-          <li>Levantamento do passivo federal, separando Receita e dívida ativa</li>
-          <li>Verificação de enquadramento nas modalidades do edital vigente</li>
-          <li>Exame de prescrição antes de qualquer confissão de débito</li>
-          <li>Retorno em até 48 horas úteis, sem compromisso inicial</li>
-        </ul>
-        <div class="cta-passos">
-          <div class="cta-passo"><div class="n">Passo 01</div><p>Contato e, havendo interesse, procuração eletrônica para o e-CAC.</p></div>
-          <div class="cta-passo"><div class="n">Passo 02</div><p>Mapeamento de todos os débitos, sua natureza e sua fase.</p></div>
-          <div class="cta-passo"><div class="n">Passo 03</div><p>Relatório de viabilidade com caminhos, fundamentos e riscos.</p></div>
-        </div>
+    <div class="quem-grid">
+      <div class="retrato reveal">
+        <img src="assets/img/alex-amadeu-2.jpg" alt="Alex Amadeu em frente ao escritório da TriboTax" width="846" height="1269" loading="lazy" />
       </div>
-
-      <div class="form-card">
-        <div class="faixa-prazo">
-          <span class="rotulo">Diagnóstico gratuito</span>
-          <span class="valor contagem-slot" aria-hidden="true">Até 30/09</span>
+      <div>
+        <span class="eyebrow reveal">Quem assina a análise</span>
+        <h2 class="reveal" data-delay="60">Diagnóstico com nome, registro e <em>endereço</em>.</h2>
+        <p class="bio reveal" data-delay="120"><strong>Alex Amadeu</strong> é advogado tributarista (OAB/MG) e fundador da TriboTax, consultoria com sede na Savassi, em Belo Horizonte. Atua em recuperação de créditos, defesa em processos administrativos e arquitetura fiscal de grupos empresariais e famílias empresárias.</p>
+        <p class="bio reveal" data-delay="160">A TriboTax nasceu para trocar a frieza da consultoria tradicional por um modelo de comunidade técnica. É por isso que o primeiro passo aqui nunca é uma proposta — é um <strong>diagnóstico por escrito</strong>, com fundamentos e riscos, que fica com você.</p>
+        <div class="quem-cit reveal" data-delay="200">
+          <p>Eu não fundei um escritório. Fundei uma tribo.</p>
+          <div class="autor">Alex Amadeu · Carta aberta da TriboTax</div>
         </div>
-        <p class="form-titulo">Solicite a <em>análise</em> do seu caso.</p>
-        <p class="form-sub">Os dados abaixo servem apenas para direcionar a análise. Retorno em até 48 horas úteis.</p>
-        <form class="lead-form" novalidate>
-          <div class="campo">
-            <label for="b-nome">Nome</label>
-            <input class="form-input" type="text" id="b-nome" name="nome" placeholder="Como devemos te chamar" autocomplete="name" required>
-          </div>
-          <div class="campo">
-            <label for="b-whats">WhatsApp</label>
-            <input class="form-input" type="tel" id="b-whats" name="whatsapp" placeholder="(DDD) 90000-0000" autocomplete="tel" inputmode="tel" required>
-          </div>
-          <div class="campo">
-            <label for="b-faixa">Faixa aproximada dos débitos federais</label>
-            <select class="form-select" id="b-faixa" name="faixa" required>
-              <option value="" disabled selected>Selecione</option>
-              <option>Até R$ 50 mil</option>
-              <option>De R$ 50 mil a R$ 200 mil</option>
-              <option>De R$ 200 mil a R$ 1 milhão</option>
-              <option>Acima de R$ 1 milhão</option>
-              <option>Não sei informar</option>
-            </select>
-          </div>
-          <input type="hidden" name="regime" value="Simples Nacional (LP)">
-          <button type="submit" class="lead-btn">
-            Quero o diagnóstico gratuito
-            <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
-          </button>
-        </form>
-        <p class="form-nota">Sem compromisso · Dados tratados conforme a <a href="/politica-de-privacidade">política de privacidade</a></p>
+        <div class="quem-fatos reveal" data-delay="240">
+          <span>Direito tributário · pós-graduação</span>
+          <span>Contencioso e consultivo</span>
+          <span>OAB/MG</span>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── AVISO ─────────────────────────────────────────────── -->
-<section class="aviso">
+<!-- ── CAPTURA FINAL ─────────────────────────────────────── -->
+<section id="captura" class="cta-section">
   <div class="container">
-    <p><strong>Conteúdo informativo.</strong> Esta página descreve o funcionamento de normas tributárias vigentes e não constitui aconselhamento jurídico, nem promessa de resultado. Prazos, percentuais e modalidades citados são os limites previstos em lei e nos editais mencionados, e sua aplicação depende da análise de cada caso concreto. <strong>Cada caso é um caso.</strong></p>
+    <h2 class="reveal">Comece pelo <em>diagnóstico</em>, não pela assinatura.</h2>
+    <p class="cta-lede reveal" data-delay="60">A equipe levanta a situação dos débitos e devolve um relatório com os caminhos possíveis, seus fundamentos e seus riscos. A partir daí, a decisão é sua.</p>
+    <div class="reveal" data-delay="120">
+      <button type="button" class="btn-diag js-abre-diag">
+        Quero o diagnóstico gratuito
+        <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+      </button>
+      <span class="cta-micro"><span class="contagem-slot">Até 30/09</span> · sem compromisso</span>
+    </div>
+    <div class="cta-passos reveal" data-delay="180">
+      <div class="cta-passo"><div class="n">Passo 01</div><p>Contato em até 48h úteis e, havendo interesse, procuração eletrônica para o e-CAC.</p></div>
+      <div class="cta-passo"><div class="n">Passo 02</div><p>Mapeamento de todos os débitos, sua natureza e sua fase.</p></div>
+      <div class="cta-passo"><div class="n">Passo 03</div><p>Relatório de viabilidade com caminhos, fundamentos e riscos.</p></div>
+    </div>
   </div>
 </section>
 
-<footer class="lp-footer">
-  <div class="container inner">
-    <span class="marca">Tribo<em>Tax</em> — Consultoria Tributária</span>
-    <span class="links"><a href="/politica-de-privacidade">Política de Privacidade</a> · <a href="/exclusao-de-dados">Exclusão de dados</a></span>
+<!-- ── CONFORMIDADE ──────────────────────────────────────── -->
+<section class="conform">
+  <div class="container">
+    <p>Página educativa, em conformidade com o Provimento 205/2021 da OAB: nada aqui promete resultado. Os percentuais e prazos citados são os tetos previstos em lei e nos editais — e é justamente porque cada caso tem os seus que o primeiro passo é um diagnóstico.</p>
   </div>
-</footer>
+</section>
+
+<footer id="tt-footer"></footer>
 
 <div class="sticky-cta-bar" id="sticky-bar">
-  <a href="#captura">Quero o diagnóstico gratuito
+  <button type="button" class="js-abre-diag">Quero o diagnóstico gratuito
     <svg aria-hidden="true" width="16" height="10" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
-  </a>
+  </button>
 </div>
 
-<script>
-/* ── Reveal-on-scroll (local; a página não usa o site.js) ──── */
-(function () {
-  if (!('IntersectionObserver' in window)) {
-    document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
-    return;
-  }
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) {
-        var delay = e.target.dataset.delay || 0;
-        if (delay) e.target.style.transitionDelay = delay + 'ms';
-        e.target.classList.add('in');
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0 });
-  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
-})();
+<!-- ── POPUP ─────────────────────────────────────────────── -->
+<div class="modal" id="modal-diag" role="dialog" aria-modal="true" aria-labelledby="modal-titulo" hidden>
+  <div class="modal-veu" data-fecha></div>
+  <div class="modal-card">
+    <button class="modal-x" type="button" aria-label="Fechar" data-fecha>✕</button>
+    <div class="modal-faixa">
+      <span class="rotulo">Diagnóstico gratuito</span>
+      <span class="valor contagem-slot">Até 30/09</span>
+    </div>
+    <p class="modal-titulo" id="modal-titulo">Solicite a <em>análise</em> do seu caso.</p>
+    <p class="modal-sub">Deixe seus contatos e a equipe do Alex retorna em até 48 horas úteis com os próximos passos.</p>
+    <form class="lead-form" id="formDiag" novalidate>
+      <div class="campo">
+        <label for="d-nome">Nome</label>
+        <input class="form-input" type="text" id="d-nome" name="nome" placeholder="Como devemos te chamar" autocomplete="name" required>
+      </div>
+      <div class="campo">
+        <label for="d-whats">WhatsApp</label>
+        <div class="fone-linha">
+          <span class="ddi" aria-hidden="true">+55</span>
+          <input class="form-input" type="tel" id="d-whats" name="whatsapp" placeholder="(DDD) 90000-0000" autocomplete="tel-national" inputmode="tel" required>
+        </div>
+      </div>
+      <div class="campo">
+        <label for="d-email">E-mail</label>
+        <input class="form-input" type="email" id="d-email" name="email" placeholder="nome@empresa.com.br" autocomplete="email" required>
+      </div>
+      <div class="campo">
+        <label for="d-faixa">Faixa aproximada dos débitos federais</label>
+        <select class="form-select" id="d-faixa" name="faixa" required>
+          <option value="" disabled selected>Selecione</option>
+          <option>Até R$ 50 mil</option>
+          <option>De R$ 50 mil a R$ 200 mil</option>
+          <option>De R$ 200 mil a R$ 1 milhão</option>
+          <option>Acima de R$ 1 milhão</option>
+          <option>Não sei informar</option>
+        </select>
+      </div>
+      <input type="hidden" name="regime" value="Simples Nacional (LP)">
+      <button type="submit" class="lead-btn">
+        Solicitar diagnóstico
+        <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+      </button>
+    </form>
+    <p class="form-nota">Sem compromisso · Dados tratados conforme a <a href="/politica-de-privacidade" target="_blank" rel="noopener">política de privacidade</a></p>
+  </div>
+</div>
 
+<script src="assets/js/site.js?v=2"></script>
+<script>
 /* ── Contagem até 30/09/2026, 19h ──────────────────────────── */
 (function () {
   var alvo = new Date('2026-09-30T19:00:00-03:00').getTime();
@@ -745,92 +792,150 @@
   else if (dias === 1) txt = 'Falta 1 dia';
   else if (dias === 0) txt = 'Último dia';
   else                 txt = null;
-  document.querySelectorAll('#contagem, .contagem-slot').forEach(function (el) {
-    if (txt) el.textContent = txt + ' · 30/09';
-    else el.textContent = 'Encerrado em 30/09';
+  document.querySelectorAll('.contagem-slot').forEach(function (el) {
+    el.textContent = txt ? (txt + ' · 30/09') : 'Encerrado em 30/09';
   });
 })();
 
-/* ── Envio: um handler para os dois formulários ────────────── */
-document.querySelectorAll('form.lead-form').forEach(function (f) {
-  f.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    if (!f.checkValidity()) { f.reportValidity(); return; }
+/* ── Popup: abrir, fechar, pré-preencher ───────────────────── */
+(function () {
+  var modal = document.getElementById('modal-diag');
+  var form = document.getElementById('formDiag');
+  var CHAVE = 'tt_diag_rascunho';
+  var ultimoFoco = null;
 
-    var btn = f.querySelector('button[type="submit"]');
-    var original = btn.innerHTML;
-    var val = function (n) { return f.elements[n] ? f.elements[n].value.trim() : ''; };
+  function prefill() {
+    var dados = {};
+    try { dados = JSON.parse(localStorage.getItem(CHAVE) || '{}'); } catch (_) {}
     var p = new URLSearchParams(location.search);
+    // O parâmetro da URL vence o rascunho salvo (ex.: link com ?nome=)
+    ['nome', 'email'].forEach(function (n) {
+      if (p.get(n)) dados[n] = p.get(n);
+    });
+    if (p.get('wpp')) dados.whatsapp = p.get('wpp');
+    Object.keys(dados).forEach(function (n) {
+      var el = form.elements[n];
+      if (el && !el.value && dados[n]) el.value = dados[n];
+    });
+  }
 
-    var nome = val('nome'), wpp = val('whatsapp'), empresa = val('empresa');
-    var servico = 'Simples Nacional — Janela de Setembro';
+  function abre() {
+    ultimoFoco = document.activeElement;
+    prefill();
+    modal.hidden = false;
+    document.body.classList.add('modal-aberto');
+    document.body.style.overflow = 'hidden';
+    var primeiro = form.querySelector('input,select');
+    // Sem foco automático no mobile: o teclado subiria cobrindo o popup
+    if (window.matchMedia('(min-width: 561px)').matches && primeiro) primeiro.focus();
+  }
 
-    // Um único event_id por conversão: vai para o n8n (CAPI) e para /obrigado
-    // (Pixel). Ids diferentes fariam a Meta contar o mesmo lead duas vezes.
-    var eid = window.ttNewEventId ? window.ttNewEventId() : '';
-    var sinais = window.ttSignals ? window.ttSignals() : {};
+  function fecha() {
+    modal.hidden = true;
+    document.body.classList.remove('modal-aberto');
+    document.body.style.overflow = '';
+    if (ultimoFoco && ultimoFoco.focus) ultimoFoco.focus();
+  }
 
-    btn.disabled = true;
-    btn.textContent = 'Enviando…';
-
-    try {
-      // Sem checar o status, um 500 do n8n cairia fora do catch: o lead
-      // redirecionaria para /obrigado, o Pixel contaria a conversão e o
-      // contato se perderia em silêncio.
-      var resp = await fetch('https://n8n.gabrielgouvea.com.br/webhook/f484ff6a-2bf3-440b-b23c-dcfe76eaf968', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nome: nome, whatsapp: wpp, email: val('email'), empresa: empresa,
-          cnpj: val('cnpj'),
-          regime: val('regime'), termo: val('termo'), faixa: val('faixa'),
-          servico: servico,
-          canal_aquisicao: 'Meta Ads — Simples Setembro',
-          origem: location.pathname,
-          event_id: eid, event_name: 'Lead',
-          fbp: sinais.fbp || '', fbc: sinais.fbc || '',
-          event_source_url: sinais.event_source_url || location.href,
-          client_user_agent: sinais.client_user_agent || navigator.userAgent,
-          utm_source: p.get('utm_source') || '',
-          utm_medium: p.get('utm_medium') || '',
-          utm_campaign: p.get('utm_campaign') || '',
-          utm_content: p.get('utm_content') || '',
-          utm_term: p.get('utm_term') || ''
-        })
-      });
-      if (!resp.ok) throw new Error('HTTP ' + resp.status);
-      location.href = '/obrigado?' + new URLSearchParams({
-        nome: nome, wpp: wpp, empresa: empresa, servico: servico, eid: eid
-      }).toString();
-    } catch (_) {
-      btn.disabled = false;
-      btn.innerHTML = original;
-      var erro = f.parentNode.querySelector('.form-erro');
-      if (!erro) {
-        erro = document.createElement('p');
-        erro.className = 'form-erro';
-        f.parentNode.insertBefore(erro, f.nextSibling);
-      }
-      erro.innerHTML = 'Não conseguimos enviar agora. <a href="https://wa.me/554799975701" target="_blank" rel="noopener">Fale pelo WhatsApp →</a>';
-    }
+  document.querySelectorAll('.js-abre-diag').forEach(function (b) {
+    b.addEventListener('click', abre);
   });
-});
+  modal.querySelectorAll('[data-fecha]').forEach(function (b) {
+    b.addEventListener('click', fecha);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !modal.hidden) fecha();
+  });
 
-/* ── Barra fixa some quando qualquer formulário está em tela ── */
+  // Rascunho: o que a pessoa digita fica salvo para a próxima abertura
+  form.addEventListener('input', function () {
+    var d = {
+      nome: form.elements.nome.value,
+      whatsapp: form.elements.whatsapp.value,
+      email: form.elements.email.value,
+      faixa: form.elements.faixa.value
+    };
+    try { localStorage.setItem(CHAVE, JSON.stringify(d)); } catch (_) {}
+  });
+})();
+
+/* ── Barra fixa cede quando o CTA do hero está em tela ─────── */
 (function () {
   var barra = document.getElementById('sticky-bar');
-  if (!barra || !('IntersectionObserver' in window)) return;
-  // Set, não contador: o observer dispara callbacks iniciais com
-  // isIntersecting=false e um contador partiria de -N.
-  var emTela = new Set();
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) emTela.add(e.target); else emTela.delete(e.target);
-    });
-    barra.classList.toggle('form-in-view', emTela.size > 0);
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.form-card').forEach(function (el) { io.observe(el); });
+  var alvo = document.querySelector('.hero .btn-diag');
+  if (!barra || !alvo || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (entries) {
+    barra.classList.toggle('cta-em-tela', entries[0].isIntersecting);
+  }, { threshold: 0.4 }).observe(alvo);
 })();
+
+/* ── Envio ─────────────────────────────────────────────────── */
+document.getElementById('formDiag').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  var f = e.target;
+  if (!f.checkValidity()) { f.reportValidity(); return; }
+
+  var btn = f.querySelector('button[type="submit"]');
+  var original = btn.innerHTML;
+  var val = function (n) { return f.elements[n] ? f.elements[n].value.trim() : ''; };
+  var p = new URLSearchParams(location.search);
+
+  var nome = val('nome');
+  // DDI fixo do formulário: o campo recebe só o número nacional
+  var wpp = val('whatsapp');
+  if (wpp && wpp.indexOf('+') !== 0) wpp = '+55 ' + wpp;
+  var servico = 'Simples Nacional — Janela de Setembro';
+
+  // Um único event_id por conversão: vai para o n8n (CAPI) e para /obrigado
+  // (Pixel). Ids diferentes fariam a Meta contar o mesmo lead duas vezes.
+  var eid = window.ttNewEventId ? window.ttNewEventId() : '';
+  var sinais = window.ttSignals ? window.ttSignals() : {};
+
+  btn.disabled = true;
+  btn.textContent = 'Enviando…';
+
+  try {
+    // Sem checar o status, um 500 do n8n cairia fora do catch: o lead
+    // redirecionaria para /obrigado, o Pixel contaria a conversão e o
+    // contato se perderia em silêncio.
+    var resp = await fetch('https://n8n.gabrielgouvea.com.br/webhook/f484ff6a-2bf3-440b-b23c-dcfe76eaf968', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nome: nome, whatsapp: wpp, email: val('email'), empresa: '',
+        cnpj: '',
+        regime: val('regime'), termo: '', faixa: val('faixa'),
+        servico: servico,
+        canal_aquisicao: 'Meta Ads — Simples Setembro',
+        origem: location.pathname,
+        event_id: eid, event_name: 'Lead',
+        fbp: sinais.fbp || '', fbc: sinais.fbc || '',
+        event_source_url: sinais.event_source_url || location.href,
+        client_user_agent: sinais.client_user_agent || navigator.userAgent,
+        utm_source: p.get('utm_source') || '',
+        utm_medium: p.get('utm_medium') || '',
+        utm_campaign: p.get('utm_campaign') || '',
+        utm_content: p.get('utm_content') || '',
+        utm_term: p.get('utm_term') || ''
+      })
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    try { localStorage.removeItem('tt_diag_rascunho'); } catch (_) {}
+    location.href = '/obrigado?' + new URLSearchParams({
+      nome: nome, wpp: wpp, servico: servico, eid: eid
+    }).toString();
+  } catch (_) {
+    btn.disabled = false;
+    btn.innerHTML = original;
+    var erro = f.parentNode.querySelector('.form-erro');
+    if (!erro) {
+      erro = document.createElement('p');
+      erro.className = 'form-erro';
+      f.parentNode.insertBefore(erro, f.nextSibling);
+    }
+    erro.innerHTML = 'Não conseguimos enviar agora. <a href="https://wa.me/554799975701" target="_blank" rel="noopener">Fale pelo WhatsApp →</a>';
+  }
+});
 </script>
 </body>
 </html>
