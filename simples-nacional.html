@@ -417,30 +417,35 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
 }
 .form-nota a { color: inherit; }
 
-/* ── Hero em duas colunas: argumento + formulário inline ──── */
-.hero-grid { display: grid; grid-template-columns: minmax(0,1.05fr) minmax(0,0.95fr); gap: clamp(28px,4.5vw,64px); align-items: start; }
-@media (max-width: 920px) { .hero-grid { grid-template-columns: 1fr; gap: 26px; } }
-
-/* Continuidade anúncio → página: o rosto de quem assina, já no hero */
-.assina { margin-top: var(--sp-5); display: flex; align-items: center; gap: 12px; }
-.assina img {
-  width: 46px; height: 46px; border-radius: 50%; object-fit: cover; object-position: 50% 16%;
-  border: 1px solid var(--clay-300); display: block;
+/* ── Retrato do Alex com o tratamento da home: fundo forest,
+     duotone por luminosity e leve zoom ─────────────────────── */
+.quem-photo {
+  aspect-ratio: 4/5;
+  background: var(--forest-900);
+  border: 1px solid var(--rule);
+  position: relative;
+  overflow: hidden;
 }
-.assina .quem-linha { font-size: 13.5px; line-height: 1.45; color: var(--ink-700); }
-.assina .quem-linha strong { color: var(--forest-900); font-weight: 500; }
-.assina .quem-linha .reg { font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-500); display: block; margin-top: 3px; }
-
-.form-card {
-  background: #FDFBF7; border: 1px solid var(--clay-200); border-radius: var(--radius-m);
-  box-shadow: 0 24px 60px -28px rgba(20,37,29,0.3);
-  padding: 24px 24px 20px; max-width: 440px;
+.quem-photo img {
+  width: 100%; height: 100%; object-fit: cover; object-position: 50% 10%;
+  filter: grayscale(0.3) contrast(1.05);
+  mix-blend-mode: luminosity;
+  opacity: 0.95;
+  transform: scale(1.05);
 }
-@media (max-width: 920px) { .form-card { max-width: none; } }
-.form-card .modal-faixa { margin-right: 0; }
-.form-card .form-titulo { font-family: var(--f-display); font-size: 25px; font-weight: 500; line-height: 1.12; color: var(--ink-900); margin: 0 0 5px; }
-.form-card .form-titulo em { font-style: italic; color: var(--copper-500); }
-.form-card .form-sub { font-size: 13px; line-height: 1.55; color: var(--ink-500); margin: 0 0 var(--sp-4); }
+.quem-photo::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(20,37,29,0.6) 100%);
+  pointer-events: none; z-index: 2;
+}
+.quem-photo::after {
+  content: "retrato · Alex Amadeu";
+  position: absolute; bottom: 18px; left: 18px;
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.2em;
+  color: var(--clay-50); text-transform: uppercase;
+  z-index: 3;
+}
+@media (max-width: 880px) { .quem-photo { max-width: 420px; } }
 
 /* ── FAQ: as objeções respondidas antes do pedido ─────────── */
 .faq { background: var(--clay-50); }
@@ -496,73 +501,30 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
 <!-- ── HERO ──────────────────────────────────────────────── -->
 <section class="hero">
   <div class="container">
-    <div class="hero-grid">
-      <div class="hero-texto">
+    <div class="hero-texto">
         <span class="eyebrow">Débitos do Simples Nacional · Exclusão 2026</span>
-        <h1>Duas portas ainda abertas. As duas fecham em <em>30&nbsp;de&nbsp;setembro</em>.</h1>
-        <p class="lede">Foram <strong>1.102.924 Termos de Exclusão</strong> em março. Para quem recebeu um, o que resta de 2026 cabe numa data. Assinar parcelamento no impulso do prazo costuma ser o caminho mais caro. Antes disso, um diagnóstico.</p>
-        <div class="hero-conf" aria-label="Garantias do diagnóstico">
-          <span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg>Sem compromisso</span>
-          <span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 13.5h11M4.5 13.5V7M8 13.5V7M11.5 13.5V7M2 5.5L8 2.5l6 3H2z"/></svg>Norma vigente citada</span>
-          <span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5l5.5 2.5v4c0 3-2.3 5.5-5.5 6.5C4.8 13.5 2.5 11 2.5 8V4L8 1.5z"/></svg>Análise documental</span>
-        </div>
-        <div class="assina">
-          <img src="assets/img/alex-amadeu-2.jpg" alt="Alex Amadeu" width="46" height="46" />
-          <div class="quem-linha">
-            Análise assinada por <strong>Alex Amadeu</strong>
-            <span class="reg">Advogado tributarista · OAB/MG · Savassi, Belo Horizonte</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-card reveal" data-delay="80">
-        <div class="modal-faixa">
-          <span class="rotulo">Diagnóstico gratuito</span>
-          <span class="valor contagem-slot">Até 30/09</span>
-        </div>
-        <p class="form-titulo">Receba a <em>análise</em> do seu caso.</p>
-        <p class="form-sub">Leva 2 minutos. A equipe do Alex retorna em até 48 horas úteis com os próximos passos.</p>
-        <form class="lead-form" id="formDiagHero" novalidate>
-          <div class="campo">
-            <label for="h-nome">Nome</label>
-            <input class="form-input" type="text" id="h-nome" name="nome" placeholder="Como devemos te chamar" autocomplete="name" required>
-          </div>
-          <div class="campo">
-            <label for="h-whats">WhatsApp</label>
-            <div class="fone-linha">
-              <span class="ddi" aria-hidden="true">+55</span>
-              <input class="form-input" type="tel" id="h-whats" name="whatsapp" placeholder="(DDD) 90000-0000" autocomplete="tel-national" inputmode="tel" required>
-            </div>
-          </div>
-          <div class="campo">
-            <label for="h-faixa">Faixa aproximada dos débitos federais</label>
-            <select class="form-select" id="h-faixa" name="faixa" required>
-              <option value="" disabled selected>Selecione</option>
-              <option>Até R$ 50 mil</option>
-              <option>De R$ 50 mil a R$ 200 mil</option>
-              <option>De R$ 200 mil a R$ 1 milhão</option>
-              <option>Acima de R$ 1 milhão</option>
-              <option>Não sei informar</option>
-            </select>
-          </div>
-          <input type="hidden" name="regime" value="Simples Nacional (LP)">
-          <button type="submit" class="lead-btn">
+        <h1>Regularizar os débitos do Simples tem prazo: <em>30&nbsp;de&nbsp;setembro</em>.</h1>
+        <p class="lede">A Receita emitiu mais de <strong>1,1 milhão de Termos de Exclusão</strong> em março. Quem não resolver os débitos até 30 de setembro apura impostos fora do Simples durante todo o ano de 2027, com carga maior e guias separadas. Até lá, ainda dá para pedir a permanência no regime e negociar a dívida ativa com desconto. O diagnóstico mostra qual caminho cabe no seu caso, antes de qualquer assinatura.</p>
+        <div class="hero-cta">
+          <button type="button" class="btn-diag js-abre-diag">
             Quero o diagnóstico gratuito
             <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
           </button>
-        </form>
-        <p class="form-nota">Sem compromisso · Ao enviar, você autoriza o contato da equipe sobre esta análise · Dados tratados conforme a <a href="/politica-de-privacidade" target="_blank" rel="noopener">política de privacidade</a></p>
-      </div>
+          <span class="cta-micro">Leva 2 minutos · retorno em até 48h úteis · <span class="contagem-slot">até 30/09</span></span>
+        </div>
+        <div class="hero-conf" aria-label="Garantias do diagnóstico">
+          <span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg>Sem compromisso</span>
+        </div>
     </div>
 
     <div class="portas" role="list">
       <div class="porta" role="listitem">
-        <div class="data">Porta 01 · 1º a 30/09</div>
-        <p><strong>Janela de opção pelo Simples</strong> com efeitos a partir de janeiro de 2027. A Reforma deslocou esse prazo de janeiro para setembro. <span class="fund">LC 214/2025</span></p>
+        <div class="data">Caminho 1 · 1º a 30/09</div>
+        <p><strong>Pedir a permanência no Simples</strong> para valer em 2027. O pedido só é aceito com os débitos pagos, parcelados ou suspensos. <span class="fund">LC 214/2025</span></p>
       </div>
       <div class="porta" role="listitem">
-        <div class="data">Porta 02 · Até 30/09, 19h</div>
-        <p><strong>Adesão ao Edital PGDAU 6/2026</strong>, a transação da dívida ativa para débitos já inscritos na PGFN. <span class="fund">Lei 13.988/2020</span></p>
+        <div class="data">Caminho 2 · Até 30/09, 19h</div>
+        <p><strong>Negociar a dívida ativa</strong> pelo Edital PGDAU 6/2026, com desconto sobre juros, multas e encargos para ME e EPP. <span class="fund">Lei 13.988/2020</span></p>
       </div>
     </div>
   </div>
@@ -572,20 +534,16 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
 <div class="trust-strip">
   <div class="container trust-inner">
     <div class="trust-item">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5l5.5 2.5v4c0 3-2.3 5.5-5.5 6.5C4.8 13.5 2.5 11 2.5 8V4L8 1.5z"/></svg>
-      Análise documental
-    </div>
-    <div class="trust-item">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.4V8l2.4 1.6"/></svg>
-      Retorno em 48 horas
-    </div>
-    <div class="trust-item">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 13.5h11M4.5 13.5V7M8 13.5V7M11.5 13.5V7M2 5.5L8 2.5l6 3H2z"/></svg>
-      Fundamentado em norma vigente
+      Retorno em até 48 horas úteis
     </div>
     <div class="trust-item">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg>
-      Sem compromisso inicial
+      Sem compromisso
+    </div>
+    <div class="trust-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.2"/><path d="M2 8h12M8 1.8c2 1.8 2 10.6 0 12.4M8 1.8c-2 1.8-2 10.6 0 12.4"/></svg>
+      Atendimento digital em todo o Brasil
     </div>
   </div>
 </div>
@@ -593,8 +551,9 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
 <!-- ── TRÊS FATOS ────────────────────────────────────────── -->
 <section class="fatos tight">
   <div class="container">
-    <span class="eyebrow reveal">Onde o calendário está agora</span>
+    <span class="eyebrow reveal">O que está acontecendo</span>
     <h2 class="h-display h-2 reveal" data-delay="60" style="max-width:17ch">Um prazo que corre <em>sozinho</em>.</h2>
+    <p class="lede reveal" data-delay="90" style="max-width:66ch;margin-top:var(--sp-4);font-size:15.5px">Em resumo: a Receita notificou as empresas com débito em março, os primeiros prazos já passaram, e o que resta até 30 de setembro define como cada empresa entra em 2027. Abaixo, os três fatos e a fonte de cada um.</p>
 
     <div class="fatos-grid">
       <div class="fato reveal" data-delay="80">
@@ -747,7 +706,7 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
 <section class="quem tight">
   <div class="container">
     <div class="quem-grid">
-      <div class="retrato reveal">
+      <div class="quem-photo reveal">
         <img src="assets/img/alex-amadeu-2.jpg" alt="Alex Amadeu em frente ao escritório da TriboTax" width="846" height="1269" loading="lazy" />
       </div>
       <div>
@@ -916,7 +875,6 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
 (function () {
   var modal = document.getElementById('modal-diag');
   var form = document.getElementById('formDiag');
-  var formHero = document.getElementById('formDiagHero');
   var CHAVE = 'tt_diag_rascunho';
   var ultimoFoco = null;
 
@@ -940,8 +898,6 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
       if (el && !el.value && dados[n]) el.value = dados[n];
     });
   }
-
-  preenche(formHero);
 
   function abre() {
     ultimoFoco = document.activeElement;
@@ -971,32 +927,28 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
     if (e.key === 'Escape' && !modal.hidden) fecha();
   });
 
-  // Rascunho compartilhado: o que a pessoa digita num formulário
-  // reaparece no outro (hero e popup gravam nas mesmas chaves)
-  [form, formHero].forEach(function (f) {
-    if (!f) return;
-    f.addEventListener('input', function () {
-      var d = {};
-      try { d = JSON.parse(localStorage.getItem(CHAVE) || '{}'); } catch (_) {}
-      ['nome', 'whatsapp', 'email', 'faixa'].forEach(function (n) {
-        if (f.elements[n] && f.elements[n].value) d[n] = f.elements[n].value;
-      });
-      try { localStorage.setItem(CHAVE, JSON.stringify(d)); } catch (_) {}
+  // Rascunho: o que a pessoa digita fica salvo para a próxima abertura
+  form.addEventListener('input', function () {
+    var d = {};
+    try { d = JSON.parse(localStorage.getItem(CHAVE) || '{}'); } catch (_) {}
+    ['nome', 'whatsapp', 'email', 'faixa'].forEach(function (n) {
+      if (form.elements[n] && form.elements[n].value) d[n] = form.elements[n].value;
     });
+    try { localStorage.setItem(CHAVE, JSON.stringify(d)); } catch (_) {}
   });
 })();
 
-/* ── Barra fixa cede quando o formulário do hero está em tela ── */
+/* ── Barra fixa cede quando o CTA do hero está em tela ─────── */
 (function () {
   var barra = document.getElementById('sticky-bar');
-  var alvo = document.querySelector('.hero .lead-btn');
+  var alvo = document.querySelector('.hero .btn-diag');
   if (!barra || !alvo || !('IntersectionObserver' in window)) return;
   new IntersectionObserver(function (entries) {
     barra.classList.toggle('cta-em-tela', entries[0].isIntersecting);
   }, { threshold: 0.4 }).observe(alvo);
 })();
 
-/* ── Envio (formulário do hero e do popup, mesmo destino) ──── */
+/* ── Envio ─────────────────────────────────────────────────── */
 (function () {
   async function envia(e) {
     e.preventDefault();
@@ -1005,7 +957,6 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
 
     var btn = f.querySelector('button[type="submit"]');
     var original = btn.innerHTML;
-    // O formulário do hero não tem e-mail: val() devolve '' para campo ausente
     var val = function (n) { return f.elements[n] ? f.elements[n].value.trim() : ''; };
     var p = new URLSearchParams(location.search);
 
@@ -1066,10 +1017,7 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
     }
   }
 
-  ['formDiag', 'formDiagHero'].forEach(function (id) {
-    var f = document.getElementById(id);
-    if (f) f.addEventListener('submit', envia);
-  });
+  document.getElementById('formDiag').addEventListener('submit', envia);
 })();
 </script>
 </body>
