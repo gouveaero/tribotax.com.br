@@ -826,6 +826,10 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
         <input class="form-input" type="email" id="d-email" name="email" placeholder="nome@empresa.com.br" autocomplete="email" required>
       </div>
       <div class="campo">
+        <label for="d-cnpj">CNPJ da empresa</label>
+        <input class="form-input" type="text" id="d-cnpj" name="cnpj" placeholder="00.000.000/0000-00" inputmode="numeric" maxlength="18" required>
+      </div>
+      <div class="campo">
         <label for="d-faixa">Faixa aproximada dos débitos federais</label>
         <select class="form-select" id="d-faixa" name="faixa" required>
           <option value="" disabled selected>Selecione</option>
@@ -908,10 +912,23 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
   form.addEventListener('input', function () {
     var d = {};
     try { d = JSON.parse(localStorage.getItem(CHAVE) || '{}'); } catch (_) {}
-    ['nome', 'whatsapp', 'email', 'faixa'].forEach(function (n) {
+    ['nome', 'whatsapp', 'email', 'cnpj', 'faixa'].forEach(function (n) {
       if (form.elements[n] && form.elements[n].value) d[n] = form.elements[n].value;
     });
     try { localStorage.setItem(CHAVE, JSON.stringify(d)); } catch (_) {}
+  });
+
+  // Máscara e validação do CNPJ (00.000.000/0000-00)
+  var cnpjEl = document.getElementById('d-cnpj');
+  if (cnpjEl) cnpjEl.addEventListener('input', function () {
+    var d = this.value.replace(/\D/g, '').slice(0, 14);
+    var v = d;
+    if (d.length > 12)      v = d.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/, '$1.$2.$3/$4-$5');
+    else if (d.length > 8)  v = d.replace(/(\d{2})(\d{3})(\d{3})(\d{0,4})/, '$1.$2.$3/$4');
+    else if (d.length > 5)  v = d.replace(/(\d{2})(\d{3})(\d{0,3})/, '$1.$2.$3');
+    else if (d.length > 2)  v = d.replace(/(\d{2})(\d{0,3})/, '$1.$2');
+    this.value = v;
+    this.setCustomValidity(d.length === 14 || d.length === 0 ? '' : 'Informe o CNPJ completo (14 dígitos)');
   });
 })();
 
@@ -960,7 +977,7 @@ body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           nome: nome, whatsapp: wpp, email: val('email'), empresa: '',
-          cnpj: '',
+          cnpj: val('cnpj'),
           regime: val('regime'), termo: '', faixa: val('faixa'),
           servico: servico,
           canal_aquisicao: 'Meta Ads — Simples Setembro',
