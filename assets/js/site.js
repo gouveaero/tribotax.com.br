@@ -13,6 +13,7 @@ const NAV_LINKS = [
     { href: '/monitor-tributario/', label: 'Monitor Tributário' },
     { href: '/reclassificador-fiscal/', label: 'Reclassificador Fiscal' },
   ]},
+  { href: '/diagnostico/', label: 'Diagnóstico' },
   { href: '/sobre-alex', label: 'Alex Amadeu' },
   { href: '/contato', label: 'Contato' },
 ];
