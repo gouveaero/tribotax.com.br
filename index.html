@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TriboTax · Inteligência Coletiva. Resiliência Fiscal.</title>
   <meta name="description" content="Consultoria tributária para líderes que não navegam sozinhos. Proteção de legado, recuperação de créditos, arquitetura fiscal preditiva." />
+  <!-- Verificação de domínio — Meta Business (Business Manager). Precisa ser HTML estático no <head>. -->
+  <meta name="facebook-domain-verification" content="i23t9wo5m2y3gnyk4447s7h83y9eb3" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
@@ -356,6 +358,8 @@
     }
     .tweak-row .opts button.active { background: var(--forest-900); color: var(--clay-50); border-color: var(--forest-900); }
   </style>
+<!-- Meta Pixel + CAPI (ver .tracking.json) -->
+<script src="assets/js/track.js?v=1"></script>
 </head>
 <body>
   <header id="tt-nav"></header>
@@ -796,7 +800,7 @@
 
   <footer id="tt-footer"></footer>
 
-  <script src="assets/js/site.js"></script>
+  <script src="assets/js/site.js?v=2"></script>
   <script>
     // ——— Tweaks (edit mode) ———
     const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{

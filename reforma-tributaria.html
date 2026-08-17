@@ -436,6 +436,8 @@
 }
 
 </style>
+<!-- Meta Pixel + CAPI (ver .tracking.json) -->
+<script src="assets/js/track.js?v=1"></script>
 </head>
 <body>
 <header id="tt-nav"></header>
@@ -968,7 +970,7 @@
 </div>
 
 <footer id="tt-footer"></footer>
-<script src="assets/js/site.js"></script>
+<script src="assets/js/site.js?v=2"></script>
 <script>
 async function submitLead(e, servico) {
   e.preventDefault();
@@ -983,16 +985,24 @@ async function submitLead(e, servico) {
     utm_campaign: p.get('utm_campaign') || '', utm_content: p.get('utm_content') || '',
     utm_term: p.get('utm_term') || ''
   };
+  // Um único event_id por conversão: viaja para o n8n (CAPI) e para /obrigado
+  // (Pixel). Se os dois lados usarem ids diferentes, a Meta conta o lead 2x.
+  const eid = window.ttNewEventId ? window.ttNewEventId() : '';
+  const sinais = window.ttSignals ? window.ttSignals() : {};
   const originalHTML = btn.innerHTML;
   btn.disabled = true;
   btn.textContent = 'Enviando…';
   try {
-    await fetch('https://n8n.gabrielgouvea.com.br/webhook/f484ff6a-2bf3-440b-b23c-dcfe76eaf968', {
+    // Sem checar o status, um 500 do n8n cairia fora do catch: o lead
+    // redirecionaria para /obrigado, o Pixel contaria a conversão e o
+    // contato se perderia em silêncio.
+    const resp = await fetch('https://n8n.gabrielgouvea.com.br/webhook/f484ff6a-2bf3-440b-b23c-dcfe76eaf968', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nome, whatsapp: wpp, empresa, servico, origem: location.pathname, ...utms })
+      body: JSON.stringify({ nome, whatsapp: wpp, empresa, servico, origem: location.pathname, ...utms, event_id: eid, event_name: 'Lead', ...sinais })
     });
-    location.href = '/obrigado?' + new URLSearchParams({ nome, wpp, empresa, servico }).toString();
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    location.href = '/obrigado?' + new URLSearchParams({ nome, wpp, empresa, servico, eid }).toString();
   } catch (_) {
     btn.disabled = false;
     btn.innerHTML = originalHTML;

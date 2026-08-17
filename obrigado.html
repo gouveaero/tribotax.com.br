@@ -154,14 +154,15 @@
     margin: 0;
   }
 </style>
+<!-- Meta Pixel + CAPI (ver .tracking.json) -->
+<script src="assets/js/track.js?v=1"></script>
 </head>
 <body>
-<header id="tt-nav"></header>
 
 <div class="ty-wrap">
   <div class="ty-hero">
     <div class="ty-hero-inner">
-      <div class="ty-seal">Diagnóstico recebido</div>
+      <div class="ty-seal">Pedido registrado</div>
 
       <div class="ty-icon" aria-hidden="true">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -169,25 +170,26 @@
         </svg>
       </div>
 
-      <h1 class="ty-h1" id="ty-heading">Recebemos, <em id="ty-nome">sua solicitação.</em></h1>
-      <p class="ty-sub" id="ty-msg">Em até 48 horas úteis, Alex Amadeu ou um mentor da equipe entra em contato com a leitura preliminar do seu caso.</p>
+      <h1 class="ty-h1" id="ty-heading">Falta <em>um passo</em><span id="ty-nome"></span>.</h1>
+      <p class="ty-sub" id="ty-msg">Seu pedido foi registrado. Para dar sequência agora, envie a mensagem que já deixamos pronta no WhatsApp da equipe. É por lá que o diagnóstico começa.</p>
 
       <div class="ty-cta-wrap">
         <a class="wa-btn" id="wa-link" href="https://wa.me/554799975701" target="_blank" rel="noopener">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.66 1.438 5.168L2 22l4.978-1.306A9.96 9.96 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
-          Falar com a equipe agora
+          Abrir o WhatsApp com a mensagem pronta
         </a>
-        <span class="ty-secondary">ou aguarde o contato em até <strong style="color:var(--fg-on-deep)">48h úteis</strong> por WhatsApp ou e-mail · <a href="/">Voltar ao início</a></span>
+        <span class="ty-secondary" id="ty-auto" hidden>Abrindo o WhatsApp em <strong id="ty-conta" style="color:var(--fg-on-deep)">5</strong>s · <a href="#" id="ty-cancela">cancelar</a></span>
+        <span class="ty-secondary">Equipe TriboTax · WhatsApp <strong style="color:var(--fg-on-deep); white-space:nowrap">+55 47 9997-5701</strong></span>
       </div>
 
       <div class="ty-promise">
         <div class="ty-promise-item">
-          <div class="k">O que vem agora</div>
-          <p>Leitura preliminar do seu caso por Alex Amadeu ou um mentor da equipe.</p>
+          <div class="k">Por que o WhatsApp</div>
+          <p>É onde a equipe confirma seus dados e recebe os detalhes do caso com segurança.</p>
         </div>
         <div class="ty-promise-item">
           <div class="k">Prazo</div>
-          <p>Até 48 horas úteis. Se o caso for urgente, informe na conversa pelo WhatsApp.</p>
+          <p>Leitura preliminar em até 48 horas úteis. Caso urgente? Diga na primeira mensagem.</p>
         </div>
         <div class="ty-promise-item">
           <div class="k">Sem compromisso</div>
@@ -199,24 +201,48 @@
 </div>
 
 <footer id="tt-footer"></footer>
-<script src="assets/js/site.js"></script>
+<script src="assets/js/site.js?v=2"></script>
 <script>
 (function () {
   const p = new URLSearchParams(location.search);
   const nome    = p.get('nome') || '';
-  const servico = p.get('servico') || 'Diagnóstico Geral';
-  const wpp     = p.get('wpp') || '';
+  const servico = p.get('servico') || '';
   const empresa = p.get('empresa') || '';
 
   if (nome) {
-    document.getElementById('ty-nome').textContent = nome + '.';
+    // Primeiro nome no vocativo: "Falta um passo, Maria."
+    document.getElementById('ty-nome').textContent = ', ' + nome.trim().split(/\s+/)[0];
   }
 
-  const msg = empresa
-    ? `Olá TriboTax! Meu nome é *${nome}*, da empresa *${empresa}*. Acabei de solicitar o diagnóstico de *${servico}*. Meu WhatsApp: ${wpp}`
-    : `Olá TriboTax! Meu nome é *${nome}*. Acabei de solicitar o diagnóstico de *${servico}*. Meu WhatsApp: ${wpp}`;
+  const quem  = empresa ? `*${nome}*, da *${empresa}*` : `*${nome || 'cliente do site'}*`;
+  const sobre = servico ? ` sobre *${servico}*` : '';
+  const msg   = `Olá! Aqui é ${quem}. Acabei de solicitar o diagnóstico gratuito${sobre} no site da TriboTax e quero dar sequência à análise.`;
 
-  document.getElementById('wa-link').href = 'https://wa.me/554799975701?text=' + encodeURIComponent(msg);
+  const waHref = 'https://wa.me/554799975701?text=' + encodeURIComponent(msg);
+  document.getElementById('wa-link').href = waHref;
+
+  // Abertura automática: só para quem chegou do formulário (tem nome/eid),
+  // com contagem visível e cancelamento; o Lead do Pixel dispara no load
+  // e os 5s garantem a chamada antes da troca de app.
+  if (!nome && !p.get('eid')) return;
+  const aviso = document.getElementById('ty-auto');
+  const conta = document.getElementById('ty-conta');
+  aviso.hidden = false;
+  let s = 5;
+  const timer = setInterval(() => {
+    s -= 1;
+    conta.textContent = s;
+    if (s <= 0) {
+      clearInterval(timer);
+      aviso.hidden = true;
+      location.href = waHref;
+    }
+  }, 1000);
+  document.getElementById('ty-cancela').addEventListener('click', (e) => {
+    e.preventDefault();
+    clearInterval(timer);
+    aviso.hidden = true;
+  });
 })();
 </script>
 </body>
