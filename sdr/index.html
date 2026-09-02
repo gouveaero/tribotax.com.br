@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Radar SDR — TriboTax</title>
+<!--
+  PONTE PARA O RADAR SDR (uso interno).
+
+  Esta página NÃO contém o Radar: ela apenas redireciona para o endereço atual do
+  túnel, lido de um ponto fixo no GitHub (mesma mecânica do Radar Fiscal público).
+
+  Por que existe: o túnel do Cloudflare troca de endereço a cada reinício, o que
+  impediria gravar um link permanente nos cards do Bitrix. Com esta ponte, o link
+  do card é sempre https://tribotax.com.br/sdr?cnpj=XXXXXXXXXXXXXX
+
+  A autenticação continua no Radar interno (usuário + senha) — nada aqui é público.
+-->
+<style>
+  :root{ --paper:#FBF8F1; --ink:#14251D; --muted:#6E6357; --cobre:#A9743F; --terracota:#8F3A2E; --linha:#E4DBCB; }
+  @media (prefers-color-scheme: dark){
+    :root{ --paper:#11201A; --ink:#F1EADC; --muted:#A79E90; --cobre:#CFA06E; --terracota:#D0725A; --linha:#2B3D34; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+    background:var(--paper);color:var(--ink);
+    font-family:'Inter Tight',system-ui,-apple-system,'Segoe UI',sans-serif;padding:24px}
+  .cx{max-width:420px;width:100%;text-align:center}
+  .mark{font-weight:700;font-size:18px;letter-spacing:.3px;margin-bottom:26px}
+  .mark span{color:var(--cobre)}
+  .spin{width:34px;height:34px;margin:0 auto 18px;border:3px solid var(--linha);
+    border-top-color:var(--terracota);border-radius:50%;animation:g .8s linear infinite}
+  @keyframes g{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion: reduce){ .spin{animation:none} }
+  h1{font-size:17px;font-weight:600;margin:0 0 8px}
+  p{font-size:14px;color:var(--muted);line-height:1.55;margin:0 0 14px}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;
+    background:rgba(169,116,63,.12);padding:2px 7px;border-radius:5px}
+  a.btn{display:inline-block;margin-top:6px;background:var(--terracota);color:#fff;
+    text-decoration:none;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600}
+  .erro{display:none}
+  .erro h1{color:var(--terracota)}
+</style>
+</head>
+<body>
+  <div class="cx">
+    <div class="mark">TRIBO<span>TAX</span></div>
+
+    <div id="carregando">
+      <div class="spin"></div>
+      <h1>Abrindo o Radar…</h1>
+      <p id="alvo">Localizando o endereço atual.</p>
+    </div>
+
+    <div id="falha" class="erro">
+      <h1>Radar indisponível</h1>
+      <p>Não consegui localizar o endereço do Radar agora. Isso costuma acontecer quando
+         a máquina que hospeda o sistema está desligada ou sem internet.</p>
+      <p>Avise o gestor e tente de novo em alguns minutos.</p>
+      <a class="btn" href="javascript:location.reload()">Tentar de novo</a>
+    </div>
+  </div>
+
+<script>
+(function () {
+  var PONTO_FIXO = "https://raw.githubusercontent.com/gouveaero/tribotax.com.br/radar-endpoint/sdr-endpoint.json";
+
+  // repassa o CNPJ (e qualquer outro parâmetro) para o Radar
+  var qs = window.location.search || "";
+  var cnpj = new URLSearchParams(qs).get("cnpj");
+  if (cnpj) {
+    document.getElementById("alvo").textContent = "Consultando o CNPJ " + cnpj + ".";
+  }
+
+  function falhar() {
+    document.getElementById("carregando").style.display = "none";
+    document.getElementById("falha").style.display = "block";
+  }
+
+  fetch(PONTO_FIXO + "?t=" + Date.now(), { cache: "no-store" })
+    .then(function (r) { if (!r.ok) throw new Error("ponto fixo indisponivel"); return r.json(); })
+    .then(function (j) {
+      var url = (j && j.url || "").replace(/\/+$/, "");
+      if (!/^https:\/\//.test(url)) throw new Error("endereco invalido");
+      window.location.replace(url + "/" + qs);
+    })
+    .catch(falhar);
+
+  // se o redirecionamento não acontecer em 12s, mostra a tela honesta
+  setTimeout(function () {
+    if (document.getElementById("carregando").style.display !== "none") falhar();
+  }, 12000);
+})();
+</script>
+</body>
+</html>
