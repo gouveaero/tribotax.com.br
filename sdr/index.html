@@ -16,6 +16,17 @@
   do card é sempre https://tribotax.com.br/sdr?cnpj=XXXXXXXXXXXXXX
 
   A autenticação continua no Radar interno (usuário + senha) — nada aqui é público.
+
+  ⚠️ RESILIÊNCIA (02/09/2026): o ponto fixo é lido de raw.githubusercontent.com, que
+  tem cache de borda FIXO de 5 minutos (Cache-Control: max-age=300) — a Fastly ignora
+  cache-buster de query string. Ou seja: depois de um reinício do túnel, o endereço
+  publicado pode ficar até 5 min desatualizado ali. Por isso a página TESTA se o
+  endereço resolvido de fato responde antes de navegar; se não responder (a causa
+  original deste bug: o browser caía direto numa URL morta, tela NXDOMAIN), cai para
+  a API do GitHub (api.github.com/repos/.../contents), que não tem esse cache e
+  devolve o valor fresco na hora — confirmado por teste direto no console do browser.
+  A API só é usada nesse cenário de falha (raro, ~poucos min por reinício de túnel),
+  para não esbarrar no limite de 60 req/hora sem autenticação.
 -->
 <style>
   :root{ --paper:#FBF8F1; --ink:#14251D; --muted:#6E6357; --cobre:#A9743F; --terracota:#8F3A2E; --linha:#E4DBCB; }
@@ -64,7 +75,9 @@
 
 <script>
 (function () {
-  var PONTO_FIXO = "https://raw.githubusercontent.com/gouveaero/tribotax.com.br/radar-endpoint/sdr-endpoint.json";
+  var RAW = "https://raw.githubusercontent.com/gouveaero/tribotax.com.br/radar-endpoint/sdr-endpoint.json";
+  var API = "https://api.github.com/repos/gouveaero/tribotax.com.br/contents/sdr-endpoint.json?ref=radar-endpoint";
+  var TIMEOUT_MS = 6000;
 
   // repassa o CNPJ (e qualquer outro parâmetro) para o Radar
   var qs = window.location.search || "";
@@ -73,24 +86,65 @@
     document.getElementById("alvo").textContent = "Consultando o CNPJ " + cnpj + ".";
   }
 
+  var resolvido = false; // trava contra corrida entre os dois caminhos (raw + fallback)
+
   function falhar() {
+    if (resolvido) return;
     document.getElementById("carregando").style.display = "none";
     document.getElementById("falha").style.display = "block";
   }
 
-  fetch(PONTO_FIXO + "?t=" + Date.now(), { cache: "no-store" })
-    .then(function (r) { if (!r.ok) throw new Error("ponto fixo indisponivel"); return r.json(); })
-    .then(function (j) {
-      var url = (j && j.url || "").replace(/\/+$/, "");
-      if (!/^https:\/\//.test(url)) throw new Error("endereco invalido");
-      window.location.replace(url + "/" + qs);
-    })
-    .catch(falhar);
+  function comTimeout(promessa, ms) {
+    return Promise.race([
+      promessa,
+      new Promise(function (_, rej) { setTimeout(function () { rej(new Error("timeout")); }, ms); }),
+    ]);
+  }
 
-  // se o redirecionamento não acontecer em 12s, mostra a tela honesta
-  setTimeout(function () {
-    if (document.getElementById("carregando").style.display !== "none") falhar();
-  }, 12000);
+  // Só navega DEPOIS de confirmar que o endereço responde — é o que faltava: antes a
+  // página confiava cegamente no ponto fixo e podia mandar a SDR para uma URL morta.
+  function testarEIr(url) {
+    if (!url) return Promise.resolve(false);
+    url = url.replace(/\/+$/, "");
+    if (!/^https:\/\//.test(url)) return Promise.resolve(false);
+    return comTimeout(
+      fetch(url + "/login", { mode: "no-cors", cache: "no-store" }),
+      TIMEOUT_MS
+    ).then(function () {
+      if (resolvido) return true;
+      resolvido = true;
+      window.location.replace(url + "/" + qs);
+      return true;
+    }).catch(function () { return false; });
+  }
+
+  function viaRaw() {
+    return comTimeout(fetch(RAW + "?t=" + Date.now(), { cache: "no-store" }), TIMEOUT_MS)
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (j) { return testarEIr(j && j.url); })
+      .catch(function () { return false; });
+  }
+
+  // Fallback: api.github.com não tem o cache de 5 min do raw.githubusercontent — devolve
+  // o endereço fresco na hora. Só é chamado quando o caminho rápido falha (tunel recém
+  // trocado), então não pesa no limite de 60 req/h sem autenticação.
+  function viaApi() {
+    return comTimeout(
+      fetch(API, { cache: "no-store", headers: { Accept: "application/vnd.github.raw" } }),
+      TIMEOUT_MS
+    )
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (j) { return testarEIr(j && j.url); })
+      .catch(function () { return false; });
+  }
+
+  viaRaw()
+    .then(function (ok) { return ok || viaApi(); })
+    .then(function (ok) { if (!ok) falhar(); })
+    .catch(function () { viaApi().then(function (ok) { if (!ok) falhar(); }); });
+
+  // rede honesta: se nada resolver em 16s, mostra a tela de indisponibilidade
+  setTimeout(function () { if (!resolvido) falhar(); }, 16000);
 })();
 </script>
 </body>
