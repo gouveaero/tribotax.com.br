@@ -1,5 +1,5 @@
 {
-  "url": "https://api.trycloudflare.com",
-  "atualizado": "2026-09-03 23:19:25 -0300",
+  "url": "https://correlation-hosts-orientation-investigated.trycloudflare.com",
+  "atualizado": "2026-09-04 01:18:10 -0300",
   "obs": "Endereco do RADAR SDR (interno, com login). Lido pela ponte em tribotax.com.br/sdr. Atualizado automaticamente pelo vigia (loop continuo)."
 }
