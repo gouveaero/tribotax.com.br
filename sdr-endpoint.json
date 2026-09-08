@@ -1,5 +1,5 @@
 {
   "url": "https://api.trycloudflare.com",
-  "atualizado": "2026-09-08 02:06:15 -0300",
+  "atualizado": "2026-09-08 04:25:35 -0300",
   "obs": "Endereco do RADAR SDR (interno, com login). Lido pela ponte em tribotax.com.br/sdr. Atualizado automaticamente pelo vigia (loop continuo)."
 }
