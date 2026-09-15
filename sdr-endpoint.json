@@ -1,5 +1,5 @@
 {
-  "url": "https://genome-out-capabilities-portsmouth.trycloudflare.com",
-  "atualizado": "2026-09-14 20:41:55 -0300",
+  "url": "https://api.trycloudflare.com",
+  "atualizado": "2026-09-14 22:42:21 -0300",
   "obs": "Endereco do RADAR SDR (interno, com login). Lido pela ponte em tribotax.com.br/sdr. Atualizado automaticamente pelo vigia (loop continuo)."
 }
