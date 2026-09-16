@@ -1,0 +1,1052 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Isenção de IR por doença grave · TriboTax</title>
+<meta name="description" content="Aposentados, pensionistas e militares reformados que enfrentaram doenças graves previstas na Lei 7.713/88 podem ter isenção de Imposto de Renda sobre o benefício. Análise do enquadramento sem custo." />
+<meta name="robots" content="noindex" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="stylesheet" href="assets/css/tokens.css" />
+<style>
+
+/* ── LP de captura: sem menu no topo; um único destino ──────
+   Público de 58 a 75 anos: a escala tipográfica desta página é
+   deliberadamente maior que a das LPs B2B do site, e os alvos de
+   toque não descem de 48px. ─────────────────────────────────── */
+
+/* ── Topo mínimo: marca + fundamento legal ─────────────────── */
+.lp-top { border-bottom: 1px solid var(--clay-200); background: var(--clay-50); }
+.lp-top .inner {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 18px; padding-bottom: 18px;
+}
+.lp-brand {
+  font-family: var(--f-display); font-size: 24px; font-weight: 600;
+  color: var(--forest-900); letter-spacing: -0.01em;
+  display: inline-flex; align-items: baseline;
+}
+.lp-brand em { font-style: italic; font-weight: 500; }
+.lp-brand .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--copper-500); transform: translateY(-1px); margin-left: 6px; }
+.lp-top .chip {
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--copper-600);
+  display: inline-flex; align-items: center; gap: 9px;
+}
+.lp-top .chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--copper-500); }
+@media (max-width: 560px) { .lp-top .chip span.longo { display: none; } }
+
+/* ── Hero ──────────────────────────────────────────────────── */
+.hero {
+  position: relative; overflow: hidden;
+  padding: clamp(40px,6vw,84px) 0 clamp(44px,5.5vw,76px);
+}
+.hero::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 50% 70% at 100% 0%, rgba(143,58,46,0.10), transparent 65%);
+  pointer-events: none;
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-texto { max-width: 760px; }
+.hero h1 {
+  font-family: var(--f-display); font-weight: 500;
+  font-size: clamp(38px,4.7vw,66px); line-height: 1.04; letter-spacing: -0.015em;
+  color: var(--forest-900); margin: 0; max-width: 16ch;
+  text-wrap: balance;
+}
+.hero h1 em { font-style: italic; color: var(--copper-500); }
+.hero .lede { max-width: 56ch; margin-top: var(--sp-5); font-size: clamp(17px,1.45vw,19.5px); line-height: 1.65; }
+.hero .lede strong { color: var(--forest-900); }
+
+.hero-cta { margin-top: var(--sp-6); display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.btn-diag {
+  background: var(--copper-500); color: #FDF6EC;
+  font-family: var(--f-body); font-size: 17.5px; font-weight: 500;
+  padding: 19px 32px; min-height: 56px; border: none; border-radius: var(--radius-s); cursor: pointer;
+  display: inline-flex; align-items: center; gap: 12px; text-decoration: none;
+  transition: background .25s ease, transform .3s var(--ease-out-quart, ease), box-shadow .3s ease;
+}
+.btn-diag:hover { background: var(--copper-600); transform: translateY(-2px); box-shadow: 0 10px 26px -10px rgba(94,31,26,0.55); }
+.btn-diag:active { transform: translateY(0); }
+.btn-diag .arrow { width: 16px; height: 10px; }
+.btn-diag .arrow path { stroke: currentColor; fill: none; stroke-width: 1.4; }
+.cta-micro {
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-500);
+}
+
+/* As duas portas: o contraste em versão curta, já no hero */
+.portas { margin-top: var(--sp-7); border-top: 1px solid var(--rule); display: grid; grid-template-columns: 1fr 1fr; }
+@media (max-width: 760px) { .portas { grid-template-columns: 1fr; } }
+.porta { padding: 18px 24px 18px 0; border-bottom: 1px solid var(--rule); }
+.porta + .porta { padding: 18px 0 18px 24px; border-left: 1px solid var(--rule); }
+@media (max-width: 760px) { .porta + .porta { padding-left: 0; border-left: none; } }
+.porta .data {
+  font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--copper-600); margin-bottom: 7px;
+}
+.porta p { margin: 0; font-size: 16px; line-height: 1.6; color: var(--ink-700); max-width: 52ch; }
+.porta p strong { color: var(--forest-900); font-weight: 500; }
+.porta .fund { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-300); }
+
+/* ── Faixa de confiança ────────────────────────────────────── */
+.trust-strip {
+  background: var(--clay-200); padding: var(--sp-4) 0;
+  border-top: 1px solid var(--clay-300); border-bottom: 1px solid var(--clay-300);
+}
+.trust-inner { display: flex; align-items: center; justify-content: center; gap: var(--sp-7); flex-wrap: wrap; }
+.trust-item {
+  display: flex; align-items: center; gap: var(--sp-3);
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-700);
+}
+.trust-item svg { flex-shrink: 0; }
+
+/* ── Três fatos ────────────────────────────────────────────── */
+.fatos { background: var(--clay-100); }
+.fatos-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--sp-6); margin-top: var(--sp-7); }
+@media (max-width: 860px) { .fatos-grid { grid-template-columns: 1fr; gap: var(--sp-5); } }
+.fato { border-top: 1px solid var(--forest-900); padding-top: var(--sp-4); }
+.fato .n {
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--copper-600); margin-bottom: 10px;
+}
+.fato h3 { font-family: var(--f-display); font-size: clamp(22px,2vw,27px); font-weight: 500; line-height: 1.12; margin: 0 0 9px; color: var(--forest-900); }
+.fato h3 em { font-style: italic; color: var(--copper-500); }
+.fato p { font-size: 15.5px; line-height: 1.65; color: var(--ink-700); margin: 0 0 9px; }
+.fato .base { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-300); }
+
+/* ── Contraste: sem requerer × com o requerimento ──────────── */
+.escopo {
+  margin-top: var(--sp-6); padding: var(--sp-4) var(--sp-5);
+  background: var(--clay-100); border: 1px solid var(--clay-200); border-radius: var(--radius-m);
+}
+.escopo p { font-size: 15px; line-height: 1.65; color: var(--ink-700); margin: 0; max-width: 76ch; }
+.escopo p strong { color: var(--forest-900); }
+.tab-wrap { overflow-x: auto; margin-top: var(--sp-6); }
+.tab { width: 100%; border-collapse: collapse; font-size: 15.5px; min-width: 640px; }
+.tab th {
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em;
+  text-transform: uppercase; text-align: left; padding: 14px 16px;
+  background: var(--forest-900); color: var(--clay-50); vertical-align: top;
+}
+.tab th:first-child { background: var(--forest-800); width: 26%; }
+.tab td { padding: 16px; border-bottom: 1px solid var(--clay-200); color: var(--ink-700); vertical-align: top; line-height: 1.6; }
+.tab tr:last-child td { border-bottom: none; }
+.tab td:first-child { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-500); }
+.tab .lado-bom { background: rgba(143,58,46,0.05); }
+.tab .destaque { font-family: var(--f-display); font-size: 26px; font-style: italic; color: var(--copper-500); line-height: 1.1; }
+.tab .nulo { color: var(--ink-300); }
+.tab .fund { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.1em; color: var(--ink-300); text-transform: uppercase; }
+
+.contraste-cards { display: none; margin-top: var(--sp-6); gap: var(--sp-4); }
+.cc { border: 1px solid var(--clay-200); border-radius: var(--radius-m); padding: var(--sp-5); background: #FDFBF7; }
+.cc.bom { background: rgba(143,58,46,0.06); border-color: rgba(143,58,46,0.28); }
+.cc .onde {
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--ink-500); margin-bottom: 7px;
+}
+.cc.bom .onde { color: var(--copper-600); }
+.cc ul { margin: 0; padding: 0; list-style: none; }
+.cc li {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 14px;
+  padding: 10px 0; border-bottom: 1px solid var(--clay-200); font-size: 15.5px; line-height: 1.5;
+}
+.cc li:last-child { border-bottom: none; }
+.cc li .k { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-500); flex-shrink: 0; }
+.cc li .v { text-align: right; color: var(--ink-700); }
+.cc li .v.nulo { color: var(--ink-300); }
+.cc li .v .destaque { font-family: var(--f-display); font-size: 22px; font-style: italic; color: var(--copper-500); line-height: 1.05; display: block; }
+
+.ressalva { margin-top: var(--sp-5); font-size: 14.5px; line-height: 1.75; color: var(--ink-500); max-width: 78ch; }
+.ressalva strong { color: var(--ink-700); }
+.pos-tabela { margin-top: var(--sp-6); display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+
+/* ── A lista legal das 16 moléstias ────────────────────────── */
+.doencas { background: var(--clay-50); }
+.doencas-grid {
+  margin-top: var(--sp-6); display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 0 var(--sp-6); border-top: 1px solid var(--forest-900);
+}
+@media (max-width: 980px) { .doencas-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 560px) { .doencas-grid { grid-template-columns: 1fr; } }
+.doenca {
+  display: flex; align-items: baseline; gap: 12px;
+  padding: 14px 0; border-bottom: 1px solid var(--clay-300);
+  font-size: 15.5px; line-height: 1.45; color: var(--ink-700);
+}
+.doenca .idx {
+  font-family: var(--f-mono); font-size: 11px; color: var(--copper-600);
+  flex-shrink: 0; min-width: 20px;
+}
+.doenca strong { color: var(--forest-900); font-weight: 500; }
+.taxativo {
+  margin-top: var(--sp-5); padding: var(--sp-4) var(--sp-5);
+  border-left: 2px solid var(--copper-500); background: var(--clay-100);
+}
+.taxativo p { margin: 0; font-size: 15px; line-height: 1.7; color: var(--ink-700); max-width: 74ch; }
+.taxativo p strong { color: var(--forest-900); }
+.taxativo .fonte { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-300); display: block; margin-top: 10px; }
+
+/* ── Bloco escuro: o inimigo é a inércia do sistema ────────── */
+.ciencia { background: var(--forest-900); color: var(--fg-on-deep); position: relative; overflow: hidden; }
+.ciencia::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 55% 60% at 88% 18%, rgba(143,58,46,0.2), transparent 60%);
+  pointer-events: none;
+}
+.ciencia .container { position: relative; z-index: 1; }
+.ciencia-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(28px,4vw,64px); align-items: center; }
+@media (max-width: 860px) { .ciencia-grid { grid-template-columns: 1fr; } }
+.ciencia h2 { font-family: var(--f-display); font-size: clamp(30px,3.3vw,48px); font-weight: 500; line-height: 1.06; margin: 0 0 16px; max-width: 17ch; }
+.ciencia h2 em { font-style: italic; color: var(--copper-300); }
+.ciencia p.txt { font-size: 16.5px; line-height: 1.7; color: var(--fg-on-deep-muted); margin: 0; max-width: 54ch; }
+.cit {
+  padding: var(--sp-5) var(--sp-6);
+  border-left: 1px solid var(--copper-500);
+  background: rgba(231,222,201,0.04);
+  border-radius: 0 var(--radius-m) var(--radius-m) 0;
+}
+.cit p { font-family: var(--f-display); font-size: clamp(20px,2vw,26px); font-style: italic; line-height: 1.3; color: var(--fg-on-deep); margin: 0 0 12px; }
+.cit .autor { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--copper-300); }
+
+/* ── O que a análise examina ───────────────────────────────── */
+.eixos-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--sp-6); margin-top: var(--sp-7); }
+@media (max-width: 860px) { .eixos-grid { grid-template-columns: 1fr; gap: var(--sp-5); } }
+.eixo { border-top: 1px solid var(--forest-900); padding-top: var(--sp-4); }
+.eixo .n { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--copper-600); margin-bottom: 10px; }
+.eixo h3 { font-family: var(--f-display); font-size: clamp(22px,2vw,27px); font-weight: 500; line-height: 1.12; margin: 0 0 9px; color: var(--forest-900); }
+.eixo p { font-size: 15.5px; line-height: 1.65; color: var(--ink-700); margin: 0 0 9px; }
+.eixo .base { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-300); }
+.sinergia {
+  margin-top: var(--sp-7); background: var(--clay-100);
+  border: 1px solid var(--clay-200); border-radius: var(--radius-m);
+  padding: var(--sp-6) var(--sp-7);
+}
+.sinergia p { font-size: clamp(16px,1.25vw,18px); line-height: 1.7; color: var(--ink-700); max-width: 72ch; margin: 0; }
+.sinergia p strong { color: var(--forest-900); }
+
+/* ── Quem assina ───────────────────────────────────────────── */
+.quem { background: var(--clay-100); }
+.quem-grid {
+  display: grid; grid-template-columns: minmax(0,0.82fr) minmax(0,1.18fr);
+  gap: clamp(28px,4.5vw,72px); align-items: center;
+}
+@media (max-width: 880px) { .quem-grid { grid-template-columns: 1fr; gap: 28px; } }
+.quem h2 { font-family: var(--f-display); font-size: clamp(32px,3.6vw,52px); font-weight: 500; line-height: 1.05; letter-spacing: -0.015em; color: var(--forest-900); margin: 0 0 16px; max-width: 16ch; }
+.quem h2 em { font-style: italic; color: var(--copper-500); }
+.quem .bio { font-size: 16.5px; line-height: 1.75; color: var(--ink-700); max-width: 56ch; margin: 0 0 14px; }
+.quem .bio strong { color: var(--forest-900); }
+.quem-fatos { display: flex; flex-wrap: wrap; gap: 8px 26px; margin: var(--sp-5) 0; }
+.quem-fatos span {
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-500);
+}
+.quem-cit { margin: var(--sp-5) 0 var(--sp-6); padding: 14px 0 14px 22px; border-left: 1px solid var(--copper-500); }
+.quem-cit p { font-family: var(--f-display); font-size: clamp(21px,2vw,27px); font-style: italic; line-height: 1.25; color: var(--forest-900); margin: 0 0 6px; max-width: 30ch; }
+.quem-cit .autor { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-500); }
+
+.quem-photo {
+  aspect-ratio: 4/5; background: var(--forest-900);
+  border: 1px solid var(--rule); position: relative; overflow: hidden;
+}
+.quem-photo img {
+  width: 100%; height: 100%; object-fit: cover; object-position: 50% 10%;
+  filter: grayscale(0.3) contrast(1.05);
+  mix-blend-mode: luminosity; opacity: 0.95; transform: scale(1.05);
+}
+.quem-photo::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(20,37,29,0.6) 100%);
+  pointer-events: none; z-index: 2;
+}
+.quem-photo::after {
+  content: "retrato · Alex Amadeu";
+  position: absolute; bottom: 18px; left: 18px;
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.2em;
+  color: var(--clay-50); text-transform: uppercase; z-index: 3;
+}
+@media (max-width: 880px) { .quem-photo { max-width: 420px; } }
+
+/* ── Captura final ─────────────────────────────────────────── */
+.cta-section { background: var(--copper-500); color: var(--ink-900); position: relative; overflow: hidden; }
+.cta-section::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.08 0 0 0 0 0.05 0 0 0 0.22 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.5; mix-blend-mode: multiply; pointer-events: none;
+}
+.cta-section .container { position: relative; z-index: 1; text-align: center; }
+.cta-section h2 {
+  font-family: var(--f-display); font-size: clamp(34px,4vw,58px);
+  line-height: 1.05; font-weight: 500; margin: 0 auto 16px; letter-spacing: -0.015em; max-width: 18ch;
+}
+.cta-section h2 em { color: var(--copper-700); font-style: italic; }
+.cta-lede { font-size: 18px; line-height: 1.65; color: var(--ink-900); max-width: 54ch; margin: 0 auto var(--sp-6); }
+.cta-section .btn-diag { background: var(--forest-900); color: var(--copper-300); font-size: 18px; padding: 20px 36px; }
+.cta-section .btn-diag:hover { background: var(--forest-800); box-shadow: 0 10px 26px -10px rgba(20,37,29,0.6); }
+.cta-section .cta-micro { color: rgba(42,18,8,0.7); margin-top: 12px; display: block; }
+.cta-passos {
+  margin: var(--sp-7) auto 0; padding-top: var(--sp-5);
+  border-top: 1px solid rgba(42,18,8,0.25);
+  display: grid; grid-template-columns: repeat(3,1fr); gap: var(--sp-5);
+  max-width: 880px; text-align: left;
+}
+@media (max-width: 640px) { .cta-passos { grid-template-columns: 1fr; } }
+.cta-passo .n { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(42,18,8,0.7); margin-bottom: 6px; }
+.cta-passo p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--ink-900); }
+
+/* ── Conformidade ──────────────────────────────────────────── */
+.conform { background: var(--clay-100); border-top: 1px solid var(--clay-200); }
+.conform .container { padding-top: var(--sp-5); padding-bottom: var(--sp-5); }
+.conform p { font-size: 13.5px; line-height: 1.75; color: var(--ink-500); max-width: 78ch; margin: 0 auto; text-align: center; }
+
+/* ── Barra fixa mobile ─────────────────────────────────────── */
+.sticky-cta-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--forest-900); padding: 14px 20px calc(14px + env(safe-area-inset-bottom, 0px));
+  z-index: 50; display: none;
+  border-top: 2px solid rgba(143,58,46,0.5);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+}
+.sticky-cta-bar button {
+  background: none; border: none; cursor: pointer; min-height: 48px;
+  color: var(--copper-300); font-family: var(--f-body); font-size: 16.5px; font-weight: 500;
+  display: flex; align-items: center; gap: 10px; width: 100%; justify-content: center;
+}
+@media (max-width: 920px) {
+  .sticky-cta-bar { display: block; }
+  body { padding-bottom: 76px; }
+}
+body.modal-aberto .sticky-cta-bar, .sticky-cta-bar.cta-em-tela { display: none; }
+
+/* ── Popup ─────────────────────────────────────────────────── */
+.modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.modal[hidden] { display: none; }
+.modal-veu {
+  position: absolute; inset: 0;
+  background: rgba(18,24,20,0.6);
+  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+}
+.modal-card {
+  position: relative; width: 100%; max-width: 440px;
+  background: #FDFBF7; border-radius: var(--radius-m);
+  box-shadow: 0 30px 80px -20px rgba(0,0,0,0.5);
+  padding: 26px 26px 22px;
+  animation: modal-in .45s var(--ease-out-expo, cubic-bezier(0.16,1,0.3,1)) both;
+  max-height: calc(100dvh - 40px); overflow-y: auto;
+}
+@keyframes modal-in { from { opacity: 0; transform: translateY(22px) scale(.985); } }
+@media (prefers-reduced-motion: reduce) { .modal-card { animation: none; } }
+@media (max-width: 560px) {
+  .modal { padding: 0; align-items: flex-end; }
+  .modal-card { max-width: none; border-radius: var(--radius-m) var(--radius-m) 0 0; padding: 22px 20px calc(18px + env(safe-area-inset-bottom)); max-height: 92dvh; }
+  @keyframes modal-in { from { opacity: 0; transform: translateY(40px); } }
+}
+.modal-x {
+  position: absolute; top: 12px; right: 12px;
+  width: 44px; height: 44px; border: none; border-radius: 50%;
+  background: var(--clay-100); color: var(--ink-700); cursor: pointer;
+  font-size: 18px; line-height: 1; display: flex; align-items: center; justify-content: center;
+  transition: background .2s ease;
+}
+.modal-x:hover { background: var(--clay-200); }
+.modal-faixa {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin: 0 40px var(--sp-4) 0; padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--clay-200);
+}
+.modal-faixa .rotulo, .modal-faixa .valor {
+  font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.15em; text-transform: uppercase;
+}
+.modal-faixa .rotulo { color: var(--ink-500); }
+.modal-faixa .valor { color: var(--copper-600); text-align: right; }
+.modal-titulo { font-family: var(--f-display); font-size: 27px; font-weight: 500; line-height: 1.1; color: var(--ink-900); margin: 0 0 6px; }
+.modal-titulo em { font-style: italic; color: var(--copper-500); }
+.modal-sub { font-size: 14.5px; line-height: 1.6; color: var(--ink-500); margin: 0 0 var(--sp-5); }
+
+.lead-form { display: flex; flex-direction: column; gap: var(--sp-3); }
+.campo { display: flex; flex-direction: column; gap: 5px; }
+.campo label {
+  font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--ink-500);
+}
+.form-input, .form-select {
+  width: 100%; padding: 14px 15px; min-height: 52px;
+  font-family: var(--f-body); font-size: 16px; color: var(--ink-900);
+  background: #fff; border: 1px solid rgba(42,18,8,0.22);
+  border-radius: var(--radius-s);
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.form-select {
+  appearance: none; cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1.5L6 6L11 1.5' stroke='%232A2A26' stroke-width='1.4' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat: no-repeat; background-position: right 15px center;
+  padding-right: 40px;
+}
+.form-input:focus, .form-select:focus {
+  outline: none; border-color: var(--forest-700);
+  box-shadow: 0 0 0 3px rgba(35,64,50,0.10);
+}
+.form-input::placeholder { color: rgba(42,42,38,0.45); }
+.form-input:user-invalid, .form-select:user-invalid { border-color: var(--copper-600); }
+
+.fone-linha { display: flex; }
+.fone-linha .ddi {
+  display: flex; align-items: center; padding: 0 13px;
+  background: var(--clay-100); border: 1px solid rgba(42,18,8,0.22); border-right: none;
+  border-radius: var(--radius-s) 0 0 var(--radius-s);
+  font-family: var(--f-mono); font-size: 14px; color: var(--ink-700);
+}
+.fone-linha .form-input { border-radius: 0 var(--radius-s) var(--radius-s) 0; }
+
+.lead-btn {
+  background: var(--copper-500); color: #FDF6EC;
+  justify-content: center; width: 100%; padding: 17px 20px; min-height: 56px;
+  font-family: var(--f-body); font-size: 16.5px; font-weight: 500;
+  margin-top: var(--sp-3); cursor: pointer;
+  display: inline-flex; align-items: center; gap: 12px;
+  border: none; border-radius: var(--radius-s);
+  transition: background .25s ease;
+}
+.lead-btn:hover:not(:disabled) { background: var(--copper-600); }
+.lead-btn:disabled { opacity: .72; cursor: progress; }
+.lead-btn .arrow { width: 16px; height: 10px; }
+.lead-btn .arrow path { stroke: currentColor; fill: none; stroke-width: 1.4; }
+.form-erro { font-size: 14px; color: var(--copper-700); text-align: center; margin: 6px 0 0; line-height: 1.55; }
+.form-erro a { color: inherit; text-decoration: underline; }
+.form-nota {
+  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink-500); text-align: center;
+  margin: 10px 0 0; line-height: 1.85;
+}
+.form-nota a { color: inherit; }
+
+/* ── FAQ ───────────────────────────────────────────────────── */
+.faq { background: var(--clay-50); }
+.faq-lista { margin-top: var(--sp-6); border-top: 1px solid var(--clay-300); max-width: 800px; }
+.faq-item { border-bottom: 1px solid var(--clay-300); }
+.faq-item summary {
+  cursor: pointer; list-style: none; min-height: 48px;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 18px;
+  padding: 20px 0;
+  font-family: var(--f-display); font-size: clamp(19px,1.85vw,23px); font-weight: 500;
+  color: var(--forest-900);
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: "+"; font-family: var(--f-mono); font-size: 18px; color: var(--copper-600);
+  flex-shrink: 0; transition: transform .25s ease;
+}
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item p { margin: 0 0 20px; font-size: 16px; line-height: 1.7; color: var(--ink-700); max-width: 68ch; }
+
+/* ── Ajustes mobile ────────────────────────────────────────── */
+@media (max-width: 920px) {
+  .hero { padding: 26px 0 40px; }
+  .hero h1 { font-size: clamp(33px,8.8vw,44px); }
+  .hero .lede { font-size: 17px; margin-top: 14px; }
+  .btn-diag { width: 100%; justify-content: center; }
+  .trust-strip { padding: 12px 0; }
+  .trust-inner { gap: 10px 22px; }
+  section { padding: clamp(40px, 8vw, 64px) 0; }
+  .fatos-grid, .eixos-grid { margin-top: var(--sp-6); }
+  .sinergia { padding: var(--sp-5); }
+}
+@media (max-width: 720px) {
+  .tab-wrap { display: none; }
+  .contraste-cards { display: grid; }
+}
+
+</style>
+<!-- Meta Pixel + CAPI (ver .tracking.json) -->
+<script src="assets/js/track.js?v=1"></script>
+</head>
+<body data-tt-viewcontent="LP Isenção IR — Doença Grave">
+
+<!-- ── TOPO ──────────────────────────────────────────────── -->
+<header class="lp-top">
+  <div class="container inner">
+    <span class="lp-brand">Tribo<em>Tax</em><span class="dot" aria-hidden="true"></span></span>
+    <span class="chip"><span class="longo">Direito previsto na&nbsp;</span>Lei 7.713/88</span>
+  </div>
+</header>
+
+<!-- ── HERO ──────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-texto">
+      <span class="eyebrow">Isenção de Imposto de Renda · Aposentadoria, pensão e reforma</span>
+      <h1>Um imposto que a lei já dispensou, e o sistema continua <em>descontando</em>.</h1>
+      <p class="lede">Aposentados, pensionistas e militares reformados que enfrentaram doenças graves previstas em lei têm direito à <strong>isenção de Imposto de Renda sobre o benefício</strong>. É a Lei 7.713/88, em vigor desde 1988. O que quase ninguém sabe é que <strong>o desconto não para sozinho</strong>: a fonte pagadora continua retendo até alguém requerer. E há uma segunda camada, a devolução do que foi retido nos últimos cinco anos.</p>
+      <div class="hero-cta">
+        <button type="button" class="btn-diag js-abre-diag">
+          Quero a análise do enquadramento
+          <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+        </button>
+        <span class="cta-micro">Leva 2 minutos · sem custo · sem compromisso</span>
+      </div>
+    </div>
+
+    <div class="portas" role="list">
+      <div class="porta" role="listitem">
+        <div class="data">Sem requerer</div>
+        <p><strong>O desconto segue caindo todo mês,</strong> e o passado prescreve em silêncio: a cada mês que passa, o mês mais antigo sai da janela e não volta mais. <span class="fund">A inércia tem custo</span></p>
+      </div>
+      <div class="porta" role="listitem">
+        <div class="data">Com o requerimento</div>
+        <p><strong>A isenção passa a valer sobre o benefício</strong> e abre-se a discussão sobre o que foi retido nos últimos cinco anos, a depender do caso e da faixa do benefício. <span class="fund">Lei 7.713/88 · CTN art. 168</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRUST ─────────────────────────────────────────────── -->
+<div class="trust-strip">
+  <div class="container trust-inner">
+    <div class="trust-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.4V8l2.4 1.6"/></svg>
+      Retorno em até 48 horas úteis
+    </div>
+    <div class="trust-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg>
+      Análise sem custo e sem compromisso
+    </div>
+    <div class="trust-item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.2"/><path d="M2 8h12M8 1.8c2 1.8 2 10.6 0 12.4M8 1.8c-2 1.8-2 10.6 0 12.4"/></svg>
+      Atendimento digital em todo o Brasil
+    </div>
+  </div>
+</div>
+
+<!-- ── TRÊS FATOS ────────────────────────────────────────── -->
+<section class="fatos tight">
+  <div class="container">
+    <span class="eyebrow reveal">O que a lei diz</span>
+    <h2 class="h-display h-2 reveal" data-delay="60" style="max-width:18ch">Três fatos que mudam a <em>conta do mês</em>.</h2>
+    <p class="lede reveal" data-delay="90" style="max-width:68ch;margin-top:var(--sp-4);font-size:17px">O direito existe há quase quarenta anos, o STJ já pacificou seu alcance, e mesmo assim depende de alguém pedir. São estes os três pontos.</p>
+
+    <div class="fatos-grid">
+      <div class="fato reveal" data-delay="80">
+        <div class="n">O direito</div>
+        <h3>Isenção sobre o <em>benefício</em></h3>
+        <p>Quem recebe aposentadoria, pensão ou reforma e enfrentou uma das dezesseis moléstias listadas em lei pode ser isento de Imposto de Renda sobre esse benefício. Vale inclusive quando a doença apareceu depois da aposentadoria.</p>
+        <div class="base">Lei 7.713/88, art. 6º, XIV</div>
+      </div>
+      <div class="fato reveal" data-delay="160">
+        <div class="n">O que quase ninguém sabe</div>
+        <h3>Sintoma atual não é <em>exigência</em></h3>
+        <p>O STJ firmou que não se exige demonstrar a contemporaneidade dos sintomas nem a recidiva da doença. Tratamento encerrado há anos não faz o direito desaparecer.</p>
+        <div class="base">Súmula 627 do STJ</div>
+      </div>
+      <div class="fato reveal" data-delay="240">
+        <div class="n">A janela que anda</div>
+        <h3>Cinco anos, <em>deslizando</em></h3>
+        <p>O pedido de restituição alcança o que foi retido nos últimos cinco anos. É uma janela móvel: a cada mês que passa, o mês mais antigo prescreve e sai da conta.</p>
+        <div class="base">CTN, art. 168</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTRASTE ─────────────────────────────────────────── -->
+<section id="contraste" class="tight">
+  <div class="container">
+    <span class="eyebrow reveal">O mesmo benefício, dois cenários</span>
+    <h2 class="h-display h-2 reveal" data-delay="60" style="max-width:20ch">O que muda quando o direito <em>é requerido</em>.</h2>
+
+    <div class="escopo reveal" data-delay="120">
+      <p>Um aviso honesto antes do quadro: desde janeiro de 2026 a tabela do Imposto de Renda isenta quem recebe <strong>até R$ 5.000 por mês</strong>. Para benefícios nessa faixa <strong>não há desconto a zerar hoje</strong> — o que pode existir é a restituição dos anos anteriores, em que houve retenção. Acima dessa faixa, os dois cenários valem.</p>
+    </div>
+
+    <div class="tab-wrap reveal" data-delay="160">
+      <table class="tab">
+        <thead>
+          <tr>
+            <th scope="col">Benefício de aposentadoria, pensão ou reforma</th>
+            <th scope="col">Sem requerer a isenção</th>
+            <th scope="col" class="lado-bom">Com o requerimento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Desconto mensal</td>
+            <td>Retido enquanto houver enquadramento na tabela</td>
+            <td class="lado-bom"><span class="destaque">Isento</span><br>sobre o benefício, a partir do reconhecimento<br><span class="fund">Lei 7.713/88, art. 6º, XIV</span></td>
+          </tr>
+          <tr>
+            <td>Anos anteriores</td>
+            <td><span class="nulo">Prescrevem mês a mês</span></td>
+            <td class="lado-bom"><span class="destaque">até 5 anos</span><br>é o alcance do pedido de restituição<br><span class="fund">CTN, art. 168</span></td>
+          </tr>
+          <tr>
+            <td>Doença já tratada</td>
+            <td>O sistema não pergunta, e segue descontando</td>
+            <td class="lado-bom">Não se exige sintoma atual nem recidiva<br><span class="fund">Súmula 627 do STJ</span></td>
+          </tr>
+          <tr>
+            <td>Quem ainda trabalha</td>
+            <td colspan="2">A isenção não alcança o salário de quem está na ativa: vale para aposentadoria, pensão e reforma.<br><span class="fund">Tema 1.037 do STJ</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="contraste-cards reveal" data-delay="160">
+      <div class="cc">
+        <div class="onde">Sem requerer a isenção</div>
+        <ul>
+          <li><span class="k">Desconto</span><span class="v">Retido todo mês</span></li>
+          <li><span class="k">Passado</span><span class="v nulo">Prescreve mês a mês</span></li>
+          <li><span class="k">Doença tratada</span><span class="v">O sistema não pergunta</span></li>
+        </ul>
+      </div>
+      <div class="cc bom">
+        <div class="onde">Com o requerimento</div>
+        <ul>
+          <li><span class="k">Desconto</span><span class="v"><span class="destaque">Isento</span>sobre o benefício, a partir do reconhecimento</span></li>
+          <li><span class="k">Passado</span><span class="v"><span class="destaque">até 5 anos</span>alcance do pedido de restituição</span></li>
+          <li><span class="k">Doença tratada</span><span class="v">Não se exige sintoma atual (Súmula 627)</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="ressalva reveal" data-delay="200">Os cinco anos são o <strong>alcance legal do pedido</strong>, não uma previsão de valor: quanto há a restituir depende do que foi efetivamente retido em cada ano, da tabela vigente em cada um deles e da parcela extra de isenção de quem tem 65 anos ou mais. Nada aqui promete resultado — é justamente por variar tanto de caso a caso que o primeiro passo é a análise.</p>
+
+    <div class="pos-tabela reveal" data-delay="240">
+      <button type="button" class="btn-diag js-abre-diag">
+        Verificar o enquadramento
+        <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+      </button>
+      <span class="cta-micro">Análise sem custo · retorno em 48h úteis</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── A LISTA LEGAL ─────────────────────────────────────── -->
+<section class="doencas tight">
+  <div class="container">
+    <span class="eyebrow reveal">A lista da lei</span>
+    <h2 class="h-display h-2 reveal" data-delay="60" style="max-width:20ch">As dezesseis moléstias <em>previstas em lei</em>.</h2>
+    <p class="lede reveal" data-delay="90" style="max-width:68ch;margin-top:var(--sp-4);font-size:17px">Redação vigente do art. 6º, XIV, da Lei 7.713/88, dada pela Lei 11.052/2004.</p>
+
+    <div class="doencas-grid reveal" data-delay="120">
+      <div class="doenca"><span class="idx">01</span><span>Moléstia profissional</span></div>
+      <div class="doenca"><span class="idx">02</span><span>Tuberculose ativa</span></div>
+      <div class="doenca"><span class="idx">03</span><span>Alienação mental</span></div>
+      <div class="doenca"><span class="idx">04</span><span>Esclerose múltipla</span></div>
+      <div class="doenca"><span class="idx">05</span><span><strong>Neoplasia maligna</strong> (câncer)</span></div>
+      <div class="doenca"><span class="idx">06</span><span>Cegueira, inclusive monocular</span></div>
+      <div class="doenca"><span class="idx">07</span><span>Hanseníase</span></div>
+      <div class="doenca"><span class="idx">08</span><span>Paralisia irreversível e incapacitante</span></div>
+      <div class="doenca"><span class="idx">09</span><span><strong>Cardiopatia grave</strong></span></div>
+      <div class="doenca"><span class="idx">10</span><span><strong>Doença de Parkinson</strong></span></div>
+      <div class="doenca"><span class="idx">11</span><span>Espondiloartrose anquilosante</span></div>
+      <div class="doenca"><span class="idx">12</span><span>Nefropatia grave</span></div>
+      <div class="doenca"><span class="idx">13</span><span>Hepatopatia grave</span></div>
+      <div class="doenca"><span class="idx">14</span><span>Estados avançados de Paget (osteíte deformante)</span></div>
+      <div class="doenca"><span class="idx">15</span><span>Contaminação por radiação</span></div>
+      <div class="doenca"><span class="idx">16</span><span>Síndrome da imunodeficiência adquirida</span></div>
+    </div>
+
+    <div class="taxativo reveal" data-delay="180">
+      <p><strong>A lista é taxativa.</strong> O STJ, em recurso repetitivo, firmou que o rol do art. 6º, XIV é <em>numerus clausus</em> e que não cabe interpretação analógica ou extensiva para alcançar doença que não esteja no texto da lei. Por isso a verificação do enquadramento é o primeiro passo, e não uma formalidade: uma condição grave fora da lista não gera o direito, por mais séria que seja.
+      <span class="fonte">REsp 1.116.620/BA · CTN, art. 111, II</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ── O INIMIGO: A INÉRCIA DO SISTEMA ───────────────────── -->
+<section class="ciencia on-deep tight">
+  <div class="container">
+    <div class="ciencia-grid">
+      <div>
+        <h2 class="reveal">O sistema só devolve para quem <em>sabe pedir</em>.</h2>
+        <p class="txt reveal" data-delay="80">Não há um aviso. A fonte pagadora não cruza o cadastro de benefícios com diagnósticos, e não existe reconhecimento automático da isenção. O desconto entra na folha, e continua entrando, até que alguém apresente o requerimento com a documentação certa. Enquanto isso, a janela dos cinco anos anda sozinha. O inimigo aqui não é o imposto: é a inércia de um sistema que não avisa ninguém.</p>
+      </div>
+      <div class="cit reveal" data-delay="140">
+        <p>Direito que ninguém conta é direito que ninguém usa.</p>
+        <div class="autor">A tese da análise · TriboTax</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── O QUE A ANÁLISE EXAMINA ───────────────────────────── -->
+<section class="tight">
+  <div class="container">
+    <span class="eyebrow reveal">O que a análise examina</span>
+    <h2 class="h-display h-2 reveal" data-delay="60" style="max-width:20ch">Três perguntas antes de qualquer requerimento.</h2>
+
+    <div class="eixos-grid">
+      <div class="eixo reveal" data-delay="100">
+        <div class="n">i · Enquadramento</div>
+        <h3>Se o caso está na lei</h3>
+        <p>Duas condições precisam existir ao mesmo tempo: o recebimento de aposentadoria, pensão ou reforma, e uma das moléstias da lista legal. Faltando uma delas, dizemos isso com todas as letras.</p>
+        <div class="base">Lei 7.713/88 · Tema 1.037 do STJ</div>
+      </div>
+      <div class="eixo reveal" data-delay="160">
+        <div class="n">ii · Retenção</div>
+        <h3>Quanto está sendo retido</h3>
+        <p>Leitura do contracheque do benefício e do informe de rendimentos para identificar o IR retido hoje e em cada um dos anos ainda dentro da janela, considerando a tabela vigente em cada ano.</p>
+        <div class="base">Lei 15.270/2025 · tabelas anteriores</div>
+      </div>
+      <div class="eixo reveal" data-delay="220">
+        <div class="n">iii · Prova</div>
+        <h3>O que comprova a condição</h3>
+        <p>Quais documentos sustentam o pedido em cada via. Na via administrativa há exigência de laudo de serviço médico oficial; na via judicial, o STJ admite a demonstração por outros meios idôneos de prova.</p>
+        <div class="base">Lei 9.250/95, art. 30 · Súmula 598 do STJ</div>
+      </div>
+    </div>
+
+    <div class="sinergia reveal" data-delay="260">
+      <p><strong>Por que a ordem importa:</strong> a isenção daqui em diante e a restituição do passado são pedidos distintos, com caminhos e exigências próprias. Verificar o enquadramento primeiro, e só depois decidir por qual via seguir, é o que evita requerer duas vezes a mesma coisa ou deixar prescrever justamente a parte mais antiga, que é a que está saindo da janela agora.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── QUEM ASSINA ───────────────────────────────────────── -->
+<section class="quem tight">
+  <div class="container">
+    <div class="quem-grid">
+      <div class="quem-photo reveal">
+        <img src="assets/img/alex-amadeu-2.jpg" alt="Alex Amadeu em frente ao escritório da TriboTax" width="846" height="1269" loading="lazy" />
+      </div>
+      <div>
+        <span class="eyebrow reveal">Quem assina a análise</span>
+        <h2 class="reveal" data-delay="60">Análise com nome, registro e <em>endereço</em>.</h2>
+        <p class="bio reveal" data-delay="120"><strong>Alex Amadeu</strong> é advogado tributarista (OAB/MG) e fundador da TriboTax, consultoria com sede na Savassi, em Belo Horizonte. Atua em recuperação de créditos tributários, defesa em processos administrativos e arquitetura fiscal de grupos empresariais e famílias.</p>
+        <p class="bio reveal" data-delay="160">Aqui o primeiro passo nunca é uma proposta: é uma <strong>análise por escrito</strong> do enquadramento, com o fundamento legal de cada ponto e também com o que ainda depende de documento. Se não houver direito, a resposta é essa, e ela chega do mesmo jeito.</p>
+        <div class="quem-cit reveal" data-delay="200">
+          <p>Eu não fundei um escritório. Fundei uma tribo.</p>
+          <div class="autor">Alex Amadeu · Carta aberta da TriboTax</div>
+        </div>
+        <div class="quem-fatos reveal" data-delay="240">
+          <span>Direito tributário · pós-graduação</span>
+          <span>Contencioso e consultivo</span>
+          <span>OAB/MG</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ───────────────────────────────────────────────── -->
+<section class="faq tight">
+  <div class="container">
+    <span class="eyebrow reveal">Perguntas diretas, respostas diretas</span>
+    <h2 class="h-display h-2 reveal" data-delay="60" style="max-width:18ch">O que costuma travar o <em>primeiro passo</em>.</h2>
+    <div class="faq-lista reveal" data-delay="120">
+      <details class="faq-item">
+        <summary>Já me tratei e estou curado. Ainda vale?</summary>
+        <p>Essa é a dúvida mais comum, e é justamente o ponto que o STJ pacificou na Súmula 627: não se exige a demonstração da contemporaneidade dos sintomas nem da recidiva da enfermidade. O tratamento ter terminado há anos não faz, por si, o direito desaparecer. O que a análise verifica é o enquadramento na lei, não o seu estado de saúde atual.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Eu ainda trabalho. Posso pedir?</summary>
+        <p>Não. O STJ decidiu no Tema 1.037 que a isenção não alcança o salário de quem está em atividade: ela vale para aposentadoria, pensão e reforma. Preferimos dizer isso agora a criar expectativa. Se a aposentadoria vier, o direito nasce junto, e aí faz sentido retomar a conversa.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Meu benefício é baixo. Vale a pena?</summary>
+        <p>Depende do valor e do histórico. Desde janeiro de 2026 quem recebe até R$ 5.000 por mês já é isento pela tabela geral, então nessa faixa não há desconto a zerar hoje. Mas se houve retenção nos anos anteriores, esses valores ainda podem estar dentro da janela dos cinco anos. É exatamente isso que a análise verifica, ano a ano.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Meu laudo é de médico particular, não é oficial.</summary>
+        <p>Isso muda a estratégia, não necessariamente o direito. Na via administrativa a lei pede laudo de serviço médico oficial. Na via judicial, o STJ admite que a doença seja demonstrada por outros meios idôneos de prova quando o juiz os considerar suficientes (Súmula 598). A análise indica qual caminho o seu conjunto de documentos sustenta.</p>
+      </details>
+      <details class="faq-item">
+        <summary>A doença apareceu depois de eu me aposentar.</summary>
+        <p>O próprio texto da lei resolve: o direito vale mesmo que a moléstia tenha sido contraída depois da aposentadoria ou da reforma. Não há exigência de que a doença seja anterior ao benefício.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Quanto custa a análise, e o que acontece depois?</summary>
+        <p>A análise do enquadramento é gratuita e sem compromisso. Se houver caso para atuação, a proposta vem à parte, com escopo e honorários claros, e você decide se segue. Não pedimos senha de nenhum sistema para fazer essa primeira verificação.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Posso resolver isso pelo meu pai ou pela minha mãe?</summary>
+        <p>Pode, e é comum: muita gente chega aqui cuidando de um familiar. Para a primeira verificação bastam os dados do benefício. A partir do momento em que o pedido avança, a assinatura precisa ser do titular ou de quem tenha poderes para representá-lo.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Vocês atendem em qualquer lugar do país?</summary>
+        <p>Sim. A isenção é de lei federal e o atendimento é digital, com sede em Belo Horizonte. A conversa acontece por WhatsApp e e-mail, no seu ritmo.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ── CAPTURA FINAL ─────────────────────────────────────── -->
+<section id="captura" class="cta-section">
+  <div class="container">
+    <h2 class="reveal">Comece pela <em>verificação</em>, não pelo requerimento.</h2>
+    <p class="cta-lede reveal" data-delay="60">A equipe confere se o caso se enquadra na Lei 7.713/88 e devolve, por escrito, o que a lei prevê para a sua situação e o que ainda depende de documento. A partir daí, a decisão é sua.</p>
+    <div class="reveal" data-delay="120">
+      <button type="button" class="btn-diag js-abre-diag">
+        Quero a análise do enquadramento
+        <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+      </button>
+      <span class="cta-micro">Sem custo · sem compromisso</span>
+    </div>
+    <div class="cta-passos reveal" data-delay="180">
+      <div class="cta-passo"><div class="n">Passo 01</div><p>Contato da equipe em até 48 horas úteis, pelo WhatsApp que você informar.</p></div>
+      <div class="cta-passo"><div class="n">Passo 02</div><p>Verificação das duas condições da lei: o benefício e a moléstia prevista.</p></div>
+      <div class="cta-passo"><div class="n">Passo 03</div><p>Retorno por escrito com o enquadramento, os fundamentos e os próximos passos.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONFORMIDADE ──────────────────────────────────────── -->
+<section class="conform">
+  <div class="container">
+    <p>Conteúdo informativo, em conformidade com o Provimento 205/2021 da OAB: nada aqui promete resultado, valor ou prazo. Os dispositivos, súmulas e prazos citados são os previstos em lei e na jurisprudência do STJ, e cada caso depende de enquadramento próprio. É justamente por isso que o primeiro passo é uma análise. TriboTax Consultoria Tributária · Dr. Alex Amadeu.</p>
+  </div>
+</section>
+
+<footer id="tt-footer"></footer>
+
+<div class="sticky-cta-bar" id="sticky-bar">
+  <button type="button" class="js-abre-diag">Quero a análise do enquadramento
+    <svg aria-hidden="true" width="16" height="10" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+  </button>
+</div>
+
+<!-- ── POPUP ─────────────────────────────────────────────── -->
+<div class="modal" id="modal-diag" role="dialog" aria-modal="true" aria-labelledby="modal-titulo" hidden>
+  <div class="modal-veu" data-fecha></div>
+  <div class="modal-card">
+    <button class="modal-x" type="button" aria-label="Fechar" data-fecha>✕</button>
+    <div class="modal-faixa">
+      <span class="rotulo">Análise do enquadramento</span>
+      <span class="valor">Sem custo</span>
+    </div>
+    <p class="modal-titulo" id="modal-titulo">Verifique o <em>enquadramento</em> do caso.</p>
+    <p class="modal-sub">Deixe seus contatos e a equipe do Alex retorna em até 48 horas úteis. Não pedimos aqui nenhuma informação sobre saúde: isso é conversado depois, em particular.</p>
+    <form class="lead-form" id="formDiag" novalidate>
+      <div class="campo">
+        <label for="d-nome">Nome</label>
+        <input class="form-input" type="text" id="d-nome" name="nome" placeholder="Como devemos te chamar" autocomplete="name" required>
+      </div>
+      <div class="campo">
+        <label for="d-whats">WhatsApp</label>
+        <div class="fone-linha">
+          <span class="ddi" aria-hidden="true">+55</span>
+          <input class="form-input" type="tel" id="d-whats" name="whatsapp" placeholder="(DDD) 90000-0000" autocomplete="tel-national" inputmode="tel" required>
+        </div>
+      </div>
+      <div class="campo">
+        <label for="d-email">E-mail</label>
+        <input class="form-input" type="email" id="d-email" name="email" placeholder="nome@email.com.br" autocomplete="email" required>
+      </div>
+      <div class="campo">
+        <label for="d-titular">A análise é para</label>
+        <select class="form-select" id="d-titular" name="titularidade" required>
+          <option value="" disabled selected>Selecione</option>
+          <option>Para mim</option>
+          <option>Para um familiar</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="d-beneficio">Já recebe aposentadoria, pensão ou reforma?</label>
+        <select class="form-select" id="d-beneficio" name="beneficio" required>
+          <option value="" disabled selected>Selecione</option>
+          <option>Sim</option>
+          <option>Ainda não</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="d-faixa">Valor aproximado do benefício mensal</label>
+        <select class="form-select" id="d-faixa" name="beneficio_faixa" required>
+          <option value="" disabled selected>Selecione</option>
+          <option>Até R$ 5.000</option>
+          <option>De R$ 5.000 a R$ 7.350</option>
+          <option>De R$ 7.350 a R$ 10.000</option>
+          <option>Acima de R$ 10.000</option>
+          <option>Não sei informar</option>
+        </select>
+      </div>
+      <button type="submit" class="lead-btn">
+        Solicitar a análise
+        <svg aria-hidden="true" class="arrow" viewBox="0 0 16 10"><path d="M1 5 H14 M10 1 L14 5 L10 9"/></svg>
+      </button>
+    </form>
+    <p class="form-nota">Sem compromisso · Ao enviar, você autoriza o contato da equipe sobre esta análise · Dados tratados conforme a <a href="/politica-de-privacidade" target="_blank" rel="noopener">política de privacidade</a></p>
+  </div>
+</div>
+
+<script src="assets/js/site.js?v=3"></script>
+<script>
+/* ── Popup: abrir, fechar, pré-preencher ───────────────────── */
+(function () {
+  var modal = document.getElementById('modal-diag');
+  var form = document.getElementById('formDiag');
+  var CHAVE = 'tt_isencao_rascunho';
+  var ultimoFoco = null;
+
+  function dadosSalvos() {
+    var dados = {};
+    try { dados = JSON.parse(localStorage.getItem(CHAVE) || '{}'); } catch (_) {}
+    var p = new URLSearchParams(location.search);
+    // O parâmetro da URL vence o rascunho salvo (ex.: link com ?nome=)
+    ['nome', 'email'].forEach(function (n) {
+      if (p.get(n)) dados[n] = p.get(n);
+    });
+    if (p.get('wpp')) dados.whatsapp = p.get('wpp');
+    return dados;
+  }
+
+  function preenche(f) {
+    if (!f) return;
+    var dados = dadosSalvos();
+    Object.keys(dados).forEach(function (n) {
+      var el = f.elements[n];
+      if (el && !el.value && dados[n]) el.value = dados[n];
+    });
+  }
+
+  function abre() {
+    ultimoFoco = document.activeElement;
+    preenche(form);
+    modal.hidden = false;
+    document.body.classList.add('modal-aberto');
+    document.body.style.overflow = 'hidden';
+    var primeiro = form.querySelector('input,select');
+    // Sem foco automático no mobile: o teclado subiria cobrindo o popup
+    if (window.matchMedia('(min-width: 561px)').matches && primeiro) primeiro.focus();
+  }
+
+  function fecha() {
+    modal.hidden = true;
+    document.body.classList.remove('modal-aberto');
+    document.body.style.overflow = '';
+    if (ultimoFoco && ultimoFoco.focus) ultimoFoco.focus();
+  }
+
+  document.querySelectorAll('.js-abre-diag').forEach(function (b) {
+    b.addEventListener('click', abre);
+  });
+  modal.querySelectorAll('[data-fecha]').forEach(function (b) {
+    b.addEventListener('click', fecha);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !modal.hidden) fecha();
+  });
+
+  // Rascunho: o que a pessoa digita fica salvo para a próxima abertura.
+  // Nenhum campo desta LP contém dado de saúde, então o rascunho local é
+  // inofensivo sob a LGPD — a doença só aparece na conversa de WhatsApp.
+  form.addEventListener('input', function () {
+    var d = {};
+    try { d = JSON.parse(localStorage.getItem(CHAVE) || '{}'); } catch (_) {}
+    ['nome', 'whatsapp', 'email', 'titularidade', 'beneficio', 'beneficio_faixa'].forEach(function (n) {
+      if (form.elements[n] && form.elements[n].value) d[n] = form.elements[n].value;
+    });
+    try { localStorage.setItem(CHAVE, JSON.stringify(d)); } catch (_) {}
+  });
+})();
+
+/* ── Barra fixa cede quando o CTA do hero está em tela ─────── */
+(function () {
+  var barra = document.getElementById('sticky-bar');
+  var alvo = document.querySelector('.hero .btn-diag');
+  if (!barra || !alvo || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (entries) {
+    barra.classList.toggle('cta-em-tela', entries[0].isIntersecting);
+  }, { threshold: 0.4 }).observe(alvo);
+})();
+
+/* ── Envio ─────────────────────────────────────────────────── */
+(function () {
+  async function envia(e) {
+    e.preventDefault();
+    var f = e.target;
+    if (!f.checkValidity()) { f.reportValidity(); return; }
+
+    var btn = f.querySelector('button[type="submit"]');
+    var original = btn.innerHTML;
+    var val = function (n) { return f.elements[n] ? f.elements[n].value.trim() : ''; };
+    var p = new URLSearchParams(location.search);
+
+    var nome = val('nome');
+    // DDI fixo do formulário: o campo recebe só o número nacional
+    var wpp = val('whatsapp');
+    if (wpp && wpp.indexOf('+') !== 0) wpp = '+55 ' + wpp;
+    var servico = 'Isenção de IR — Doença Grave';
+
+    // O n8n grava no Bitrix só os campos que o template dele nomeia, um a um:
+    // chave que ele não conhece é descartada em silêncio. `contexto` é o único
+    // campo de texto livre já mapeado (vira "Contexto: …" na observação do
+    // negócio), então a qualificação desta campanha viaja por ele. É o que
+    // permite entregar a informação completa sem alterar o workflow que já
+    // atende as outras LPs do site.
+    var contexto = [
+      'Análise ' + val('titularidade').toLowerCase(),
+      'Recebe aposentadoria/pensão/reforma: ' + val('beneficio'),
+      'Benefício mensal: ' + val('beneficio_faixa')
+    ].join(' · ');
+
+    // Um único event_id por conversão: vai para o n8n (CAPI) e para /obrigado
+    // (Pixel). Ids diferentes fariam a Meta contar o mesmo lead duas vezes.
+    var eid = window.ttNewEventId ? window.ttNewEventId() : '';
+    var sinais = window.ttSignals ? window.ttSignals() : {};
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando…';
+
+    try {
+      // Sem checar o status, um 500 do n8n cairia fora do catch: o lead
+      // redirecionaria para /obrigado, o Pixel contaria a conversão e o
+      // contato se perderia em silêncio.
+      var resp = await fetch('https://n8n.gabrielgouvea.com.br/webhook/f484ff6a-2bf3-440b-b23c-dcfe76eaf968', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nome: nome, whatsapp: wpp, email: val('email'), empresa: '',
+          // Campos do funil B2B do site. Vão vazios: no Bitrix eles carregam
+          // rótulos do Simples ("Optante do Simples", "Faixa de débito") que
+          // seriam falsos para esta campanha. A qualificação vai nas chaves
+          // próprias abaixo.
+          cnpj: '', regime: '', termo: '', faixa: '',
+          // A qualificação legível, no único campo livre que o n8n já mapeia.
+          contexto: contexto,
+          // As mesmas respostas em chaves próprias. O n8n as ignora hoje; ficam
+          // aqui para o dia em que valer a pena separá-las em campos do Bitrix,
+          // sem precisar mexer na página de novo. Nenhuma é dado de saúde.
+          titularidade: val('titularidade'), beneficio: val('beneficio'),
+          beneficio_faixa: val('beneficio_faixa'),
+          servico: servico,
+          canal_aquisicao: 'Meta Ads — Isenção IR Doença Grave',
+          origem: location.pathname,
+          event_id: eid, event_name: 'Lead',
+          fbp: sinais.fbp || '', fbc: sinais.fbc || '',
+          event_source_url: sinais.event_source_url || location.href,
+          client_user_agent: sinais.client_user_agent || navigator.userAgent,
+          utm_source: p.get('utm_source') || '',
+          utm_medium: p.get('utm_medium') || '',
+          utm_campaign: p.get('utm_campaign') || '',
+          utm_content: p.get('utm_content') || '',
+          utm_term: p.get('utm_term') || ''
+        })
+      });
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      try { localStorage.removeItem('tt_isencao_rascunho'); } catch (_) {}
+      location.href = '/obrigado?' + new URLSearchParams({
+        nome: nome, wpp: wpp, servico: servico, eid: eid
+      }).toString();
+    } catch (_) {
+      btn.disabled = false;
+      btn.innerHTML = original;
+      var erro = f.parentNode.querySelector('.form-erro');
+      if (!erro) {
+        erro = document.createElement('p');
+        erro.className = 'form-erro';
+        f.parentNode.insertBefore(erro, f.nextSibling);
+      }
+      erro.innerHTML = 'Não conseguimos enviar agora. <a href="https://wa.me/554799975701" target="_blank" rel="noopener">Fale pelo WhatsApp →</a>';
+    }
+  }
+
+  document.getElementById('formDiag').addEventListener('submit', envia);
+})();
+</script>
+</body>
+</html>
