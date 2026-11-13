@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Reforma Tributária no Agro · Material da palestra · TriboTax</title>
+<meta name="description" content="Receba o resumo e os slides completos da palestra Reforma Tributária no Agro, do Dr. Alex Amadeu (TriboTax), apresentada em Guanambi/BA em 13 de novembro de 2026." />
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#F6F1E8" />
+<meta property="og:title" content="Reforma Tributária no Agro · Material da palestra" />
+<meta property="og:description" content="Resumo e slides completos da palestra do Dr. Alex Amadeu em Guanambi/BA." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<!-- Fontes fora do caminho crítico: com 4G fraco no auditório, o formulário
+     precisa aparecer antes delas. Até carregarem, vale o fallback do tokens.css. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'" />
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" /></noscript>
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="stylesheet" href="assets/css/tokens.css" />
+<style>
+
+/* Página de captura do evento. O Dr. Alex anuncia o QR code no palco e quase
+   toda a plateia preenche: a página não precisa convencer, só ser rápida.
+   Regra do layout: o formulário inteiro, com o botão, cabe na primeira dobra
+   do celular (375x667 e 390x844), sem rolar. Por isso não há cabeçalho, os
+   rótulos ficam no placeholder (com <label> para leitor de tela) e o perfil
+   é escolhido com um toque. */
+
+body { font-size: 16px; }
+
+.sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.pagina {
+  max-width: 440px; margin: 0 auto;
+  padding: max(14px, env(safe-area-inset-top)) 18px 20px;
+}
+
+.eyebrow {
+  margin: 0 0 6px; color: var(--copper-600);
+  font-size: 10.5px; letter-spacing: 0.16em;
+}
+.eyebrow::before { width: 14px; }
+
+.titulo {
+  font-family: var(--f-display); font-weight: 500;
+  font-size: 30px; line-height: 1.05; letter-spacing: -0.015em;
+  color: var(--forest-900); margin: 0 0 14px;
+}
+.titulo em { font-style: italic; color: var(--copper-500); }
+
+/* Formulário */
+.lead-form { display: flex; flex-direction: column; gap: 8px; }
+.form-input {
+  width: 100%; height: 48px; padding: 0 14px;
+  /* 16px é o mínimo para o iOS não dar zoom ao focar o campo */
+  font-family: var(--f-body); font-size: 16px; color: var(--ink-900);
+  background: #fff; border: 1px solid rgba(42,18,8,0.24);
+  border-radius: var(--radius-s);
+  transition: border-color .2s ease, box-shadow .2s ease;
+  -webkit-appearance: none; appearance: none;
+}
+.form-input:focus { outline: none; border-color: var(--forest-700); box-shadow: 0 0 0 3px rgba(35,64,50,0.12); }
+.form-input::placeholder { color: #6E6D66; opacity: 1; }
+.form-input:user-invalid { border-color: var(--copper-600); }
+
+.fone-linha { display: flex; }
+.fone-linha .ddi {
+  display: flex; align-items: center; padding: 0 11px;
+  background: var(--clay-100); border: 1px solid rgba(42,18,8,0.24); border-right: none;
+  border-radius: var(--radius-s) 0 0 var(--radius-s);
+  font-family: var(--f-mono); font-size: 13.5px; color: var(--ink-700);
+}
+.fone-linha .form-input { border-radius: 0 var(--radius-s) var(--radius-s) 0; }
+
+/* Perfil: um toque, sem abrir seletor nativo */
+.perfil-grupo { margin: 2px 0 0; }
+.perfil-rotulo { margin: 0 0 6px; font-size: 13.5px; font-weight: 500; color: var(--ink-700); }
+.perfis { display: flex; flex-wrap: wrap; gap: 6px; }
+.perfil { position: relative; }
+.perfil input { position: absolute; opacity: 0; width: 1px; height: 1px; left: 50%; bottom: 0; margin: 0; }
+.perfil span {
+  display: inline-flex; align-items: center; height: 40px; padding: 0 13px;
+  font-size: 14.5px; color: var(--ink-700); white-space: nowrap;
+  background: #fff; border: 1px solid rgba(42,18,8,0.24); border-radius: 999px;
+  cursor: pointer; transition: background .2s ease, color .2s ease, border-color .2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.perfil input:checked + span { background: var(--forest-800); border-color: var(--forest-800); color: var(--clay-50); }
+.perfil input:focus-visible + span { box-shadow: 0 0 0 3px rgba(35,64,50,0.22); }
+
+.lead-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  width: 100%; height: 54px; margin-top: 6px; padding: 0 20px;
+  font-family: var(--f-body); font-size: 17px; font-weight: 600; letter-spacing: 0.01em;
+  background: var(--copper-500); color: #FDF6EC;
+  border: none; border-radius: var(--radius-s); cursor: pointer;
+  transition: background .25s ease;
+}
+.lead-btn:hover:not(:disabled) { background: var(--copper-600); }
+.lead-btn:disabled { opacity: .72; cursor: progress; }
+.lead-btn .arrow { width: 16px; height: 10px; }
+.lead-btn .arrow path { stroke: currentColor; fill: none; stroke-width: 1.5; }
+
+.consentimento { margin: 2px 0 0; font-size: 12px; line-height: 1.45; color: var(--ink-500); }
+.consentimento a { color: var(--ink-700); text-decoration: underline; text-underline-offset: 2px; }
+
+.form-erro {
+  margin: 4px 0 0; padding: 12px 14px; border-radius: var(--radius-s);
+  background: rgba(143,58,46,0.07); border: 1px solid rgba(143,58,46,0.25);
+  font-size: 14.5px; line-height: 1.5; color: var(--copper-700);
+}
+.form-erro p { margin: 0 0 10px; }
+.form-erro .acoes { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.form-erro button {
+  height: 44px; padding: 0 16px; border-radius: var(--radius-s);
+  background: var(--copper-700); color: #FDF6EC; font-weight: 600; font-size: 15px;
+}
+.form-erro a { color: var(--copper-700); text-decoration: underline; text-underline-offset: 2px; padding: 10px 2px; display: inline-block; }
+
+/* Sucesso: troca o formulário na mesma página */
+#estadoOk:focus { outline: none; }
+.ok-sub { font-size: 15px; color: var(--ink-500); margin: -6px 0 6px; line-height: 1.5; }
+.baixar {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  width: 100%; min-height: 60px; padding: 14px 16px; margin-top: 10px;
+  background: var(--forest-900); color: var(--clay-50);
+  border-radius: var(--radius-s); font-size: 16px; font-weight: 500; line-height: 1.3;
+  transition: background .25s ease;
+}
+.baixar:hover { background: var(--forest-700); }
+.baixar .txt small { display: block; margin-top: 2px; font-size: 13px; font-weight: 400; color: var(--fg-on-deep-muted); }
+.aviso-resumo {
+  margin: 10px 0 0; padding: 14px 16px; min-height: 60px;
+  display: flex; align-items: center;
+  background: var(--clay-100); border: 1px dashed var(--clay-400); border-radius: var(--radius-s);
+  font-size: 14.5px; line-height: 1.45; color: var(--ink-700);
+}
+.baixar svg { flex: none; width: 20px; height: 20px; color: var(--copper-200); }
+.baixar svg path { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.ok-conversa { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--clay-200); }
+.ok-conversa p { margin: 0 0 10px; font-size: 15px; color: var(--ink-700); line-height: 1.5; }
+.btn-wpp {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; height: 52px; padding: 0 18px;
+  border: 1px solid var(--forest-800); border-radius: var(--radius-s);
+  color: var(--forest-900); font-weight: 600; font-size: 16px;
+  transition: background .25s ease;
+}
+.btn-wpp:hover { background: rgba(27,50,38,0.06); }
+.btn-wpp svg { width: 20px; height: 20px; flex: none; }
+.refazer { margin: 12px 0 0; text-align: center; }
+.refazer button { font-size: 13.5px; color: var(--ink-500); text-decoration: underline; text-underline-offset: 2px; padding: 10px 6px; }
+
+[hidden] { display: none !important; }
+
+/* Rodapé mínimo, abaixo da dobra */
+.rodape { max-width: 440px; margin: 0 auto; padding: 8px 18px calc(24px + env(safe-area-inset-bottom)); }
+.rodape p { margin: 0 0 4px; font-size: 12px; color: var(--ink-500); line-height: 1.55; }
+.rodape a { color: var(--ink-700); text-decoration: underline; text-underline-offset: 2px; }
+.rodape .legal { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.03em; margin-top: 8px; }
+
+/* Desktop: a mesma coluna, centrada, num cartão */
+@media (min-width: 720px) {
+  .pagina {
+    margin-top: 8vh; padding: 36px 40px 32px;
+    background: #FCFAF5; border: 1px solid var(--clay-200); border-radius: var(--radius-m);
+    box-shadow: 0 18px 40px -24px rgba(27,50,38,0.28);
+  }
+  .titulo { font-size: 36px; }
+  .rodape { padding-top: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+<script src="assets/js/track.js?v=1"></script>
+</head>
+<body data-tt-viewcontent="Palestra Reforma Agro Guanambi">
+
+<main class="pagina" id="material">
+  <p class="eyebrow">TriboTax · Palestra em Guanambi/BA</p>
+
+  <!-- Estado 1: formulário -->
+  <div id="estadoForm">
+    <h1 class="titulo">Receba o resumo e os <em>slides da palestra.</em></h1>
+
+    <form class="lead-form" id="formPalestra" novalidate>
+      <label class="sr" for="f-nome">Nome</label>
+      <input class="form-input" id="f-nome" name="nome" type="text" required autocomplete="name" autocapitalize="words" placeholder="Nome" maxlength="120" />
+
+      <label class="sr" for="f-wpp">WhatsApp com DDD</label>
+      <div class="fone-linha">
+        <span class="ddi" aria-hidden="true">+55</span>
+        <input class="form-input" id="f-wpp" name="whatsapp" type="tel" required inputmode="tel" autocomplete="tel-national" placeholder="WhatsApp com DDD" />
+      </div>
+
+      <label class="sr" for="f-email">E-mail</label>
+      <input class="form-input" id="f-email" name="email" type="email" required inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="E-mail" maxlength="160" />
+
+      <div class="perfil-grupo" role="radiogroup" aria-labelledby="rotuloPerfil" aria-required="true">
+        <p class="perfil-rotulo" id="rotuloPerfil">Você é:</p>
+        <div class="perfis">
+          <label class="perfil"><input type="radio" name="perfil" value="Produtor rural" required /><span>Produtor rural</span></label>
+          <label class="perfil"><input type="radio" name="perfil" value="Contador" /><span>Contador</span></label>
+          <label class="perfil"><input type="radio" name="perfil" value="Advogado" /><span>Advogado</span></label>
+          <label class="perfil"><input type="radio" name="perfil" value="Empresário ou gestor do agro" /><span>Empresário ou gestor do agro</span></label>
+          <label class="perfil"><input type="radio" name="perfil" value="Outro" /><span>Outro</span></label>
+        </div>
+      </div>
+
+      <label class="sr" for="f-cidade">Cidade (opcional)</label>
+      <input class="form-input" id="f-cidade" name="cidade" type="text" autocomplete="address-level2" autocapitalize="words" placeholder="Cidade (opcional)" maxlength="80" />
+
+      <button type="submit" class="lead-btn" id="btnEnviar">
+        <span class="rotulo">Quero o material</span>
+        <svg class="arrow" viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h14M10 1l4 4-4 4"/></svg>
+      </button>
+
+      <p class="consentimento">Ao enviar, você concorda com a <a href="/politica-de-privacidade" target="_blank" rel="noopener">Política de Privacidade</a> e em receber contato da TriboTax.</p>
+
+      <div class="form-erro" id="formErro" role="alert" hidden>
+        <p>Não conseguimos enviar agora. O sinal aqui pode estar fraco: vamos tentar de novo sozinhos em alguns segundos, com esta página aberta.</p>
+        <div class="acoes">
+          <button type="button" id="btnTentar">Tentar de novo</button>
+          <a id="erroWpp" href="https://wa.me/5531990738758" target="_blank" rel="noopener">ou fale pelo WhatsApp</a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Estado 2: sucesso (troca o formulário, sem redirecionar) -->
+  <div id="estadoOk" hidden tabindex="-1" aria-live="polite">
+    <h1 class="titulo">Pronto<span id="okNome"></span>. <em>O material é seu.</em></h1>
+    <p class="ok-sub">Toque para abrir e salve no celular para consultar quando precisar.</p>
+
+    <!-- O resumo pode ainda não ter sido publicado: sem o arquivo, o nginx
+         devolve a home com 200. O link só aparece depois do HEAD confirmar PDF. -->
+    <a class="baixar" id="linkResumo" href="/materiais/reforma-agro-resumo.pdf" target="_blank" rel="noopener" hidden>
+      <span class="txt">Baixar o resumo da palestra<small id="tamResumo">PDF</small></span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10M5.5 8.5 10 13l4.5-4.5M4 16.5h12"/></svg>
+    </a>
+    <p class="aviso-resumo" id="avisoResumo">Conferindo o resumo da palestra...</p>
+    <a class="baixar" href="/materiais/reforma-agro-slides.pdf" target="_blank" rel="noopener">
+      <span class="txt">Baixar os slides completos<small>PDF, 13 MB</small></span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10M5.5 8.5 10 13l4.5-4.5M4 16.5h12"/></svg>
+    </a>
+
+    <div class="ok-conversa">
+      <p>Quer olhar o seu caso com a equipe do Dr.&nbsp;Alex?</p>
+      <a class="btn-wpp" id="okWpp" href="https://wa.me/5531990738758" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91A9.86 9.86 0 0 0 12.04 2Zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.23-8.23 8.23Zm4.51-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.14.16-.29.18-.54.06-.25-.12-1.04-.38-1.99-1.23-.73-.66-1.23-1.47-1.37-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.42h-.48c-.17 0-.43.06-.66.31-.23.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.24 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.16-.48-.29Z"/></svg>
+        Falar com a TriboTax
+      </a>
+    </div>
+
+    <p class="refazer"><button type="button" id="btnRefazer">Preencher para outra pessoa</button></p>
+  </div>
+</main>
+
+<footer class="rodape">
+  <p>Material de caráter informativo, do Dr. Alex Amadeu (TriboTax). Cada operação pede uma análise própria antes de qualquer decisão.</p>
+  <p><a href="/politica-de-privacidade">Política de Privacidade</a></p>
+  <p class="legal">© 2026 TriboTax Inteligência Tributária e Tecnologia Ltda · CNPJ 68.391.925/0001-44</p>
+</footer>
+
+<script>
+/* Envio do lead
+   Dois destinos em paralelo, porque nenhum contato pode se perder:
+   1. principal: o workflow n8n que grava no Bitrix e faz o fan-out do CAPI
+      (o mesmo das LPs do site);
+   2. backup: um webhook próprio do evento, com o registro cru. É chamado em
+      TODO envio, independente do principal.
+   Basta um dos dois responder ok para a pessoa receber o material. O Lead do
+   Pixel só dispara quando o principal confirma, porque um Lead sem CAPI do
+   outro lado (ou sem lead no CRM) envenena a otimização da Meta.
+   O que falhar fica numa fila no localStorage e é reenviado sozinho: a cada
+   15 s com a página aberta (até 8 vezes), quando a conexão volta e na próxima
+   visita. O 4G de auditório costuma falhar exatamente na hora do QR code. */
+(function () {
+  'use strict';
+
+  var URL_PRINCIPAL = 'https://n8n.gabrielgouvea.com.br/webhook/f484ff6a-2bf3-440b-b23c-dcfe76eaf968';
+  var URL_BACKUP = 'https://n8n.gabrielgouvea.com.br/webhook/tribotax-palestra-agro';
+  var SERVICO = 'Palestra Reforma Agro Guanambi 13/11';
+  var TIMEOUT_MS = 12000;
+  var CHAVE_OK = 'tt_palestra_agro_ok';
+  var CHAVE_FILA = 'tt_palestra_agro_fila';
+  var WPP = '5531990738758';
+
+  var form = document.getElementById('formPalestra');
+  var btn = document.getElementById('btnEnviar');
+  var rotulo = btn.querySelector('.rotulo');
+  var erro = document.getElementById('formErro');
+  var estadoForm = document.getElementById('estadoForm');
+  var estadoOk = document.getElementById('estadoOk');
+  var fone = document.getElementById('f-wpp');
+
+  var enviando = false;
+  var retentativa = null;
+  var tentativasAuto = 0;
+
+  /* localStorage pode não existir (aba anônima, bloqueio): nunca quebra a página */
+  function ler(k) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (_) { return null; } }
+  function gravar(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} }
+  function apagar(k) { try { localStorage.removeItem(k); } catch (_) {} }
+
+  /* A fila é uma lista de envios pendentes, um por pessoa (event_id): duas
+     pessoas no mesmo celular não podem sobrescrever o pendente uma da outra. */
+  function lerFila() { var f = ler(CHAVE_FILA); return Array.isArray(f) ? f : (f ? [f] : []); }
+  function guardaNaFila(item) {
+    var fila = lerFila().filter(function (x) { return x.eid !== item.eid; });
+    if (item.principal || item.backup) fila.push(item);
+    if (fila.length) gravar(CHAVE_FILA, fila); else apagar(CHAVE_FILA);
+  }
+
+  function novoId() {
+    if (window.ttNewEventId) return window.ttNewEventId();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = (Math.random() * 16) | 0;
+      return (c === 'x' ? r : ((r & 0x3) | 0x8)).toString(16);
+    });
+  }
+
+  function primeiroNome(n) { return String(n || '').trim().split(/\s+/)[0] || ''; }
+
+  function linkWpp(nome) {
+    var pn = primeiroNome(nome);
+    var msg = 'Olá! ' + (pn ? 'Sou ' + pn + ' e assisti' : 'Assisti') +
+      ' à palestra do Dr. Alex Amadeu sobre a Reforma Tributária no Agro, em Guanambi. Gostaria de conversar sobre o meu caso.';
+    return 'https://wa.me/' + WPP + '?text=' + encodeURIComponent(msg);
+  }
+  document.getElementById('erroWpp').href = linkWpp('');
+  document.getElementById('okWpp').href = linkWpp('');
+
+  /* Máscara leve do WhatsApp: (77) 99999-9999. Aceita colar com +55 ou 0. */
+  function soDigitos(v) {
+    var d = String(v || '').replace(/\D/g, '');
+    if (d.length > 11 && d.indexOf('55') === 0) d = d.slice(2);
+    d = d.replace(/^0+/, '');
+    return d.slice(0, 11);
+  }
+  function formataFone(d) {
+    if (!d) return '';
+    if (d.length <= 2) return '(' + d;
+    if (d.length <= 6) return '(' + d.slice(0, 2) + ') ' + d.slice(2);
+    if (d.length <= 10) return '(' + d.slice(0, 2) + ') ' + d.slice(2, 6) + '-' + d.slice(6);
+    return '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7);
+  }
+  function validaFone() {
+    var d = soDigitos(fone.value);
+    fone.setCustomValidity(d.length >= 10 ? '' : 'Informe o WhatsApp com DDD, por exemplo (77) 99999-9999.');
+  }
+  fone.addEventListener('input', function (e) {
+    fone.setCustomValidity('');
+    // Ao apagar, não reimpor a máscara (senão o separador volta e trava o backspace)
+    if (e && e.inputType && e.inputType.indexOf('delete') === 0) return;
+    fone.value = formataFone(soDigitos(fone.value));
+  });
+  fone.addEventListener('blur', function () { fone.value = formataFone(soDigitos(fone.value)); });
+
+  /* UTMs da URL. Sem nenhuma, a visita veio do QR code do último slide. */
+  function utms() {
+    var p = new URLSearchParams(location.search);
+    var chaves = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+    var tem = chaves.some(function (k) { return p.get(k); });
+    var u = {};
+    chaves.forEach(function (k) { u[k] = p.get(k) || ''; });
+    if (!tem) {
+      u.utm_source = 'palestra';
+      u.utm_medium = 'qrcode';
+      u.utm_campaign = 'reforma-agro-guanambi';
+    }
+    return u;
+  }
+
+  function montaPacote() {
+    var val = function (n) { var el = form.elements[n]; return el && el.value ? String(el.value).trim() : ''; };
+    var nome = val('nome');
+    var wpp = '+55 ' + formataFone(soDigitos(fone.value));
+    var email = val('email');
+    // Reenvio da mesma pessoa depois de uma falha reaproveita o event_id: se o
+    // principal chegou e só a resposta se perdeu, o CAPI deduplica.
+    var pendente = lerFila().filter(function (x) {
+      return !x.entregue && x.backup && (x.backup.email === email || x.backup.whatsapp === wpp);
+    }).pop();
+    var eid = pendente ? pendente.eid : novoId();
+    var perfilEl = form.querySelector('input[name="perfil"]:checked');
+    var perfil = perfilEl ? perfilEl.value : '';
+    var cidade = val('cidade');
+    var u = utms();
+    var sinais = window.ttSignals ? window.ttSignals() : {};
+
+    // O n8n grava no Bitrix só os campos que o template dele nomeia, um a um:
+    // chave que ele não conhece é descartada em silêncio. `contexto` é o único
+    // campo de texto livre já mapeado (vira "Contexto: ..." na observação do
+    // negócio), então a qualificação do evento viaja por ele, numa linha só.
+    var contexto = 'Perfil: ' + perfil + ' · Cidade: ' + (cidade || 'não informada');
+
+    var principal = {
+      nome: nome, whatsapp: wpp, email: email, empresa: '',
+      // Campos do funil B2B do site. Vão vazios: no Bitrix carregam rótulos
+      // do Simples ("Optante do Simples", "Faixa de débito") que seriam falsos
+      // para o público da palestra.
+      cnpj: '', regime: '', termo: '', faixa: '',
+      contexto: contexto,
+      // As mesmas respostas em chaves próprias. O n8n as ignora hoje; ficam
+      // para o dia em que valer separá-las em campos do Bitrix.
+      perfil: perfil, cidade: cidade,
+      servico: SERVICO,
+      canal_aquisicao: 'Palestra presencial Guanambi (QR code)',
+      origem: location.pathname,
+      // Um único event_id por conversão: o mesmo vai para o CAPI (via n8n) e
+      // para o Pixel. Ids diferentes fariam a Meta contar o lead duas vezes.
+      event_id: eid, event_name: 'Lead',
+      fbp: sinais.fbp || '', fbc: sinais.fbc || '',
+      event_source_url: sinais.event_source_url || location.href,
+      client_user_agent: sinais.client_user_agent || navigator.userAgent,
+      utm_source: u.utm_source, utm_medium: u.utm_medium, utm_campaign: u.utm_campaign,
+      utm_content: u.utm_content, utm_term: u.utm_term
+    };
+
+    var backup = {
+      nome: nome, whatsapp: wpp, email: email,
+      // Sem a pergunta "quer conversar" no formulário; a chave segue vazia
+      // para o webhook do evento manter o mesmo formato de registro.
+      perfil: perfil, cidade: cidade, quer_conversar: '',
+      utm_source: u.utm_source, utm_medium: u.utm_medium, utm_campaign: u.utm_campaign,
+      utm_content: u.utm_content, utm_term: u.utm_term,
+      event_id: eid, pagina: location.href, user_agent: navigator.userAgent,
+      enviado_em: new Date().toISOString()
+    };
+
+    return { eid: eid, nome: nome, principal: principal, backup: backup };
+  }
+
+  function post(url, corpo) {
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, TIMEOUT_MS) : null;
+    var fim = function () { if (timer) clearTimeout(timer); };
+    return fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(corpo),
+      signal: ctrl ? ctrl.signal : undefined
+    }).then(function (resp) {
+      fim();
+      // Sem checar o status, um 500 do n8n contaria como entregue
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      return true;
+    }, function (e) { fim(); throw e; });
+  }
+
+  function todos(promessas) {
+    if (Promise.allSettled) return Promise.allSettled(promessas);
+    return Promise.all(promessas.map(function (p) {
+      return p.then(function (v) { return { status: 'fulfilled', value: v }; },
+                    function (e) { return { status: 'rejected', reason: e }; });
+    }));
+  }
+
+  /* Envia o que ainda falta do pacote e devolve o que sobrou.
+     resto.entregue = algum destino já tem o lead (agora ou antes). */
+  function envia(pacote) {
+    var vaiPrincipal = !!pacote.principal;
+    var vaiBackup = !!pacote.backup;
+    return todos([
+      vaiPrincipal ? post(URL_PRINCIPAL, pacote.principal) : Promise.resolve(false),
+      vaiBackup ? post(URL_BACKUP, pacote.backup) : Promise.resolve(false)
+    ]).then(function (r) {
+      var okP = vaiPrincipal && r[0].status === 'fulfilled' && r[0].value === true;
+      var okB = vaiBackup && r[1].status === 'fulfilled' && r[1].value === true;
+
+      if (okP && window.ttTrack) {
+        window.ttTrack('Lead', { content_name: SERVICO, content_category: 'lead_site' }, pacote.eid);
+      }
+
+      var resto = {
+        eid: pacote.eid, nome: pacote.nome,
+        principal: okP ? null : pacote.principal,
+        backup: okB ? null : pacote.backup,
+        entregue: !!pacote.entregue || okP || okB,
+        // Chegou a algum destino agora, pela primeira vez?
+        novo: !pacote.entregue && (okP || okB)
+      };
+      guardaNaFila(resto);
+      return resto;
+    });
+  }
+
+  function mostraSucesso(nome, rolar) {
+    var pn = primeiroNome(nome);
+    document.getElementById('okNome').textContent = pn ? ', ' + pn : '';
+    document.getElementById('okWpp').href = linkWpp(nome);
+    erro.hidden = true;
+    estadoForm.hidden = true;
+    estadoOk.hidden = false;
+    verificaResumo(0);
+    if (rolar) {
+      try { estadoOk.focus({ preventScroll: true }); } catch (_) {}
+      window.scrollTo(0, 0);
+    }
+  }
+
+  /* O resumo pode ser publicado depois da página. Sem o arquivo, o nginx
+     responde 200 com a home (try_files), então status ok não basta: só vale
+     se o content-type for PDF. Sem rede para conferir, tenta mais duas vezes
+     e, persistindo, mostra o link (não dá para afirmar que falta o arquivo). */
+  var linkResumo = document.getElementById('linkResumo');
+  var avisoResumo = document.getElementById('avisoResumo');
+  var resumoOk = false;
+  function mostraResumo(existe, bytes) {
+    resumoOk = existe;
+    linkResumo.hidden = !existe;
+    avisoResumo.hidden = existe;
+    if (existe && bytes > 0) {
+      var mb = bytes / 1e6;
+      document.getElementById('tamResumo').textContent =
+        'PDF, ' + (mb < 1 ? Math.max(1, Math.round(bytes / 1e3)) + ' KB' : (mb < 10 ? mb.toFixed(1).replace('.', ',') : Math.round(mb)) + ' MB');
+    }
+    if (!existe) avisoResumo.textContent = 'O resumo da palestra fica pronto ainda hoje: volte a esta página para baixar.';
+  }
+  function verificaResumo(tentativa) {
+    if (resumoOk) return;
+    fetch(linkResumo.getAttribute('href'), { method: 'HEAD', cache: 'no-store' }).then(function (r) {
+      var tipo = (r.headers.get('content-type') || '').toLowerCase();
+      mostraResumo(r.ok && tipo.indexOf('application/pdf') > -1, parseInt(r.headers.get('content-length'), 10) || 0);
+    }, function () {
+      if (tentativa < 2) setTimeout(function () { verificaResumo(tentativa + 1); }, 4000);
+      else mostraResumo(true, 0);
+    });
+  }
+  // Quem deixou a aba aberta e volta mais tarde encontra o resumo já liberado
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible' && !estadoOk.hidden && !resumoOk) verificaResumo(0);
+  });
+
+  function travaBotao(sim) {
+    btn.disabled = sim;
+    rotulo.textContent = sim ? 'Enviando...' : 'Quero o material';
+  }
+
+  function concluiu(resto, rolar) {
+    if (resto.entregue) {
+      gravar(CHAVE_OK, { nome: resto.nome, eid: resto.eid, em: new Date().toISOString() });
+      mostraSucesso(resto.nome, rolar);
+      return true;
+    }
+    return false;
+  }
+
+  /* Enquanto houver algo na fila (inclusive só o backup, com a pessoa já
+     vendo o material), tenta de novo a cada 15 s, até 8 vezes. */
+  function agendaRetentativa() {
+    if (retentativa || tentativasAuto >= 8 || !lerFila().length) return;
+    retentativa = setTimeout(function () {
+      retentativa = null;
+      tentativasAuto++;
+      esvaziaFila();
+    }, 15000);
+  }
+
+  /* Reenvio da fila. Com o formulário em erro na tela, a pessoa vê o botão
+     em "Enviando..." e, se chegar, o sucesso; com o material já na tela,
+     tudo acontece em silêncio. */
+  function esvaziaFila() {
+    var fila = lerFila();
+    if (!fila.length || enviando) return;
+    var comErroNaTela = !erro.hidden && !estadoForm.hidden;
+    enviando = true;
+    if (comErroNaTela) travaBotao(true);
+    todos(fila.map(envia)).then(function (rs) {
+      enviando = false;
+      if (comErroNaTela) travaBotao(false);
+      if (estadoOk.hidden) {
+        var chegou = null;
+        rs.forEach(function (r) { if (r.status === 'fulfilled' && r.value.novo) chegou = r.value; });
+        if (chegou) concluiu(chegou, true);
+      }
+      agendaRetentativa();
+    });
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (enviando) return;
+    validaFone();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+
+    var pacote = montaPacote();
+
+    enviando = true;
+    erro.hidden = true;
+    travaBotao(true);
+    envia(pacote).then(function (resto) {
+      enviando = false;
+      travaBotao(false);
+      if (!concluiu(resto, true)) erro.hidden = false;
+      tentativasAuto = 0;
+      agendaRetentativa();
+    });
+  });
+
+  document.getElementById('btnTentar').addEventListener('click', function () {
+    if (retentativa) { clearTimeout(retentativa); retentativa = null; }
+    if (form.requestSubmit) form.requestSubmit();
+    else form.dispatchEvent(new Event('submit', { cancelable: true }));
+  });
+
+  document.getElementById('btnRefazer').addEventListener('click', function () {
+    apagar(CHAVE_OK);
+    form.reset();
+    erro.hidden = true;
+    estadoOk.hidden = true;
+    estadoForm.hidden = false;
+    window.scrollTo(0, 0);
+    document.getElementById('f-nome').focus();
+  });
+
+  window.addEventListener('online', function () { tentativasAuto = 0; esvaziaFila(); });
+
+  // Quem já enviou vê o material direto; o que ficou pendente segue em segundo plano
+  var jaEnviou = ler(CHAVE_OK);
+  if (jaEnviou) mostraSucesso(jaEnviou.nome, false);
+  esvaziaFila();
+})();
+</script>
+</body>
+</html>

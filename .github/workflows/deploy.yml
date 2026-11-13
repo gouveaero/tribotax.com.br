@@ -33,5 +33,5 @@ jobs:
 
       - name: Trigger Coolify deploy
         run: |
-          curl -fsSL -X GET "${{ secrets.COOLIFY_WEBHOOK_TRIBOTAX_COM_BR }}" \
+          curl -fsSL -X POST "${{ secrets.COOLIFY_WEBHOOK_TRIBOTAX_COM_BR }}" \
             -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}"
